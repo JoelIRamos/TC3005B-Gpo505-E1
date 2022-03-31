@@ -1,0 +1,48 @@
+body{
+  margin: 0;
+}
+
+.App{
+  background-color: #f0f0f0 ;
+  height: 100vh;
+}
+
+#logo-nav{
+  height: 65px;
+  padding: 10px;
+  background-color: white;
+}
+
+.nav-horizontal{
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff5f1;
+  padding-right: 1%;
+}
+
+.nav-vertical{
+  height: calc(100vh - 65px);
+  padding-top: 20px;
+  width: 220px;
+  background-color: #fff5f1;
+}
+
+.btn{
+  margin-right: auto;
+  margin-bottom: 20px;
+  padding: 10%;
+  display: block;
+  border: none;
+  background-color: #f0f0f000;
+  font-size: 1.5rem;
+  border-radius: 5px;
+}
+
+.btn-subir-archivo{
+  background-color: #f25c29;
+  color: white;
+}
+
+#profile-icon{
+  font-size: 65px;
+}
