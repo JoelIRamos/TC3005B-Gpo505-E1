@@ -85,3 +85,53 @@ body{
   display: inline-block;
   position: absolute;
 }
+
+.historial {
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  height: 100%;
+  margin-top: 3%;
+  margin-left: 7%;
+  border-radius: 4px;
+  overflow: auto;
+}
+
+.tarjeta-historial {
+  margin-top: 3%;
+  margin-left: 8%;
+  height: 9vh;
+  width: 65vw;
+  border: 1px solid rgb(83,83,83);
+  border-radius: 5px;
+}
+
+.busqueda {
+  margin-top: 3%;
+  margin-left: 10%;
+  height: 7vh;
+  width: 62vw;
+  border: 1px solid rgb(83,83,83);
+  border-radius: 35px;
+}
+
+.icono-busqueda {
+  margin-top: .8%;
+  margin-left: 1.5%;
+  font-size: 200%;
+  position: absolute;
+}
+
+.icono-flecha {
+  margin-top: .8%;
+  margin-left: 74%;
+  font-size: 200%;
+  position: absolute;
+}
+
+.area-historial {
+  justify-content: left;
+  height: 80vh;
+  width: 80vw;
+  display: flex;
+}
