@@ -1,11 +1,12 @@
 import React from 'react'
 import { FaUserCircle } from "react-icons/fa"
-import { FaCloudUploadAlt } from "react-icons/fa"
-import { FaChartBar } from "react-icons/fa"
-import { FaHistory } from 'react-icons/fa'
 import Button from './Button'
 
+
+
 const Navbar = () => {
+
+
   return (
       <>
         <nav className="nav-horizontal">
@@ -13,9 +14,9 @@ const Navbar = () => {
             < FaUserCircle id='profile-icon' />
         </nav>
         <nav className='nav-vertical'>
-            <Button text='Subir Archivo' style='btn-subir-archivo' icon={<FaCloudUploadAlt className='' />}/>
-            <Button text='Dashboard' style='btn' icon={<FaChartBar />} />
-            <Button text='Historial' style='btn' icon={<FaHistory />}/>
+            <Button text='Subir Archivo' style='btn btn-subir-archivo' icon="cloud"/>
+            <Button text='Dashboard' style='btn' icon="chart"/>
+            <Button text='Historial' style='btn' icon="history"/>
         </nav>
     </>
   )
