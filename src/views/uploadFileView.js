@@ -1,4 +1,4 @@
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Navbar/Navbar.js';
 import '../index.css';
 
 function uploadFileView() {

@@ -1,9 +1,9 @@
-import Navbar from '../components/Navbar';
-import Graph from '../components/Graph';
+import Navbar from '../components/Navbar/Navbar.js';
+import Graph from '../components/Graph/Graph.js';
 import Titulo from '../components/Titulo';
 import '../index.css';
 import ContenedorDatos from '../components/ContenedorDatos';
-import FormAtributos from '../components/FormAtributos';
+import FormAtributos from '../components/FormAtributos/FormAtributos.js';
 
 function dashboardView({datos, atributos, onSelect, atributo1}) {
   return (

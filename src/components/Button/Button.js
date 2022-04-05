@@ -3,6 +3,7 @@ import { FaCloudUploadAlt } from "react-icons/fa"
 import { FaChartBar } from "react-icons/fa"
 import { FaHistory } from 'react-icons/fa'
 import { useState } from 'react'
+import './Button.css'
 
 const Button = ({text, style, icon}) => {
 

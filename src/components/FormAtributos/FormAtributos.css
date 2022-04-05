@@ -1,0 +1,10 @@
+.container-form-atributo{
+    width: 50%;
+  }
+
+  .container-atributos{
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: auto;
+    max-height: 100px;
+  }

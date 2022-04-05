@@ -1,4 +1,4 @@
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Navbar/Navbar.js';
 import Tabla from '../components/Tabla';
 import '../index.css';
 

@@ -1,5 +1,6 @@
 import React from 'react'
-import Atributos from './Atributos'
+import Atributos from '../Atributos/Atributos'
+import './FormAtributos.css'
 
 const FormAtributos = ({atributos, onSelect}) => {
 

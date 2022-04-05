@@ -1,8 +1,8 @@
 import React from 'react'
 import { FaUserCircle } from "react-icons/fa"
 import { Link } from "react-router-dom";
-import Button from './Button'
-import '../index.css'
+import Button from '../Button/Button.js'
+import './Navbar.css'
 
 
 const Navbar = () => {

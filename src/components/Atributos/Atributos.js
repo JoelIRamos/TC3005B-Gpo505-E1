@@ -1,4 +1,5 @@
 import React from 'react'
+import './Atributos.css'
 
 const Atributos = ({atributos}) => {
   return (
