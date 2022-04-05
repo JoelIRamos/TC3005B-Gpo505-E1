@@ -1,6 +1,6 @@
-import Navbar from '../components/Navbar';
-import Graph from '../components/Graph';
-import Titulo from '../components/Titulo';
+import Navbar from '../components/Navbar/Navbar';
+import Graph from '../components/Graph/Graph';
+import Titulo from '../components/Titulo/Titulo';
 import '../index.css';
 
 function dashboardView() {

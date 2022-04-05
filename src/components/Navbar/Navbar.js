@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaUserCircle } from "react-icons/fa"
 import { Link } from "react-router-dom";
-import Button from './Button'
+import Button from '../Button/Button'
 import '../index.css'
 
 

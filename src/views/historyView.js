@@ -1,5 +1,5 @@
-import Navbar from '../components/Navbar';
-import Tabla from '../components/Tabla';
+import Navbar from '../components/Navbar/Navbar';
+import Tabla from '../components/Tabla/Tabla';
 import '../index.css';
 
 function historyView() {
