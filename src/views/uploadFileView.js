@@ -1,5 +1,5 @@
 import Navbar from '../components/Navbar/Navbar';
-import '../index.css';
+import '../App.css';
 
 function uploadFileView() {
   return (

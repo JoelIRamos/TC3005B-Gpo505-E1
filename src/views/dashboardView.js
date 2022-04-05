@@ -1,7 +1,7 @@
 import Navbar from '../components/Navbar/Navbar';
 import Graph from '../components/Graph/Graph';
 import Titulo from '../components/Titulo/Titulo';
-import '../index.css';
+import '../App.css';
 
 function dashboardView() {
   return (

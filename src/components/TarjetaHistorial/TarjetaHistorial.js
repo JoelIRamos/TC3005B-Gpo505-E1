@@ -1,4 +1,4 @@
-import '../index.css';
+import '../../App.css';
 
 function barraBusqueda() {
     return (
