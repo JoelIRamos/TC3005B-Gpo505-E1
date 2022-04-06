@@ -1,10 +1,10 @@
 import Navbar from '../components/Navbar/Navbar.js';
-import '../index.css';
+import '../App.css';
 
 function uploadFileView() {
   return (
     <div className="App">
-      <Navbar />
+      <Navbar selected='upload' />
     </div>
   );
 }

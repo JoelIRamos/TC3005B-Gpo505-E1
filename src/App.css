@@ -1,33 +1,15 @@
 body{
   margin: 0;
-  background-color: #f0f0f0
+  background-color: #f0f0f0;
+  font-family: 'Roboto', sans-serif;
+}
+
+input, select, button{
+  font-family: inherit;
 }
 
 .App{
   height: 100vh;
-}
-
-.graph{
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px 20px;
-  min-height: 300px;
-}
-
-
-#profile-icon{
-  font-size: 65px;
-}
-
-.container-titulo{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  text-align: center;
-  height: 80px;
 }
 
 .row{
@@ -39,31 +21,11 @@ body{
 
 .container-app{
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   position: absolute;
-  margin-left: 240px;
+  margin-left: calc(100vw - (100vw - 240px));
   margin-top: 105px;
-  max-width: calc(100vw - 240px);
-  width: calc(100vw - 240px);
-}
-
-.contenedor-datos{
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  border-radius: 10px;
-  color: #fff;
-  height: 120px;
-  width: 48%;
-  text-align: center;
-}
-
-.red{
-  background-color: #f25c29;
-}
-
-.yellow{
-  background-color: #ffa82f;
+  width: calc(100vw - 260px);
 }
 
 .col-1{
@@ -138,19 +100,4 @@ a{
 .form-atributos{
   width: 100%;
   max-height: 120px;
-}
-
-.btn-form{
-  background-color: #f25c29;
-  border: none;
-  padding: 10px 25px;
-  color: white;
-  cursor: pointer;
-  border-radius: 25px;
-  margin-top: 2%;
-  transition: all 0.2s;
-}
-
-.btn-form:hover{
-  background-color: #ffa82f;
 }

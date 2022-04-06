@@ -1,0 +1,18 @@
+.contenedor-datos{
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    color: #fff;
+    height: 120px;
+    width: 48%;
+    text-align: center;
+  }
+  
+  .red{
+    background-color: #f25c29;
+  }
+  
+  .yellow{
+    background-color: #ffa82f;
+  }

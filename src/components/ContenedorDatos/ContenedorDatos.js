@@ -1,4 +1,5 @@
 import React from 'react'
+import './ContenedorDatos.css'
 
 const ContenedorDatos = ({datos, label, color}) => {
   return (

@@ -1,0 +1,10 @@
+.container-titulo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    text-align: center;
+    height: 80px;
+  }

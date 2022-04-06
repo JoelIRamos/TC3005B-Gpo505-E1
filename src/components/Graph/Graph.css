@@ -1,0 +1,44 @@
+.graph{
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px 20px;
+    height: 300px;
+    padding-bottom: 40px;
+    position: relative;
+  }
+
+.container-titulo-btn{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container-btn-graph{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-graph{
+    margin-right: 5%;
+    padding: 1%;
+    display: block;
+    border: none;
+    background-color: #f0f0f000;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 2%;
+    color: #636363;
+    border: solid 1px transparent;
+    transition: all 200ms;
+}
+
+.btn-graph:hover{
+    color: #f25c29;
+}
+
+
+h3{
+    margin: 0;
+}

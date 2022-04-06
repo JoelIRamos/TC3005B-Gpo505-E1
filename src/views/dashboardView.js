@@ -1,20 +1,18 @@
 import Navbar from '../components/Navbar/Navbar.js';
 import Graph from '../components/Graph/Graph.js';
-import Titulo from '../components/Titulo';
-import '../index.css';
-import ContenedorDatos from '../components/ContenedorDatos';
+import Titulo from '../components/Titulo/Titulo';
+import '../App.css';
+import ContenedorDatos from '../components/ContenedorDatos/ContenedorDatos.js';
 import FormAtributos from '../components/FormAtributos/FormAtributos.js';
 
 function dashboardView({datos, atributos, onSelect, atributo1}) {
   return (
     <div className="App">
-      <Navbar />
+      <Navbar selected='dashboard' />
       <div className="container-app">
         <div className='col col-1'>
           < Titulo />
-          <div className="graph">
-            <Graph data = {datos} atributo1={atributo1} />
-          </div>
+          <Graph data = {datos} atributo1={atributo1} />
         </div>
         <div className="col col-2">
           <div className="row">

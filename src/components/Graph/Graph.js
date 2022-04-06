@@ -1,34 +1,36 @@
 import React from 'react'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import './Graph.css'
+import { FaCog } from 'react-icons/fa'
+import GraphList from '../GraphList/GraphList'
+import { useState } from 'react'
 
-const data = [
-    {
-        id: 'ID_1',
-        anomalias: 6100,
-    },
-    {
-        id: 'ID_2',
-        anomalias: 4500,
-    },
-    {
-        id: 'ID_3',
-        anomalias: 2200,
-    },
-    {
-        id: 'ID_4',
-        anomalias: 600,
-    },
-]
+const graphs = ['Grafico de Barras', 'Grafico de Area', 'Grafico de Burbuja']
 
-const Graph = () => {
+const Graph = ({data, atributo1}) => {
+
+  const [click, setClick] = useState(false)
+
+  const clicked = () => {
+    setClick(!click)
+  }
+
   return (
+    <div className="graph">
+      <div className="container-titulo-btn">
+        <h3>Cantidad de Anomalías por {atributo1}</h3>
+        <button className='btn-graph' onClick={clicked}>{< FaCog />}</button>
+      </div>
+      < GraphList graphs={graphs} state={click} onClick={clicked}  />
+      <ResponsiveContainer width='100%' height='100%'>
         <BarChart width={500} height={300} data = {data}>
-            <CartesianGrid strokeDasharray='3 3'/>
-            <XAxis dataKey='id' />
+            <XAxis dataKey={atributo1} />
             <YAxis />
             <Tooltip />
             <Bar dataKey='anomalias' fill='#ffa82f' />
         </BarChart>
+      </ResponsiveContainer>
+    </div>
   )
 }
 
