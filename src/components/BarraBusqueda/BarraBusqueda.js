@@ -1,4 +1,4 @@
-import '../index.css';
+import '../../App.css';
 import { FaSearch, FaArrowRight} from "react-icons/fa"
 
 function barraBusqueda() {
