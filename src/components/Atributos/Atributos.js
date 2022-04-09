@@ -1,6 +1,7 @@
 import React from 'react'
 import './Atributos.css'
 
+// TODO: Agregar booleano para saber si es el atributo1 o el atributo2
 const Atributos = ({atributos}) => {
   return (
       <div className='atributos'>

@@ -9,3 +9,7 @@
     max-height: 80px;
     padding: 5px 20px;
   }
+
+.hide-form{
+  display: none;
+}

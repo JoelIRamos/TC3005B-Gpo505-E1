@@ -1,18 +1,30 @@
 import Navbar from '../components/Navbar/Navbar.js';
-import Graph from '../components/Graph/Graph.js';
 import Titulo from '../components/Titulo/Titulo';
 import '../App.css';
 import ContenedorDatos from '../components/ContenedorDatos/ContenedorDatos.js';
 import FormAtributos from '../components/FormAtributos/FormAtributos.js';
+import GraphContainer from '../components/GraphContainer/GraphContainer.js';
 
-function dashboardView({datos, atributos, onSelect, atributo1}) {
+function dashboardView({datos , atributos, onSelect, atributo1, clicked, clickedLi, click, chart, showForm}) {
+
+  // Props: 
+  //   datos = datos dummy
+  //   atributos = lista de atributos
+  //   onSelect = guarda el atributo para la grafica
+  //   atributo1 = atributo #1 que se muestra en la grafica
+  //   clicked = funcion para el estado del click
+  //   clickedLi = funcion para el estado del click y guardar el grafico a desplegar
+  //   click = estado de click
+  //   chart = estado de grafico a desplegar
+  //   showForm = estado para desplegar form para grafico burbuja
+
   return (
     <div className="App">
       <Navbar selected='dashboard' />
       <div className="container-app">
         <div className='col col-1'>
           < Titulo />
-          <Graph data = {datos} atributo1={atributo1} />
+          <GraphContainer click={click} chart={chart} data = {datos} atributo1={atributo1} clicked={clicked} clickedLi={clickedLi} />
         </div>
         <div className="col col-2">
           <div className="row">
@@ -24,7 +36,10 @@ function dashboardView({datos, atributos, onSelect, atributo1}) {
             <ContenedorDatos datos='39%' label='Porcentaje de Anomalías' color='yellow'/>
           </div>
           <div className='row'>
-            < FormAtributos atributos={atributos} onSelect={onSelect} />
+            < FormAtributos atributos={atributos} onSelect={onSelect} showForm = {true} />
+          </div>
+          <div className='row'>
+            < FormAtributos atributos={atributos} onSelect={onSelect} showForm={showForm} />
           </div>
         </div>
       </div>
