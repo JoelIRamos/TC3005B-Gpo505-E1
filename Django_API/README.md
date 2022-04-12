@@ -11,7 +11,7 @@
     ``` sh
     .\env\Scripts\activate
     ```
-    > Para salir escribir "deactivate"
+    > Para salir ir a esta carpeta y escribir "deactivate en vez de activate"
 4. El ambiente fue activado si en la terminal aparece *"(env)"* antes de la dirección.
     ``` sh 
     (env) C:\...
