@@ -62,9 +62,15 @@ function App() {
   // Estado de atributo para desplegar los atributos en la grafica
   const [atributo1, setAtributo1] = useState('claveTransportista')
 
+  const [atributo2, setAtributo2] = useState('claveTransportista')
+
   // Funcion que guarda el atributo nuevo para visualizar en la grafica
-  const saveAtributo = (atributo) => {
+  const saveAtributo1 = (atributo) => {
     setAtributo1(atributo)
+  }
+
+  const saveAtributo2 = (atributo) => {
+    setAtributo2(atributo)
   }
 
   // Funciones que cambian el estado de los clicks para la lista de graficas
@@ -88,7 +94,7 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<UpFileview/>}/>
-        <Route path='/Dashboard' element={<Dashboard showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect={saveAtributo} atributo1 = {atributo1}/>}/>
+        <Route path='/Dashboard' element={<Dashboard atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>
     </Router>

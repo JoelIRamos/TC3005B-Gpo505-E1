@@ -2,7 +2,7 @@ import React from 'react'
 import Atributos from '../Atributos/Atributos'
 import './FormAtributos.css'
 
-const FormAtributos = ({atributos, onSelect, showForm}) => {
+const FormAtributos_1 = ({atributos, onSelect, showForm, idForm}) => {
 
     const radioEvent = (e) => {
         onSelect(e.target.value)
@@ -11,14 +11,16 @@ const FormAtributos = ({atributos, onSelect, showForm}) => {
   return (
       <div className={`container-form-atributo ${!showForm && 'hide-form'}`}>
             <h3>Atributo Interno</h3>
-            <div className="container-atributos" onChange={radioEvent}>
-                {atributos.map((element) => (
-                    <Atributos atributos={element} />
-                ))}
-            </div>
+            <form>
+                <div className="container-atributos" onChange={radioEvent}>
+                    {atributos.map((element) => (
+                        <Atributos idForm={idForm} atributos={element} />
+                    ))}
+                </div>
+            </form>
       </div>
     
   )
 }
 
-export default FormAtributos
+export default FormAtributos_1

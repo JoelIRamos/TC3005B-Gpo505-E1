@@ -1,5 +1,6 @@
 import React from 'react'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Area, AreaChart } from 'recharts'
+import { Doughnut } from 'react-chartjs-2'
 
 
 const Graph = ({atributo1, chart, data}) => {
