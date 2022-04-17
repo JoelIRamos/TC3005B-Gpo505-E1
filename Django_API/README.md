@@ -3,22 +3,23 @@
 ## Instrucciones de instalación (Windows)
 1. Abrir un **CMD** *(Command Prompt)* en la carpeta principal.
 
-2. Crear un ambiente virtual de python con el siguiente codigo.
+2. Crear un ambiente virtual de python los siguientes codigos.
     ``` sh
+    pip install virtualenv
     virtualenv -p python env
     ```
-3. Es necesario activar el ambiente virtual con el que se va a correr el programa.
+3. Activar el ambiente virtual con el que se va a correr el programa.
     ``` sh
     .\env\Scripts\activate
     ```
-    > Para salir ir a esta carpeta y escribir "deactivate en vez de activate"
-4. El ambiente fue activado si en la terminal aparece *"(env)"* antes de la dirección.
+    > Para salir ir a esta carpeta y escribir *"deactivate"* en vez de activate
+4. El ambiente fue activado si en la terminal aparece *"(env)"* antes de la dirección. Por ejemplo:
     ``` sh 
     (env) C:\...
     ```
 5. Una vez estando en el ambiente virtual, es necesario importar las librerias que se van a utilizar, estas se encuentran descritas en el documento ***requirements.txt***. Para importarlas de una manera más sencilla se puede utilizar el siguiente comando:
     ``` sh
-    ""
+    pip3 install -r requirements.txt
     ```
 6. Antes de correr la API es necesario entrar a la carpeta del projecto.
     ``` sh 
@@ -29,3 +30,14 @@
     python manage.py runserver
     ```
     > Para salir utilizar Ctrl+C
+
+
+## Instucciones si hay modificaciones a los modelos
+1. Crear las migraciones
+    ``` sh
+    python manage.py makemigrations api
+    ```
+2. Hacer la migracion
+    ``` sh
+    python manage.py migrate api
+    ```

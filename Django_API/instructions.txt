@@ -1,8 +1,0 @@
-Si no aparece en esta carpeta la subcarpeta "env"
-Correr "virtualenv -p python env" aquí
-Despues usar el comando ".\env\Scripts\activate" para activar el ambiente virtual.
-    Debera aparecer algo así en la terminal "(env) D:\...".
-
-Correr los comando de requirements.txt para tener las librerias necesarias (estando en el ambiente virtual)
-Entrar a la carpeta del proyecto "cd API_PROJECT"
-Correr el comando para correr la aplicacion localmente "python manage.py runserver"

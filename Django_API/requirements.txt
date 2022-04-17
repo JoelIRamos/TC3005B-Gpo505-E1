@@ -1,5 +1,5 @@
-pip install Django==4.0.3
-pip install djangorestframework
-pip install django-cors-headers
-pip install djongo
-pip install dnspython
+Django==4.0.3
+djangorestframework
+django-cors-headers
+djongo
+dnspythons

@@ -65,3 +65,69 @@ class TableView(View):
         else:
             datos = {'message': 'Not found'}
         return JsonResponse(datos)
+
+
+class LastSessionView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request,id=0):
+        datos = {'message': 'Success', 'type': 'GET_LAST_SESSION'}
+        return JsonResponse(datos)
+    
+    def post(self, request):
+        datos = {'message': 'Success', 'type': 'POST_LAST_SESSION'}
+        return JsonResponse(datos)
+    
+    def put(self, request, id):
+        datos = {'message': 'Success', 'type': 'PUT_LAST_SESSION'}
+        return JsonResponse(datos)
+    
+    def delete(self, request, id):
+        datos = {'message': 'Success', 'type': 'DELETE_LAST_SESSION'}
+        return JsonResponse(datos)
+
+
+class HistoryView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request,id=0):
+        datos = {'message': 'Success', 'type': 'GET_HISTORY'}
+        return JsonResponse(datos)
+    
+    def post(self, request):
+        datos = {'message': 'Success', 'type': 'POST_HISTORY'}
+        return JsonResponse(datos)
+    
+    def put(self, request, id):
+        datos = {'message': 'Success', 'type': 'PUT_HISTORY'}
+        return JsonResponse(datos)
+    
+    def delete(self, request, id):
+        datos = {'message': 'Success', 'type': 'DELETE_HISTORY'}
+        return JsonResponse(datos)
+
+
+class FileView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request,id=0):
+        datos = {'message': 'Success', 'type': 'GET_FILE'}
+        return JsonResponse(datos)
+    
+    def post(self, request):
+        datos = {'message': 'Success', 'type': 'POST_FILE'}
+        return JsonResponse(datos)
+    
+    def put(self, request, id):
+        datos = {'message': 'Success', 'type': 'PUT_FILE'}
+        return JsonResponse(datos)
+    
+    def delete(self, request, id):
+        datos = {'message': 'Success', 'type': 'DELETE_FILE'}
+        return JsonResponse(datos)

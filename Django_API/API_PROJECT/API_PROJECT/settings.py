@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'CLIENT': {
             "host": "mongodb+srv://JoelIRamosH:JoelI@cluster0.htyzr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-            "name": "TernData",
+            "name": "mytestdb",
             "authMechanism": "SCRAM-SHA-1"
         },
     }
