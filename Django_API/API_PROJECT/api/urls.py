@@ -2,8 +2,8 @@ from django.urls import path
 from api import views
 
 urlpatterns = [
-    path('table/', views.TableView.as_view(), name='table_list'),
-    path('table/<int:id>/', views.TableView.as_view(), name='table_detail'),
+    # path('table/', views.TableView.as_view(), name='table_list'),
+    # path('table/<int:id>/', views.TableView.as_view(), name='table_detail'),
     
     path('last_session/', views.LastSessionView.as_view(), name='last_session_list'),
     path('last_session/<int:id>/', views.LastSessionView.as_view(), name='last_session_detail'),
