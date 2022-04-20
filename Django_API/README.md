@@ -12,8 +12,8 @@
     ``` sh
     .\env\Scripts\activate
     ```
-    > Para salir ir a esta carpeta y escribir *"deactivate"* en vez de activate
-4. El ambiente fue activado si en la terminal aparece *"(env)"* antes de la dirección. Por ejemplo:
+    > Para salir ir a la carpeta de este archivo y escribir *"deactivate"* en vez de *"activate"*
+4. Revisar que el ambiente fue activado, si en la terminal aparece *"(env)"* antes de la dirección, todo esta correcto. Por ejemplo:
     ``` sh 
     (env) C:\...
     ```
@@ -30,14 +30,3 @@
     python manage.py runserver
     ```
     > Para salir utilizar Ctrl+C
-
-
-## Instucciones si hay modificaciones a los modelos
-1. Crear las migraciones
-    ``` sh
-    python manage.py makemigrations api
-    ```
-2. Hacer la migracion
-    ``` sh
-    python manage.py migrate api
-    ```
