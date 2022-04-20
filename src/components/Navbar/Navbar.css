@@ -20,21 +20,9 @@
     z-index: 999;
   }
   
-  .nav-vertical{
-    display: inline-block;
-    position: fixed;
-    top: 85px;
-    height: calc(100vh - 105px);
-    padding-top: 20px;
-    width: 220px;
-    background-color: #fff5f1;
-    z-index: 999;
-  }
-
   .btn{
     margin-right: auto;
     margin-left: auto;
-    margin-bottom: 20px;
     padding: 10%;
     display: block;
     border: none;

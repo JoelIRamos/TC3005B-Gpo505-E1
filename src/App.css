@@ -23,9 +23,10 @@ input, select, button{
   display: flex;
   justify-content: space-between;
   position: absolute;
-  margin-left: calc(100vw - (100vw - 240px));
   margin-top: 105px;
-  width: calc(100vw - 260px);
+  margin-left: 2%;
+  margin-right: 2%;
+  width: calc(100vw - 4%);
 }
 
 .col-1{
