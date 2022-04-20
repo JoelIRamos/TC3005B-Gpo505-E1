@@ -48,7 +48,7 @@ const DropFile = ({onFileChange}) => {
           onDrop={onDrop}
         >
           <div className="drop-file-input__label">
-            <p>Arrastra aquí el archivo</p>
+            <p>Arrastra aquí el archivo o clickea para seleccionarlo directamente</p>
           </div>
           <input type="file" value="" onChange={onFileDrop}/>
         </div>}
