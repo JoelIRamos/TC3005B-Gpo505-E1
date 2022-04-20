@@ -22,7 +22,7 @@ function dashboardView({datos , atributos, onSelect1, onSelect2, atributo1, atri
   return (
     <div className="App">
       <Navbar selected='dashboard' />
-      <div className="container-app">
+      <div className="container-db">
         <div className='col col-1'>
           < Titulo />
           <GraphContainer showForm={showForm} atributo2={atributo2} click={click} chart={chart} data = {datos} atributo1={atributo1} clicked={clicked} clickedLi={clickedLi} />

@@ -19,7 +19,17 @@ input, select, button{
   width: 100%;
 }
 
-.container-app{
+.container-up{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 105px;
+  position: absolute;
+  width: 100vw;
+  height: calc(100vh - 105px);
+}
+
+.container-db{
   display: flex;
   justify-content: space-between;
   position: absolute;
