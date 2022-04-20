@@ -88,8 +88,6 @@ function App() {
     setClick(!click)
   }
 
-
-
   return (
     <Router>
       <Routes>
