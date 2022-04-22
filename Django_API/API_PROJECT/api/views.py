@@ -10,6 +10,27 @@ import json
 from api.db import db 
 from bson.json_util import dumps
 
+
+from django.http import HttpResponse
+
+async def searchHistoryList(request):
+    return HttpResponse("searchHistoryList")
+
+async def searchHistoryDetail(request, historyID):
+    return HttpResponse("searchHistoryDetail: " + historyID)
+
+async def searchLastSession(request, userID):
+    return HttpResponse("searchLastSession: " + userID)
+
+async def deleteLastSession(request, userID):
+    return HttpResponse("deleteLastSession: " + userID)
+
+async def updateLastSession(request, userID):
+    return HttpResponse("updateLastSession: " + userID)
+
+async def insertToHistory(request, userID):
+    return HttpResponse("insertToHistory: " + userID)
+
 # Create your views here.
 
 class HistoryView(View):
