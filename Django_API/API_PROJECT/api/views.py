@@ -10,30 +10,6 @@ import json
 from api.db import db 
 from bson.json_util import dumps
 
-
-from django.http import HttpResponse
-
-# async def searchHistoryList(request):
-#     return HttpResponse("<html><h1>searchHistoryList</h1></html>")
-
-# async def searchHistoryDetail(request, historyID):
-#     return HttpResponse("searchHistoryDetail: " + str(historyID))
-
-# async def searchLastSession(request, userID):
-#     return HttpResponse("searchLastSession: " + str(userID))
-
-# async def deleteLastSession(request, userID):
-#     return HttpResponse("deleteLastSession: " + str(userID))
-
-# async def updateLastSession(request, userID):
-#     return HttpResponse("updateLastSession: " + str(userID))
-
-# async def insertToHistory(request, userID):
-#     if request.method == "POST":
-#         return HttpResponse("insertToHistory: " + str(userID))
-#     else: 
-#         return HttpResponse("NO insertToHistory")
-
 # Create your views here.
 
 class HistoryView(View):
@@ -204,3 +180,195 @@ class FileView(View):
         else:
             data = {'message': 'Not found'}
         return JsonResponse(data)
+
+
+from django.http import HttpResponse
+
+# View del endpoint de searchHistoryList
+class searchHistoryListView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request):
+        # ToDo: Implementar el metodo GET
+        pass
+    
+    def post(self, request):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def put(self, request):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def delete(self, request):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+
+# View del endpoint de searchHistoryDetail
+class searchHistoryDetailView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, historyID):
+        return HttpResponse("<html><h1>Hello World</h1></html>")
+        # ToDo: Implementar el metodo GET
+        pass
+    
+    def post(self, request, historyID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def put(self, request, historyID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def delete(self, request, historyID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+
+
+# View del endpoint de searchLastSession
+class searchLastSessionView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, userID):
+        # ToDo: Implementar el metodo GET
+        pass
+    
+    def post(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def put(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def delete(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+
+
+# View del endpoint de deleteLastSession
+class deleteLastSessionView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def post(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def put(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    # * Metodo HTTP (DELETE) del endpoint
+    def delete(self, request, userID):
+        # ToDo: Implementar el metodo DELETE
+        pass
+
+
+# View del endpoint de updateLastSession
+class updateLastSessionView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def post(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    # * Metodo HTTP (PUT) del endpoint
+    def put(self, request, userID):
+        # ToDo: Implementar el metodo PUT
+        pass
+    
+    def delete(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+
+
+# View del endpoint de insertToHistory
+class insertToHistoryView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    # * Metodo HTTP (POST) del endpoint
+    def post(self, request, userID):
+        # ToDo: Implementar el metodo POST
+        pass
+    
+    def put(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def delete(self, request, userID=0):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+
+class View(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def post(self, request):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def put(self, request):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    def delete(self, request):
+        data = {'message': 'endpoint not implemented'}
+        return JsonResponse(data)
+    
+    
+
+# from django.http import HttpResponse
+
+# async def searchHistoryList(request):
+#     return HttpResponse("<html><h1>searchHistoryList</h1></html>")
+
+# async def searchHistoryDetail(request, historyID):
+#     return HttpResponse("searchHistoryDetail: " + str(historyID))
+
+# async def searchLastSession(request, userID):
+#     return HttpResponse("searchLastSession: " + str(userID))
+
+# async def deleteLastSession(request, userID):
+#     return HttpResponse("deleteLastSession: " + str(userID))
+
+# async def updateLastSession(request, userID):
+#     return HttpResponse("updateLastSession: " + str(userID))
+
+# async def insertToHistory(request, userID):
+#     if request.method == "POST":
+#         return HttpResponse("insertToHistory: " + str(userID))
+#     else: 
+#         return HttpResponse("NO insertToHistory")
