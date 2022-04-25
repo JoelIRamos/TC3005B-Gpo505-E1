@@ -4,12 +4,12 @@ from api import views
 urlpatterns = [
     
     # Asyncronos
-    path('getHistoryList/', views.searchHistoryList),
-    path('getHistoryDetail/<int:historyID>', views.searchHistoryDetail),
-    path('getLastSession/<int:userID>', views.searchLastSession),
-    path('deleteLastSession/<int:userID>', views.deleteLastSession),
-    path('putLastSession/<int:userID>', views.updateLastSession),
-    path('postHistory/<int:userID>', views.insertToHistory),
+    # path('getHistoryList/', views.searchHistoryList),
+    # path('getHistoryDetail/<int:historyID>/', views.searchHistoryDetail),
+    # path('getLastSession/<int:userID>/', views.searchLastSession),
+    # path('deleteLastSession/<int:userID>/', views.deleteLastSession),
+    # path('putLastSession/<int:userID>/', views.updateLastSession),
+    # path('postHistory/<int:userID>/', views.insertToHistory),
     
     
     # Rutas de la tabla de LastSession

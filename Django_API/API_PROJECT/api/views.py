@@ -13,23 +13,26 @@ from bson.json_util import dumps
 
 from django.http import HttpResponse
 
-async def searchHistoryList(request):
-    return HttpResponse("searchHistoryList")
+# async def searchHistoryList(request):
+#     return HttpResponse("<html><h1>searchHistoryList</h1></html>")
 
-async def searchHistoryDetail(request, historyID):
-    return HttpResponse("searchHistoryDetail: " + historyID)
+# async def searchHistoryDetail(request, historyID):
+#     return HttpResponse("searchHistoryDetail: " + str(historyID))
 
-async def searchLastSession(request, userID):
-    return HttpResponse("searchLastSession: " + userID)
+# async def searchLastSession(request, userID):
+#     return HttpResponse("searchLastSession: " + str(userID))
 
-async def deleteLastSession(request, userID):
-    return HttpResponse("deleteLastSession: " + userID)
+# async def deleteLastSession(request, userID):
+#     return HttpResponse("deleteLastSession: " + str(userID))
 
-async def updateLastSession(request, userID):
-    return HttpResponse("updateLastSession: " + userID)
+# async def updateLastSession(request, userID):
+#     return HttpResponse("updateLastSession: " + str(userID))
 
-async def insertToHistory(request, userID):
-    return HttpResponse("insertToHistory: " + userID)
+# async def insertToHistory(request, userID):
+#     if request.method == "POST":
+#         return HttpResponse("insertToHistory: " + str(userID))
+#     else: 
+#         return HttpResponse("NO insertToHistory")
 
 # Create your views here.
 
