@@ -1,9 +1,10 @@
 import pymongo
 from pymongo import MongoClient
+import json
 
 cluster = MongoClient("mongodb+srv://JoelIRamosH:JoelI@cluster0.htyzr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 
-db = cluster["TernData"]
+db = cluster["TernData2"]
 
 ## getHistoryList
 # Obtiene todo el historial del sistema
@@ -25,35 +26,19 @@ def getHistoryList():
 # De un historial en especifico se obtiene un archivo con todos sus atributos 
 ## Parametro: ID_Historial
 def getHistoryDetail(historyID):
-    FileCollection = db["File"]
-    FileResults = list(FileCollection.find({"ID_History": historyID}))
-    if len(FileResults)>0:
-        for result in FileResults:
-            FileID = result["_id"]
-            print("File ID: " + str(FileID))
-        # Obtain externo and interno attributes
-        ExternoCollection = db["Externo"]
-        ExternoResults = list(ExternoCollection.find({"ID_History": historyID}))
-        InternoCollection = db["Interno"]
-        InternoResults = list(InternoCollection.find({"ID_History": historyID}))
-        ### FALTA OBTENER ATRIBUTOS EXT INT   
-        ### FALTA 
-        # Obtain all attributes from that file
-        AttributeCollection = db["Attribute"]
-        AttributeResults = list(AttributeCollection.find({"ID_File": FileID}))
-        if len(AttributeResults)>0:
-            for result in AttributeResults:
-                print(result)
-        else:
-            print("No attributes")
+    collection = db["File"] # First, get all attributes
+    fileResults = collection.find_one({"id_history": historyID})
+    if len(fileResults) > 0:
+        attr = fileResults["atribute"]
+        #print(attr)
+        ExtInt = db["History"].find_one({"_id": historyID}) # Second, get all internos y externos
+        extern = ExtInt["externos"]
+        intern = ExtInt["internos"]
+        print({"attribute": attr, "externo": extern, "interno" : intern})
+    
 
-        # data = {'message':'found', 'result': results}
-        # data = {'message':'found', 'result': "a"}
-    else:
-        # data = {'message': 'Not found'}
-        print("No file found")
 
-getHistoryDetail(0)
+#getHistoryDetail(1)
 
 def getLastSession(userID):
     collection = db["LastSession"]
@@ -69,3 +54,10 @@ def getLastSession(userID):
         print("Not found")
 
 #getLastSession(0)
+
+def deleteLastSession(userID):
+    collection = db["LastSession"]
+    collection.delete_one({"id_webUser": userID})
+
+#deleteLastSession(1)
+

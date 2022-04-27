@@ -215,9 +215,18 @@ class searchHistoryDetailView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, historyID):
-        return HttpResponse("<html><h1>Hello World</h1></html>")
+        collection = db["File"] # First, get all attributes
+        fileResults = collection.find_one({"id_history": historyID})
+        if len(fileResults) > 0:
+            # ! Regreso solo los atributos? o todo? fileid history id fecha...
+            attr = fileResults["atribute"]           # ! Corregir atribute -> attribute
+            ExtInt = db["History"].find_one({"_id": historyID}) # Second, get all internos y externos
+            extern = ExtInt["externos"]
+            intern = ExtInt["internos"]
+            data = {'message':'found', 'attribute': attr,
+                     'interno': intern, 'externo': extern}
+        return JsonResponse(data)
         # ToDo: Implementar el metodo GET
-        pass
     
     def post(self, request, historyID=0):
         data = {'message': 'endpoint not implemented'}
