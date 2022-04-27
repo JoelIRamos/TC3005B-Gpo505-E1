@@ -12,176 +12,6 @@ from bson.json_util import dumps
 
 # Create your views here.
 
-class HistoryView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
-    
-    def get(self, request,id=0):
-        collection = db["History"]
-        if id>0:
-            results = list(collection.find({"_id":id}))
-            # print(results)
-            if len(results)>0:
-                data = {'message':'found', 'result': results}
-                # data = {'message':'found', 'result': "a"}
-            else:
-                data = {'message': 'Not found'}
-
-        else:
-            results = json.loads(dumps(list(collection.find())))
-            # print(results)
-            if len(results) > 0:
-                data = {'message': 'Success', 'result': results}
-            else:
-                data = {'message': 'Empty'}
-            
-        return JsonResponse(data)
-    
-    def post(self, request):
-        collection = db["History"]
-        jd=json.loads(request.body)
-        # print(jd)
-        collection.insert_many(jd)
-        data = {'message': 'Success'}
-        return JsonResponse(data)
-    
-    def put(self, request, id):
-        collection = db["History"]
-        jd = json.loads(request.body)
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            # collection.update_one({"_id":id}, {"$set":{'name':jd['name']}})
-            collection.update_one({"_id":id}, {"$set":jd})
-            datos = {'message': 'Success'}
-        else:
-            datos = {'message': 'Not found'}
-        return JsonResponse(datos)
-    
-    def delete(self, request, id):
-        collection = db["History"]
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            collection.delete_one({"_id":id})
-            data = {'message': 'Success'}
-        else:
-            data = {'message': 'Not found'}
-        return JsonResponse(data)
-
-
-class LastSessionView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
-    
-    def get(self, request,id=0):
-        collection = db["LastSession"]
-        if id>0:
-            results = list(collection.find({"_id":id}))
-            # print(results)
-            if len(results)>0:
-                data = {'message':'found', 'result': results}
-                # data = {'message':'found', 'result': "a"}
-            else:
-                data = {'message': 'Not found'}
-
-        else:
-            results = json.loads(dumps(list(collection.find())))
-            # print(results)
-            if len(results) > 0:
-                data = {'message': 'Success', 'result': results}
-            else:
-                data = {'message': 'Empty'}
-            
-        return JsonResponse(data)
-    
-    def post(self, request):
-        collection = db["LastSession"]
-        jd=json.loads(request.body)
-        # print(jd)
-        collection.insert_many(jd)
-        data = {'message': 'Success'}
-        return JsonResponse(data)
-    
-    def put(self, request, id):
-        collection = db["LastSession"]
-        jd = json.loads(request.body)
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            # collection.update_one({"_id":id}, {"$set":{'name':jd['name']}})
-            collection.update_one({"_id":id}, {"$set":jd})
-            datos = {'message': 'Success'}
-        else:
-            datos = {'message': 'Not found'}
-        return JsonResponse(datos)
-    
-    def delete(self, request, id):
-        collection = db["LastSession"]
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            collection.delete_one({"_id":id})
-            data = {'message': 'Success'}
-        else:
-            data = {'message': 'Not found'}
-        return JsonResponse(data)
-
-class FileView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
-    
-    def get(self, request,id=0):
-        collection = db["File"]
-        if id>0:
-            results = list(collection.find({"_id":id}))
-            # print(results)
-            if len(results)>0:
-                data = {'message':'found', 'result': results}
-                # data = {'message':'found', 'result': "a"}
-            else:
-                data = {'message': 'Not found'}
-
-        else:
-            results = json.loads(dumps(list(collection.find())))
-            # print(results)
-            if len(results) > 0:
-                data = {'message': 'Success', 'result': results}
-            else:
-                data = {'message': 'Empty'}
-            
-        return JsonResponse(data)
-    
-    def post(self, request):
-        collection = db["File"]
-        jd=json.loads(request.body)
-        # print(jd)
-        collection.insert_many(jd)
-        data = {'message': 'Success'}
-        return JsonResponse(data)
-    
-    def put(self, request, id):
-        collection = db["File"]
-        jd = json.loads(request.body)
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            # collection.update_one({"_id":id}, {"$set":{'name':jd['name']}})
-            collection.update_one({"_id":id}, {"$set":jd})
-            datos = {'message': 'Success'}
-        else:
-            datos = {'message': 'Not found'}
-        return JsonResponse(datos)
-    
-    def delete(self, request, id):
-        collection = db["File"]
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            collection.delete_one({"_id":id})
-            data = {'message': 'Success'}
-        else:
-            data = {'message': 'Not found'}
-        return JsonResponse(data)
-
-
 from django.http import HttpResponse
 
 # View del endpoint de searchHistoryList
@@ -192,8 +22,13 @@ class searchHistoryListView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request):
-        # ToDo: Implementar el metodo GET
-        pass
+        collection = db["History"]
+        results = list(collection.find({}))
+        if len(results)>0:
+            data = {'message':'found', 'result': results}
+        else:
+            data = {'message': 'Not found'}
+        return JsonResponse(data)
     
     def post(self, request):
         data = {'message': 'endpoint not implemented'}
@@ -215,9 +50,14 @@ class searchHistoryDetailView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, historyID):
-        return HttpResponse("<html><h1>Hello World</h1></html>")
-        # ToDo: Implementar el metodo GET
-        pass
+        # ToDo: Incluir agentes internos y externos
+        collection = db["File"]
+        results = list(collection.find({"id_history": historyID}))
+        if len(results)>0:
+            data = {'message':'found', 'result': results}
+        else:
+            data = {'message': 'Not found'}
+        return JsonResponse(data)
     
     def post(self, request, historyID=0):
         data = {'message': 'endpoint not implemented'}
@@ -233,6 +73,7 @@ class searchHistoryDetailView(View):
 
 
 # View del endpoint de searchLastSession
+# ToDo: Incluir tabla de File
 class searchLastSessionView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
@@ -240,8 +81,13 @@ class searchLastSessionView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, userID):
-        # ToDo: Implementar el metodo GET
-        pass
+        collection = db["LastSession"]
+        results = list(collection.find({"_id": userID}))
+        if len(results)>0:
+            data = {'message':'found', 'result': results}
+        else:
+            data = {'message': 'Not found'}
+        return JsonResponse(data)
     
     def post(self, request, userID=0):
         data = {'message': 'endpoint not implemented'}
@@ -255,6 +101,7 @@ class searchLastSessionView(View):
         data = {'message': 'endpoint not implemented'}
         return JsonResponse(data)
 
+# ToDo: Hacer el endpoint de insertLastSession
 
 # View del endpoint de deleteLastSession
 class deleteLastSessionView(View):
@@ -276,8 +123,15 @@ class deleteLastSessionView(View):
     
     # * Metodo HTTP (DELETE) del endpoint
     def delete(self, request, userID):
-        # ToDo: Implementar el metodo DELETE
-        pass
+        collection = db["LastSession"]
+        result = list(collection.find({"_id": userID}))
+        if len(result)>0:
+            collection.delete_one({"_id": userID})
+            data = {'message': 'Success'}
+        else:
+            data = {'message': 'Not found'}
+        return JsonResponse(data)
+    # ToDo: Delete User
 
 
 # View del endpoint de updateLastSession
@@ -372,3 +226,59 @@ class View(View):
 #         return HttpResponse("insertToHistory: " + str(userID))
 #     else: 
 #         return HttpResponse("NO insertToHistory")
+
+class FileView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request,id=0):
+        collection = db["File"]
+        if id>0:
+            results = list(collection.find({"_id":id}))
+            # print(results)
+            if len(results)>0:
+                data = {'message':'found', 'result': results}
+                # data = {'message':'found', 'result': "a"}
+            else:
+                data = {'message': 'Not found'}
+
+        else:
+            results = json.loads(dumps(list(collection.find())))
+            # print(results)
+            if len(results) > 0:
+                data = {'message': 'Success', 'result': results}
+            else:
+                data = {'message': 'Empty'}
+            
+        return JsonResponse(data)
+    
+    def post(self, request):
+        collection = db["File"]
+        jd=json.loads(request.body)
+        # print(jd)
+        collection.insert_many(jd)
+        data = {'message': 'Success'}
+        return JsonResponse(data)
+    
+    def put(self, request, id):
+        collection = db["File"]
+        jd = json.loads(request.body)
+        result = list(collection.find({"_id":id}))
+        if len(result)>0:
+            # collection.update_one({"_id":id}, {"$set":{'name':jd['name']}})
+            collection.update_one({"_id":id}, {"$set":jd})
+            datos = {'message': 'Success'}
+        else:
+            datos = {'message': 'Not found'}
+        return JsonResponse(datos)
+    
+    def delete(self, request, id):
+        collection = db["File"]
+        result = list(collection.find({"_id":id}))
+        if len(result)>0:
+            collection.delete_one({"_id":id})
+            data = {'message': 'Success'}
+        else:
+            data = {'message': 'Not found'}
+        return JsonResponse(data)
