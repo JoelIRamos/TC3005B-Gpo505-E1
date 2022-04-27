@@ -50,14 +50,26 @@ class searchHistoryDetailView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, historyID):
-        # ToDo: Incluir agentes internos y externos
-        collection = db["File"]
-        results = list(collection.find({"id_history": historyID}))
-        if len(results)>0:
-            data = {'message':'found', 'result': results}
-        else:
-            data = {'message': 'Not found'}
+        # # ToDo: Incluir agentes internos y externos
+        # collection = db["File"]
+        # results = list(collection.find({"id_history": historyID}))
+        # if len(results)>0:
+        #     data = {'message':'found', 'result': results}
+        # else:
+        #     data = {'message': 'Not found'}
+        # return JsonResponse(data)
+        collection = db["File"] # First, get all attributes
+        fileResults = collection.find_one({"id_history": historyID})
+        if len(fileResults) > 0:
+            # ! Regreso solo los atributos? o todo? fileid history id fecha...
+            attr = fileResults["atribute"]           # ! Corregir atribute -> attribute
+            ExtInt = db["History"].find_one({"_id": historyID}) # Second, get all internos y externos
+            extern = ExtInt["externos"]
+            intern = ExtInt["internos"]
+            data = {'message':'found', 'attribute': attr,
+                     'interno': intern, 'externo': extern}
         return JsonResponse(data)
+        # ToDo: Implementar el metodo GET
     
     def post(self, request, historyID=0):
         data = {'message': 'endpoint not implemented'}
