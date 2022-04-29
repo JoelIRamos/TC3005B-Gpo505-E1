@@ -1,19 +1,19 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser #creo que no se usa
-from django.http.response import JsonResponse
-
 from django.utils.decorators import method_decorator
+from django.http.response import JsonResponse
 from django.views import View
-import json
 
 from api.db import db 
 from api.functions import *
+
 from bson.json_util import dumps
+import json
+
+# from rest_framework.parsers import JSONParser #creo que no se usa
+# from django.http import HttpResponse
 
 # Create your views here.
-
-from django.http import HttpResponse
 
 # View del endpoint de searchHistoryList
 class searchHistoryListView(View):
