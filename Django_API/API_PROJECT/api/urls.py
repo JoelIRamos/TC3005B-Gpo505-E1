@@ -23,4 +23,10 @@ urlpatterns = [
     # Endpoints DELETEs
     # * Eliminar una sesion
     path('deleteLastSession/<int:userID>/', views.deleteLastSessionView.as_view(), name='delete_last_session'),
+    # Rutas de la tabla de File
+    path('file/', views.FileView.as_view(), name='file_list'),
+    path('file/<int:id>/', views.FileView.as_view(), name='file_detail'),
+
+    # Rutas de la subida de archivos
+    path('upload_file/', views.FileUploadView.as_view(), name='upload_file')
 ]

@@ -4,3 +4,5 @@ django-cors-headers
 djongo
 dnspython
 pymongo
+pandas
+sklearn
