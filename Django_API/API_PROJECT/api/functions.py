@@ -19,7 +19,7 @@ def searchHistoryList(request):
         data = {'message': 'Not found'}
     return JsonResponse(data)
 
-def searchHistoryDetail(request, historyID):
+def searchHistoryDetailHelper(request, historyID):
     # Buscar los registros de la coleccion "File" con el id_history e ignorar las columnas _id y id_history 
     fileResults = list(db["File"].find({"id_history": historyID}, {'_id': 0, 'id_history': 0}))
     # Si hay registros regresarlos
@@ -44,16 +44,20 @@ def searchHistoryDetail(request, historyID):
                 'date': date,
                 'interno': intern,
                 'externo': extern,
-                # 'attribute': fileResults
+                # 'attribute': fileResults # TODO: Insertar Graphs 
                 'file': file
             }
         }
         
     else: # Si no hay registros regresar mensaje de error
         data = {'message': 'Not found'}
-    return JsonResponse(data)
+    return data
 
+# TODO: REGRESAR ANTIGUO
+def searchHistoryDetail(request, historyID):
+    return JsonResponse(searchHistoryDetailHelper(request, historyID))
 
+# TODO: LLAMAR SEARCHHISTORY DE ACUERDO CON EL ID QUE CONCUERDA CON USERID
 def searchLastSession(request, userID):
     # Usar coleccion "LastSession"
     colectionLS = db["LastSession"]
@@ -64,14 +68,27 @@ def searchLastSession(request, userID):
     if len(lSresults)>0:
         # Extraer el histortID
         historyID = lSresults[0]["id_history"]
-        
+        graphs = lSresults[0]["graphs"]
         # Hacer la busqueda de la tabla con dicho historyID
-        return searchHistoryDetail(request, historyID)
-    
+        dataHistory = searchHistoryDetailHelper(request, historyID)
+        
+        data = {
+            "message": "found",
+            "result": {
+                "historyID": historyID,
+                "date": dataHistory["result"]["date"],
+                "interno": dataHistory["result"]["interno"],
+                "externo": dataHistory["result"]["externo"],
+                "graphs": graphs,
+                "file": dataHistory["result"]["file"]
+            }
+        }
+        
+        return JsonResponse(data)
     else:
         return JsonResponse({'message': 'Not found'})
 
-
+# TODO: ESTE SE MANDA LLAMAR CUANDO EL USUARIO SE LOGUEA
 def deleteLastSession(request, userID):
     # Usar coleccion "LastSession"
     collection = db["LastSession"]
@@ -90,16 +107,20 @@ def deleteLastSession(request, userID):
     return JsonResponse(data)
 
 # ToDo: Implementar la funcion del metodo POST
-# ! Quedar en el estandar de almacenamiento de graficas
+# TODO: CAMBIAR A GETUSERID LO CUAL CREA EL LAST SESSION
 def insertLastSession(request, userID, historyID):
+    # TODO: CAMBIAR PARA QUE SE CREE UN USERID DE ACUERDO A UN HISTORYID
     return JsonResponse({'message': 'endpoint not implemented, funtion not implemented'})
 
 # ToDo: Implementar la funcion del metodo PUT
-def updateLastSession(request, userID):
-    # ! Quedar en el estandar para almacenar las graficas
+# TODO: CAMBIAR A UPDATEHISTORY
+def updateLastSession(request, userID): 
+    # todo: hacer update a graphs
     return JsonResponse({'message': 'endpoint not implemented, funtion not implemented'})
 
 # ToDo: Implementar la funcion del metodo POST
 def insertToHistory(request, userID):
     # ! La subida de archivo todavia está en prueba
     return JsonResponse({'message': 'endpoint not implemented, funtion not implemented'})
+
+# * Pendientes: Hacer los Cambios Aqui, Cambiar en mongoDB Graphs, Cambiar Documentacion & Junta con frontend
