@@ -51,6 +51,40 @@ const datos = [
 
 function App() {
 
+  const [file, setFile] = useState(null)
+  const [csvArray, setCsvArray] = useState([]);
+
+  const onFileDrop = (e) => {
+    const newFile = e.target.files[0]
+    if (newFile){
+      if (newFile) {
+        setFile(newFile)
+      }
+    }
+  }
+
+  const fileRemove = () => {
+    setFile(null)
+  }
+
+  const processCSV = (str, delim=',') => {
+    const headers = str.slice(0, str.indexOf('\n')).split(delim);
+    headers[headers.length - 1] = headers[headers.length - 1].slice(0, headers[headers.length - 1].length - 1)
+    console.log(headers)
+  }
+
+  const setCsvFile = () => {
+    const csvFile = file;
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const text = e.target.result;
+      processCSV(text);
+    }
+
+    reader.readAsText(csvFile)
+  }
+
   // Estado de click y chart para la lista de gráficos 
   //(es declarada en app porque dependiendo a eso se mostraran otros componentes)
   const [click, setClick] = useState(false);
@@ -91,7 +125,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<UpFileview/>}/>
+        <Route path='/' element={<UpFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove}/>}/>
         <Route path='/Dashboard' element={<Dashboard atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>
