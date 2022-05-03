@@ -11,6 +11,23 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from celery import Celery
+ 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'quick_publisher.settings')
+ 
+app = Celery('API_PROJECT')
+app.config_from_object('django.conf:settings')
+
+# REDIS related settings
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
+BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+ 
+# Load task modules from all registered Django app configs.
+app.autodiscover_tasks()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
