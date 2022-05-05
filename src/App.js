@@ -50,10 +50,10 @@ const datos = [
 ]
 
 function App() {
-
+  // Archivo .csv
   const [file, setFile] = useState(null)
-  const [csvArray, setCsvArray] = useState([]);
 
+  // Funcion para lectura del archivo cuando se dropea
   const onFileDrop = (e) => {
     const newFile = e.target.files[0]
     if (newFile){
@@ -63,26 +63,44 @@ function App() {
     }
   }
 
+  // Funcion que remueve el archivo cargado
   const fileRemove = () => {
     setFile(null)
   }
 
+  // HTTP request a backend (aun en prueba)
+  const backPost = (headersJson) => {
+    var formData = new FormData();
+    formData.append('headers', headersJson); // Array tipo JSON de los headers del archivo
+    formData.append('file', file); // Archivo completo
+    fetch('http://localhost:8000/api/upload_file/', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(success => {
+        // Do something with the successful response
+      })
+      .catch(error => console.log(error))
+  }
+
+  // Obtencion de headers desde el CSV y llamado a la función para POST
   const processCSV = (str, delim=',') => {
     const headers = str.slice(0, str.indexOf('\n')).split(delim);
     headers[headers.length - 1] = headers[headers.length - 1].slice(0, headers[headers.length - 1].length - 1)
-    console.log(headers)
+    const headersJson = JSON.stringify(headers);
+    console.log(headersJson);
+    backPost(headersJson);
   }
 
+  // Lectura de archivo
   const setCsvFile = () => {
-    const csvFile = file;
     const reader = new FileReader();
 
     reader.onload = (e) => {
       const text = e.target.result;
       processCSV(text);
     }
-
-    reader.readAsText(csvFile)
   }
 
   // Estado de click y chart para la lista de gráficos 

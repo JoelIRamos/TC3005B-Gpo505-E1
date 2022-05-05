@@ -14,7 +14,7 @@ const FormAtributos_1 = ({atributos, onSelect, showForm, idForm}) => {
             <form>
                 <div className="container-atributos" onChange={radioEvent}>
                     {atributos.map((element) => (
-                        <Atributos idForm={idForm} atributos={element} />
+                        <Atributos key={idForm} idForm={idForm} atributos={element} />
                     ))}
                 </div>
             </form>
