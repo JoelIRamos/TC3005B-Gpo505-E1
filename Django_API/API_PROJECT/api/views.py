@@ -3,18 +3,22 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http.response import JsonResponse
 from django.views import View
+from django.core.files.storage import default_storage
+from django.http import HttpResponse
 
 from api.db import db 
 from api.functions import *
 
 from bson.json_util import dumps
-from .forms import UploadFileForm
-from django.http import HttpResponse
+
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import LabelEncoder
 from datetime import datetime
+
+from .forms import UploadFileForm
+from .tasks import process_file
 
 # Create your views here.
 
@@ -192,165 +196,165 @@ class FileUploadView(View):
             #print(chunk.columns.to_list()) 
             return chunk.columns.to_list()
     
-    def filter_columns(self, df, columns):
-        """Filters the columns of a dataframe
-
-        Args:
-            df (DataFrame): DataFrame to filter
-            columns (List): List of columns to keep
-
-        Returns:
-            DataFrame: DataFrame with the columns filtered
-        """
-        return df[columns]
-    
-    def clean_df(self, df):
-        """Cleans a dataframe from null or NaN values
-
-        Args:
-            df (DataFrame): Dataframe to clean
-
-        Returns:
-            DataFrame: Cleaned dataframe
-        """
-        for column in df:
-            if df[column].isna().sum() > 0:
-                df[column] = df[column].fillna('NA')
-    
-    # def train_label_encoder(self, df):
-    #     """Trains a label encoder
+    # def filter_columns(self, df, columns):
+    #     """Filters the columns of a dataframe
 
     #     Args:
-    #         df (DataFrame): Dataframe to train the label encoder
+    #         df (DataFrame): DataFrame to filter
+    #         columns (List): List of columns to keep
+
+    #     Returns:
+    #         DataFrame: DataFrame with the columns filtered
+    #     """
+    #     return df[columns]
+    
+    # def clean_df(self, df):
+    #     """Cleans a dataframe from null or NaN values
+
+    #     Args:
+    #         df (DataFrame): Dataframe to clean
+
+    #     Returns:
+    #         DataFrame: Cleaned dataframe
+    #     """
+    #     for column in df:
+    #         if df[column].isna().sum() > 0:
+    #             df[column] = df[column].fillna('NA')
+    
+    # # def train_label_encoder(self, df):
+    # #     """Trains a label encoder
+
+    # #     Args:
+    # #         df (DataFrame): Dataframe to train the label encoder
+            
+    # #     Returns:
+    # #         List: List of Label Encoders
+    # #     """
+    # #     les = []
+    # #     for column in df:
+    # #         le = LabelEncoder()
+    # #         le.fit(df[column].astype(str))
+    # #         les.append(le)
+    # #         del le
+    # #     return les
+
+    # def encode_labels(self, df):
+    #     """Encode labels of a dataframe
+
+    #     Args:
+    #         df (DataFrame): DataFrame with the data to categorize
             
     #     Returns:
-    #         List: List of Label Encoders
+    #         DataFrame: Dataframe with the encoded labels
     #     """
-    #     les = []
+    #     les = dict()
     #     for column in df:
-    #         le = LabelEncoder()
-    #         le.fit(df[column].astype(str))
-    #         les.append(le)
-    #         del le
+    #         les[column] = LabelEncoder()
+    #         df[str(column)+'_encoded'] = les[column].fit_transform(df[column].astype(str))
+    #         df.drop(column, axis=1, inplace=True)
     #     return les
 
-    def encode_labels(self, df):
-        """Encode labels of a dataframe
-
-        Args:
-            df (DataFrame): DataFrame with the data to categorize
-            
-        Returns:
-            DataFrame: Dataframe with the encoded labels
-        """
-        les = dict()
-        for column in df:
-            les[column] = LabelEncoder()
-            df[str(column)+'_encoded'] = les[column].fit_transform(df[column].astype(str))
-            df.drop(column, axis=1, inplace=True)
-        return les
-
     
-    def decode_labels(self, df, les):
-        """Decode labels of a dataframe
+    # def decode_labels(self, df, les):
+    #     """Decode labels of a dataframe
 
-        Args:
-            df (DataFrame): DataFrame with the data to categorize
+    #     Args:
+    #         df (DataFrame): DataFrame with the data to categorize
             
-        Returns:
-            DataFrame: Dataframe with the decoded labels
-        """
-        for column in df.iloc[:,:-1]:
-            name = column.split('_encoded')[0]
-            les[name].classes_
-            df[name] = les[name].inverse_transform(df[column])
-            df.drop(column, axis=1, inplace=True)
+    #     Returns:
+    #         DataFrame: Dataframe with the decoded labels
+    #     """
+    #     for column in df.iloc[:,:-1]:
+    #         name = column.split('_encoded')[0]
+    #         les[name].classes_
+    #         df[name] = les[name].inverse_transform(df[column])
+    #         df.drop(column, axis=1, inplace=True)
     
-    def train_model(self, df, model):
-        """Trains a model
+    # def train_model(self, df, model):
+    #     """Trains a model
 
-        Args:
-            df (DataFrame): Dataframe to train the model
-            model (Model): Model to train
-        """
-        model.fit(df)
+    #     Args:
+    #         df (DataFrame): Dataframe to train the model
+    #         model (Model): Model to train
+    #     """
+    #     model.fit(df)
         
     
-    def apply_model(self, df, model):
-        """Applies the Isolation Forest algorithm to the dataframe
+    # def apply_model(self, df, model):
+    #     """Applies the Isolation Forest algorithm to the dataframe
 
-        Args:
-            df (DataFrame): DataFrame with the data to classify
-            model (Model): Model to apply
+    #     Args:
+    #         df (DataFrame): DataFrame with the data to classify
+    #         model (Model): Model to apply
             
-        Returns:
-            DataFrame: DataFrame with the data classified
-        """
-        df_1 = df.copy()
-        df['anomaly_scores'] = model.decision_function(df)  
+    #     Returns:
+    #         DataFrame: DataFrame with the data classified
+    #     """
+    #     df_1 = df.copy()
+    #     df['anomaly_scores'] = model.decision_function(df)  
 
-    def upload_to_db(self, df, collection):
-        """Uploads the dataframe to a database
+    # def upload_to_db(self, df, collection):
+    #     """Uploads the dataframe to a database
 
-        Args:
-            df (DataFrame): Dataframe to upload
-            collection (Collection): Collection to upload to
-        """
-        for index, row in df.iterrows():
-            collection.insert_one(row.to_dict())
+    #     Args:
+    #         df (DataFrame): Dataframe to upload
+    #         collection (Collection): Collection to upload to
+    #     """
+    #     for index, row in df.iterrows():
+    #         collection.insert_one(row.to_dict())
     
-    def process_file(self, file, columns, columns_IF):
-        """Applies the Isolation Forest algorithm to the file using certain columns
+    # def process_file(self, file, columns, columns_IF):
+    #     """Applies the Isolation Forest algorithm to the file using certain columns
 
-        Args:
-            file (file): File to be processed
-            columns (list): List of columns in the file
-            columns_IF (list): List of columns used by the Isolation Forest algorithm
+    #     Args:
+    #         file (file): File to be processed
+    #         columns (list): List of columns in the file
+    #         columns_IF (list): List of columns used by the Isolation Forest algorithm
 
-        Returns:
-            : None
-        """
+    #     Returns:
+    #         : None
+    #     """
         
-        model = IsolationForest(random_state=0, max_features=1, max_samples=91, n_estimators=400, contamination=0.48)
-        le = LabelEncoder()
-        chunk_size = 10000
-        classes = np.array([])
-        df_p = pd.DataFrame()
+    #     model = IsolationForest(random_state=0, max_features=1, max_samples=91, n_estimators=400, contamination=0.48)
+    #     le = LabelEncoder()
+    #     chunk_size = 10000
+    #     classes = np.array([])
+    #     df_p = pd.DataFrame()
         
-        file.seek(0)
-        for chunk in pd.read_csv(file, chunksize=chunk_size, low_memory=False):
-            chunk.columns = columns
+    #     file.seek(0)
+    #     for chunk in pd.read_csv(file, chunksize=chunk_size, low_memory=False):
+    #         chunk.columns = columns
             
-            df = self.filter_columns(chunk, columns_IF)
-            self.clean_df(df)
+    #         df = self.filter_columns(chunk, columns_IF)
+    #         self.clean_df(df)
             
-            # newclasses = self.train_label_encoder(df, le)
-            # classes = np.unique(np.append(classes, newclasses))
-            # le.classes_ = classes
+    #         # newclasses = self.train_label_encoder(df, le)
+    #         # classes = np.unique(np.append(classes, newclasses))
+    #         # le.classes_ = classes
             
-            df_p = pd.concat([df_p, df])
+    #         df_p = pd.concat([df_p, df])
         
-        #les = self.train_label_encoder(df_p)
-        les = self.encode_labels(df_p)
-        #print(les)
-        self.train_model(df_p, model)
-        self.apply_model(df_p, model)
-        self.decode_labels(df_p, les)
-        #print(df_p)
+    #     #les = self.train_label_encoder(df_p)
+    #     les = self.encode_labels(df_p)
+    #     #print(les)
+    #     self.train_model(df_p, model)
+    #     self.apply_model(df_p, model)
+    #     self.decode_labels(df_p, les)
+    #     #print(df_p)
         
-        #df_p.to_csv('test.csv')
-        #self.upload_to_db(df_p, db["File"])
+    #     #df_p.to_csv('test.csv')
+    #     #self.upload_to_db(df_p, db["File"])
         
-        # file.seek(0)
-        # for chunk in pd.read_csv(file, chunksize=chunk_size, low_memory=False):
-        #     chunk.columns = columns
-        #     df = self.filter_columns(chunk, columns_IF)
-        #     df = self.clean_df(df)
-        #     df = self.encode_labels(df, le)
-        #     df = self.apply_model(df, model)
+    #     # file.seek(0)
+    #     # for chunk in pd.read_csv(file, chunksize=chunk_size, low_memory=False):
+    #     #     chunk.columns = columns
+    #     #     df = self.filter_columns(chunk, columns_IF)
+    #     #     df = self.clean_df(df)
+    #     #     df = self.encode_labels(df, le)
+    #     #     df = self.apply_model(df, model)
             
 
-        #     print(df.isna().sum(), df.shape, df)
+    #     #     print(df.isna().sum(), df.shape, df)
 
         
         
@@ -363,11 +367,18 @@ class FileUploadView(View):
         Returns:
             HttpResponse: Contains a list of the columns of the csv file
         """
+        #columns_IF = request.data['columns_IF']
+        columns_IF = ['ID_TRANSPORTISTA', 'EMPRESA_TRANSPORTISTA', 'C_ID_ORDEN_CABECERA', 'C_POSICION_ORDEN', 'Q_CANTIDAD']
         file = request.FILES['file']
         if file != None:
             columns = self.get_columns(file)
             file_id = file.name.replace(' ', '_').replace('.csv','') + '_' + datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-            self.process_file(file, columns, ['ID_TRANSPORTISTA', 'EMPRESA_TRANSPORTISTA', 'C_ID_ORDEN_CABECERA', 'C_POSICION_ORDEN', 'Q_CANTIDAD'])
+            
+            file_name = default_storage.save(file.name, file)
+            
+            process_file.delay(file_name, columns, columns_IF)
+            
+            #self.process_file(file, columns, ['ID_TRANSPORTISTA', 'EMPRESA_TRANSPORTISTA', 'C_ID_ORDEN_CABECERA', 'C_POSICION_ORDEN', 'Q_CANTIDAD'])
 
             return JsonResponse({"message": "File received", "file_id": file_id})
         else:

@@ -6,4 +6,4 @@ dnspython
 pymongo
 pandas
 sklearn
-celery[redis]
+celery
