@@ -6,12 +6,13 @@ import json
 
 from api.db import db 
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 
 
 
 def searchHistoryList(request): 
-    # Buscar todos los registros de la coleccion "History"
-    results = list(db["History"].find({}))
+    # Buscar todos los registros de la coleccion "History" quitando las columnas "internos", "externos" y "graphs"
+    results = list(db["History"].find({}, {"internos": 0, "externos": 0, "graphs": 0}))
     
     # Si hay registros regresarlos
     if len(results)>0:
@@ -30,7 +31,7 @@ def searchHistoryDetailHelper(request, historyID):
         # Buscar el registro de la coleccion "History" que tiene el historyID correspondiente
         collectionExtInt = db["History"].find_one({"_id": historyID})
         
-        # Filtrar por los campos que se quieren regresar # ! O(n): buscar una mejor forma de hacerlo
+        # Filtrar por los campos que se quieren regresar # ! Va a crashear: O(n) -> buscar una mejor forma de hacerlo
         file = []
         for row in fileResults:
             file.append(row['attribute'])
@@ -39,7 +40,10 @@ def searchHistoryDetailHelper(request, historyID):
         extern = collectionExtInt["externos"]
         intern = collectionExtInt["internos"]
         date = collectionExtInt["date"]
-        graphs = collectionExtInt["graphs"]
+        try:
+            graphs = collectionExtInt["graphs"]
+        except:
+            graphs = []
         # Formato de los Datos
         data = {
             'message':'found',
@@ -64,10 +68,12 @@ def searchHistoryDetail(request, historyID):
 
 
 def searchLastSession(request, userID):
+    # Hacer el objectid del userID
+    objUserID = ObjectId(userID)
     # Usar coleccion "LastSession"
     colectionLS = db["LastSession"]
     # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
-    lSresults = list(colectionLS.find({"id_webUser": userID}))
+    lSresults = list(colectionLS.find({"_id": objUserID}))
     
     # Si existe el registro regresar los datos
     if len(lSresults)>0:
@@ -84,15 +90,17 @@ def searchLastSession(request, userID):
 
 # * ESTE SE MANDA LLAMAR CUANDO EL USUARIO SE DESLOGUEA
 def deleteLastSession(request, userID):
+    # Hacer el objectid del userID
+    objUserID = ObjectId(userID)
     # Usar coleccion "LastSession"
     collection = db["LastSession"]
     # Buscar la lista de los registros que tienen el userID correspondiente (Maximo debe haber 1)
-    result = list(collection.find({"id_webUser": userID}))
+    result = list(collection.find({"_id": objUserID}))
     
     # Si existe el registro borrarlo
     if len(result)>0:
         # Eliminar el registro
-        collection.delete_one({"id_webUser": userID})
+        collection.delete_one({"_id": objUserID})
         # Regresar mensaje de exito
         data = {'message': 'Success'}
         
@@ -101,11 +109,13 @@ def deleteLastSession(request, userID):
     return JsonResponse(data)
 
 
-def updateHistory(request, userID): 
+def updateHistory(request, userID):
+    # Hacer el objectid del userID
+    objUserID = ObjectId(userID) 
     # Usar coleccion "LastSession"
     colectionLS = db["LastSession"]
     # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
-    lSresults = list(colectionLS.find({"id_webUser": userID}))
+    lSresults = list(colectionLS.find({"_id": objUserID}))
     
     # Si existe el registro regresar los datos
     if len(lSresults)>0:
@@ -120,23 +130,36 @@ def updateHistory(request, userID):
         # Hacer update a la tabla con dicho historyID
         colectionH.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
         
-        # print(historyID)
-        # print(graphs)
-        
         return JsonResponse({"message": "Success"})
     else:
         return JsonResponse({'message': 'Not found'})
+    
+
+def searchUserID(request, historyID):
+    # Usar coleccion "LastSession"
+    colectionLS = db["LastSession"]
+    # Buscar si hay registros que tienen el historyID correspondiente (Maximo debe haber 1)
+    lSresults = list(colectionLS.find({"id_history": historyID}))
+    
+    # ToDo: Verificar que exista en History Table
+    
+    # Verifica que no exista un registro con el historyID
+    if len(lSresults)>0:
+        data = {'message': 'session already in use'}
+    else:  
+        colectionLS.insert_one({"id_history": historyID})
+        newRegister = colectionLS.find_one({"id_history": historyID})
+        
+        print(newRegister['_id'])
+        data = {'message': 'success', 'userID': str(newRegister['_id'])}
+        print(data)
+        
+    return JsonResponse(data)
 
 
-# TODO: CAMBIAR A GETUSERID LO CUAL CREA EL LAST SESSION
-def insertLastSession(request, userID, historyID):
-    # TODO: CAMBIAR PARA QUE SE CREE UN USERID DE ACUERDO A UN HISTORYID
-    return JsonResponse({'message': 'endpoint not implemented, funtion not implemented'})
-
-
-# ToDo: Implementar la funcion del metodo POST
 def insertToHistory(request, userID):
     # ! La subida de archivo todavia está en prueba
     return JsonResponse({'message': 'endpoint not implemented, funtion not implemented'})
 
-# * Pendientes: Hacer los Cambios Aqui, Cambiar en mongoDB Graphs, Cambiar Documentacion & Junta con frontend
+# * Pendientes: gets Asyncornos, Cambiar Documentacion & Junta con frontend
+# Barras, Aeras, Burbujas
