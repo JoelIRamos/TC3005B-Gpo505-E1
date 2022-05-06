@@ -25,8 +25,30 @@
     ``` sh 
     cd API_PROJECT
     ```
-7. Finalmente se puede correr la API con el siguiente comando:
+7. Para correr la API se puede utilizar el siguiente comando:
     ``` sh
     python manage.py runserver
     ```
     > Para salir utilizar Ctrl+C
+8. A parte del api, se debe de correr un servidor de redis con el siguiente comando en una terminal aparte, no dentro del ambiente de python
+    ```sh
+    docker run -d -p 6379:6379 --name redis-server redis
+    ```
+    Para correr este server se requiere instalar WSL 2 y docker en un ambiente windows
+    Instrucciones para la instalacion de docker: https://docs.docker.com/desktop/windows/install/ <br>
+    Tras instalar docker, este le mencionara si es necesario instalar WSL 2 y como hacerlo 
+
+9. Finalmente se requiere correr workers de celery
+    1. Abrir otra terminal en el directorio del projecto
+    2. Activar el ambiente virtual
+    ``` sh
+    .\env\Scripts\activate
+    ```
+    3. Entrar a la carpeta del api
+    ``` sh 
+    cd API_PROJECT
+    ```
+    4. Correr siguiente comando
+    ```sh
+    celery -A API_PROJECT worker -l info --pool=solo
+    ```
