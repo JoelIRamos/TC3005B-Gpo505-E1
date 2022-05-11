@@ -7,28 +7,32 @@ import pandas as pd
 import numpy as np
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import LabelEncoder
+import time
+from os.path import exists
 
-queued_files = []
+def get_columns(file):
+    """Gets the columns of a file
 
-def get_queued_files():
-    """Gets the queued files
+    Args:
+        file (file): File to get the columns from
 
     Returns:
-        List: List with the queued files
-    """
-    return queued_files
+        list: List with the columns
+    """    ''''''
+    for chunk in pd.read_csv(file, chunksize=1):
+        return chunk.columns.to_list()
 
-def filter_columns(df, columns):
-        """Filters the columns of a dataframe
+# def filter_columns(df, columns):
+#     """Filters the columns of a dataframe
 
-        Args:
-            df (DataFrame): DataFrame to filter
-            columns (List): List of columns to keep
+#     Args:
+#         df (DataFrame): DataFrame to filter
+#         columns (List): List of columns to keep
 
-        Returns:
-            DataFrame: DataFrame with the columns filtered
-        """
-        return df[columns]
+#     Returns:
+#         DataFrame: DataFrame with the columns filtered
+#     """
+#     return df[columns]
     
 def clean_df(df):
     """Cleans a dataframe from null or NaN values
@@ -93,7 +97,6 @@ def apply_model(df, model):
     Returns:
         DataFrame: DataFrame with the data classified
     """
-    df_1 = df.copy()
     df['anomaly_scores'] = model.decision_function(df)  
 
 def upload_to_db(df, collection):
@@ -107,7 +110,7 @@ def upload_to_db(df, collection):
         collection.insert_one(row.to_dict())
 
 @shared_task
-def process_file(file_name, columns, columns_IF):
+def process_file(file_name, columns_IF):
     """Applies the Isolation Forest algorithm to the file using certain columns
 
     Args:
@@ -118,53 +121,52 @@ def process_file(file_name, columns, columns_IF):
     Returns:
         : None
     """
-    file = default_storage.open(file_name)
-    queued_files.append(file_name)
-    
+    #file = default_storage.open(file_name)
+    #columns = get_columns(file)
+    # print(columns)
     model = IsolationForest(random_state=0, max_features=1, max_samples=91, n_estimators=400, contamination=0.48)
-    le = LabelEncoder()
     chunk_size = 10000
-    classes = np.array([])
     df_p = pd.DataFrame()
-    
-    file.seek(0)
-    for chunk in pd.read_csv(file, chunksize=chunk_size, low_memory=False):
-        chunk.columns = columns
-        
-        df = filter_columns(chunk, columns_IF)
+
+    #file.seek(0)
+    file = default_storage.open(file_name)
+    for chunk in pd.read_csv(file, chunksize=chunk_size, low_memory=False, usecols=columns_IF):
+        #chunk.columns = columns
+        #df = filter_columns(chunk, columns_IF)
+        df = chunk
         clean_df(df)
-        
-        # newclasses = train_label_encoder(df, le)
-        # classes = np.unique(np.append(classes, newclasses))
-        # le.classes_ = classes
-        
         df_p = pd.concat([df_p, df])
-    
-    #les = train_label_encoder(df_p)
+
     les = encode_labels(df_p)
-    #print(les)
+
     train_model(df_p, model)
     apply_model(df_p, model)
+
     decode_labels(df_p, les)
+
     print(df_p)
     df_p.to_csv(file_name.replace('.csv', '_processed.csv'), index=False)
-    #default_storage.save('test.csv',df_p.to_csv('test.csv'))
 
-    
+    file.close()
     del file
-    
+
     default_storage.delete(file_name)
+    queue = np.array([])
+    if not exists('queue.npy'):
+        queue = np.delete(queue, 0)
+    else:
+        queue = np.load('queue.npy')
+        queue = np.delete(queue, 0)
+    
+    saved = False
+    while (not saved):
+        try:
+            np.save('queue.npy', queue)
+            saved = True
+        except:
+            print('Error saving queue, trying again...')
+    
+    time.sleep(2)
     
     #df_p.to_csv('test.csv')
     #upload_to_db(df_p, db["File"])
-    
-    # file.seek(0)
-    # for chunk in pd.read_csv(file, chunksize=chunk_size, low_memory=False):
-    #     chunk.columns = columns
-    #     df = filter_columns(chunk, columns_IF)
-    #     df = clean_df(df)
-    #     df = encode_labels(df, le)
-    #     df = apply_model(df, model)
-        
-
-    #     print(df.isna().sum(), df.shape, df)
