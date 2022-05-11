@@ -89,20 +89,20 @@ class searchLastSessionView(View):
         return JsonResponse(self.data)
 
 
-# View del endpoint de insertLastSession
-class insertLastSessionView(View):
+# View del endpoint de searchUserID
+class searchUserIDView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
     
     data = {'message': 'endpoint not implemented'}
     
-    def get(self, request, userID=0, historyID=0):
-        return JsonResponse(self.data)
+    def get(self, request, historyID):
+        return searchUserID(request, historyID)
     
-    # * Metodo HTTP (POST) del endpoint
-    def post(self, request, userID, historyID):
-        return insertLastSession(request, userID, historyID)
+    # * Metodo HTTP (GET) del endpoint
+    def post(self, request, userID=0, historyID=0):
+        return JsonResponse(self.data)
     
     def put(self, request, userID=0, historyID=0):
         return JsonResponse(self.data)
