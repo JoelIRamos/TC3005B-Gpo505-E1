@@ -154,28 +154,6 @@ class updateHistoryView(View):
         return JsonResponse(self.data)
 
 
-# View del endpoint de insertToHistory
-class insertToHistoryView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
-    
-    data = {'message': 'endpoint not implemented'}
-    
-    def get(self, request, userID=0):
-        return JsonResponse(self.data)
-    
-    # * Metodo HTTP (POST) del endpoint
-    def post(self, request, userID):
-        return insertToHistory(request, userID)
-    
-    def put(self, request, userID=0):
-        return JsonResponse(self.data)
-    
-    def delete(self, request, userID=0):
-        return JsonResponse(self.data)
-
-
 class FileUploadView(View):
     """File upload view that manages file uploads and proccesing
     """

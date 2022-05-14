@@ -12,7 +12,7 @@ from bson.objectid import ObjectId
 
 def searchHistoryList(request): 
     # Buscar todos los registros de la coleccion "History" quitando las columnas "internos", "externos" y "graphs"
-    results = list(db["History"].find({}, {"internos": 0, "externos": 0, "graphs": 0}))
+    results = list(db["RunHistory"].find({}, {"internos": 0, "externos": 0, "graphs": 0}))
     
     # Si hay registros regresarlos
     if len(results)>0:
@@ -25,11 +25,11 @@ def searchHistoryList(request):
 
 def searchHistoryDetailHelper(request, historyID):
     # Buscar los registros de la coleccion "File" con el id_history e ignorar las columnas _id y id_history 
-    fileResults = list(db["File"].find({"id_history": historyID}, {'_id': 0, 'id_history': 0}))
+    fileResults = list(db["FileData"].find({"id_history": historyID}, {'_id': 0, 'id_history': 0}))
     # Si hay registros regresarlos
     if len(fileResults) > 0:
         # Buscar el registro de la coleccion "History" que tiene el historyID correspondiente
-        collectionExtInt = db["History"].find_one({"_id": historyID})
+        collectionExtInt = db["RunHistory"].find_one({"_id": historyID})
         
         # Filtrar por los campos que se quieren regresar # ! Va a crashear: O(n) -> buscar una mejor forma de hacerlo
         file = []
@@ -125,7 +125,7 @@ def updateHistory(request, userID):
         graphs = json.loads(request.body)
         
         # Usar la coleccion "History"
-        colectionH = db["History"]
+        colectionH = db["RunHistory"]
         
         # Hacer update a la tabla con dicho historyID
         colectionH.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
@@ -156,10 +156,6 @@ def searchUserID(request, historyID):
         
     return JsonResponse(data)
 
-
-def insertToHistory(request, userID):
-    # ! Eliminar Endpoint 
-    return JsonResponse({'message': 'endpoint not implemented, funtion not implemented'})
 
 # * Pendientes: gets Asyncornos, Cambiar Documentacion & Junta con frontend
 # Barras, Aeras, Burbujas

@@ -16,11 +16,6 @@ urlpatterns = [
     # * Actualizar los detalles del historial de un usuario
     path('putHistory/<str:userID>/', views.updateHistoryView.as_view(), name='put_last_session'),
     
-    # ToDo: Rutas POSTs
-    # * Crear un nuevo historial
-    # ? Eliminar ?
-    path('postHistory/<str:userID>/', views.insertToHistoryView.as_view(), name='post_history'),
-    
     # Rutas DELETEs
     # * Eliminar una sesion
     path('deleteLastSession/<str:userID>/', views.deleteLastSessionView.as_view(), name='delete_last_session'),
