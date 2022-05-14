@@ -158,8 +158,9 @@ def searchUserID(request, historyID):
 
 
 def insertToHistory(request, userID):
-    # ! La subida de archivo todavia está en prueba
+    # ! Eliminar Endpoint 
     return JsonResponse({'message': 'endpoint not implemented, funtion not implemented'})
 
 # * Pendientes: gets Asyncornos, Cambiar Documentacion & Junta con frontend
 # Barras, Aeras, Burbujas
+# Linea 144

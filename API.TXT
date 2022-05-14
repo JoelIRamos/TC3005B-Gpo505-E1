@@ -1,0 +1,192 @@
+getHistoryList/
+    Funcion: Obtiene el historial de las _____ realizadas
+    Parametros: N/A 
+    Bodys: N/A
+    Objeto Retorno Correcto: 
+        {
+            "message": "found",
+            "result": [
+                {
+                    "_id": "NombreArchivo2022-01-04",
+                    "date": "2022-01-04T06:00:00.000+00:00"
+                },
+                {
+                    "_id": "NombreArchivo2022-04-01",
+                    "date": "2022-04-01T06:01:20.000+00:00"
+                },
+                {
+                    "_id": "NombreArchivo2022-04-04",
+                    "date": "2022-04-04T06:23:16.000+00:00"
+                }
+            ]
+        }
+    Objeto Retorno Incorrecto:
+        {
+            'message': 'Not found'
+        }
+
+
+getHistoryDetail/<str:historyID>/
+    Funcion: Obtiene toda la información de una sola _______ 
+    Parametros:
+        historyID: El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
+    Bodys: N/A
+    Objeto Retorno Correcto:
+        {
+            'message':'found',
+            'result': {
+                'historyID': historyID,
+                'date': date,
+                'interno': [
+                    "PlantaPorteria_num",
+                    "EmpresaTransportista_num"
+                ],
+                'externo': [
+                    "UsuarioPesadaEntrada_num",
+                    "UsuarioDescarga_num"
+                ],
+                'graphs': [
+                    {
+                        "type": "bar graph",
+                        "x-axis": "UsuarioPesadaEntrada_num",
+                        "y-axis": "EmpresaTransportista_num"
+                    },
+                    {
+                        "type": "pi",
+                        "values": "PlantaPorteria_num"
+                    }
+                ],
+                'file': [
+                    {
+                        PlantaPorteria_num": "1",
+                        "ClaveTransportista_num": "86",
+                        "EmpresaTransportista_num": "34"
+                    },
+                    {
+                        "PlantaPorteria_num": "1",
+                        "ClaveTransportista_num": "86",
+                        "EmpresaTransportista_num": "34"
+                    }
+                ]
+            }
+        }
+
+    Objeto Retorno Incorrecto:
+        {
+            'message': 'Not found'
+        }
+
+
+getUserID/<str:historyID>/
+    Funcion: Iniciar una session de un _____, para que este pueda crear las gráficas  
+    Parametros: 
+        historyID: El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
+    Bodys: 
+    Objeto Retorno Correcto: 
+        {
+            "message": "success",
+            "userID": "627fd92b7ca61d828d29ca10"
+        }  
+    Objeto Retorno Incorrecto:
+        Version 1:
+        {
+            "message": "session already in use"
+        }
+        Version 2:
+        {
+            "message": "session unexistent"
+        }
+    ToDo: revisar session inexistente
+
+getLastSession/<str:userID>/
+    Funcion: Obtener la información de las gráficas que estaba manejando el usuario 
+    Parametros:
+        userID: El id del usuario (el cual fue generado cuando se hizo la peticion getUserID) 
+    Bodys: N/A
+    Objeto Retorno Correcto: 
+        {
+            'message':'found',
+            'result': {
+                'historyID': historyID,
+                'date': date,
+                'interno': [
+                    "PlantaPorteria_num",
+                    "EmpresaTransportista_num"
+                ],
+                'externo': [
+                    "UsuarioPesadaEntrada_num",
+                    "UsuarioDescarga_num"
+                ],
+                'graphs': [
+                    {
+                        "type": "bar graph",
+                        "x-axis": "UsuarioPesadaEntrada_num",
+                        "y-axis": "EmpresaTransportista_num"
+                    },
+                    {
+                        "type": "pi",
+                        "values": "PlantaPorteria_num"
+                    }
+                ],
+                'file': [
+                    {
+                        PlantaPorteria_num": "1",
+                        "ClaveTransportista_num": "86",
+                        "EmpresaTransportista_num": "34"
+                    },
+                    {
+                        "PlantaPorteria_num": "1",
+                        "ClaveTransportista_num": "86",
+                        "EmpresaTransportista_num": "34"
+                    }
+                ]
+            }
+        }
+    Objeto Retorno Incorrecto:
+        {
+            'message': 'Not found'
+        }
+
+
+putHistory/<str:userID>/
+    Funcion: Actualizar las gráficas que estaba haciendo el usuario
+    Parametros:
+        userID: El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
+    Bodys:
+        [
+            {
+                "type": "bar graph",
+                "x-axis": "UsuarioPesadaEntrada_num",
+                "y-axis": "EmpresaTransportista_num"
+            },
+            {
+                "type": "pi",
+                "values": "PlantaPorteria_num"
+            }
+        ]
+    Objeto Retorno Correcto:
+        {
+            "message": "Success"
+        }
+    Objeto Retorno Incorrecto: 
+        {
+            'message': 'Not found'
+        }
+
+
+deleteLastSession/<str:userID>/
+    Funcion: Cuando el usuario terminó, liberar el _____ para que pueda seguirse modificando si es que llega a volver.
+    Parametros:
+        userID: El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
+    Bodys: N/A
+    Objeto Retorno Correcto:
+        {
+            'message': 'Success'
+        }
+    Objeto Retorno Incorrecto:
+        {
+            'message': 'Not found'
+        }
+    
+    ToDo: y hacer un timer dentro de la base de datos (10 minutos)
+ 
