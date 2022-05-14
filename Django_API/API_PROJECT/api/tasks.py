@@ -10,17 +10,17 @@ from sklearn.preprocessing import LabelEncoder
 import time
 from os.path import exists
 
-def get_columns(file):
-    """Gets the columns of a file
+# def get_columns(file):
+#     """Gets the columns of a file
 
-    Args:
-        file (file): File to get the columns from
+#     Args:
+#         file (file): File to get the columns from
 
-    Returns:
-        list: List with the columns
-    """    ''''''
-    for chunk in pd.read_csv(file, chunksize=1):
-        return chunk.columns.to_list()
+#     Returns:
+#         list: List with the columns
+#     """    ''''''
+#     for chunk in pd.read_csv(file, chunksize=1):
+#         return chunk.columns.to_list()
 
 # def filter_columns(df, columns):
 #     """Filters the columns of a dataframe
