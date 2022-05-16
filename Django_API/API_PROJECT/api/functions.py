@@ -263,5 +263,5 @@ def deleteGraph(request, userID, graphID):
         data = { 'message': 'userID is not a valid ObjectID' }
     return JsonResponse(data)
 
-# * Pendientes: gets Asyncornos, Cambiar Documentacion & Junta con frontend
+# * Pendientes: gets Asyncornos?, Cambiar Documentacion & Junta con frontend
 # Barras, Aeras, Burbujas

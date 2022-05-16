@@ -221,6 +221,7 @@ N/A
 
 > ToDo: y hacer un timer dentro de la base de datos (10 minutos)
 ----
+> Falta Definir
 ## **GET_BAR_GRAPH**
 > Funcion: Obtener los valores para crear una grafica de barras en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
@@ -259,6 +260,7 @@ N/A
 ```
 
 ----
+> Falta Definir
 ## **GET_BUBBLE_GRAPH**
 > Funcion: Obtener los valores para crear una grafica de burbuja en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
@@ -297,6 +299,7 @@ N/A
 ```
 
 ----
+> Falta Definir
 ## **GET_AREA_GRAPH**
 > Funcion: Obtener los valores para crear una grafica de area en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
@@ -336,7 +339,7 @@ N/A
 
 ----
 ## **DELETE_GRAPH**
-> Funcion: 
+> Funcion: Eliminar una grafica de acuerdo a su indice de posición
 
 ### URL: 
     /api/deleteGraph/<str:userID>/<int:graphID>/
@@ -501,3 +504,124 @@ N/A
     }
 ```
 
+----
+# Revisión de Endpoints
+### GET_HISTORY_LIST
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A 
+
+**Hay algún pendiente?** Si
+
+**Descripción del pendiente:** Cambiar Nombre de Variables
+
+**Revision hecha por:** Joel Ramos
+
+### GET_USER_ID
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A 
+
+**Hay algún pendiente?** No
+
+**Descripción del pendiente:** N/A
+
+**Revision hecha por:** Joel Ramos
+
+### GET_LAST_SESSION
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A 
+
+**Hay algún pendiente?** Si
+
+**Descripción del pendiente:** Revisar con Facundo formato de salida. Eliminar Datos totales.
+
+**Revision hecha por:** Joel Ramos
+
+### DELETE_LAST_SESSION
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A
+
+**Hay algún pendiente?** Si
+
+**Descripción del pendiente:** Crear el trigger en MongoDB 
+
+**Revision hecha por:** Joel Ramos
+
+### GET_BAR_GRAPH
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A 
+
+**Hay algún pendiente?** Si
+
+**Descripción del pendiente:** Falta definir el endpoint
+
+**Revision hecha por:** Joel Ramos
+
+### GET_BUBBLE_GRAPH
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A 
+
+**Hay algún pendiente?** Si
+
+**Descripción del pendiente:** Falta definir el endpoint
+
+**Revision hecha por:** Joel Ramos
+
+### GET_AREA_GRAPH
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A 
+
+**Hay algún pendiente?** Si
+
+**Descripción del pendiente:** Falta definir el endpoint
+
+**Revision hecha por:** Joel Ramos
+
+### DELETE_GRAPH
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A 
+
+**Hay algún pendiente?** No
+
+**Descripción del pendiente:** N/A
+
+**Revision hecha por:** Joel Ramos
+
+### GET_HISTORY_DETAIL
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A 
+
+**Hay algún pendiente?** Si
+
+**Descripción del pendiente:** Revisar con Facundo formato de salida.
+
+**Revision hecha por:** Joel Ramos
+
+### PUT_GRAPHS
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A 
+
+**Hay algún pendiente?** No
+
+**Descripción del pendiente:** N/A
+
+**Revision hecha por:** Joel Ramos
