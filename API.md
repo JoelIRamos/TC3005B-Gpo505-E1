@@ -25,17 +25,17 @@ N/A
         "result": [
             {
                 "_id": "NombreArchivo2022-01-04T06:00:00.000+00:00",
-                "name": "NombreArchivo",
+                "base_file_name": "NombreArchivo",
                 "date": "2022-01-04T06:00:00.000+00:00"
             },
             {
                 "_id": "NombreArchivo2022-04-01T06:01:20.000+00:00",
-                "name": "NombreArchivo",
+                "base_file_name": "NombreArchivo",
                 "date": "2022-04-01T06:01:20.000+00:00"
             },
             {
                 "_id": "NombreArchivo22022-04-04T06:23:16.000+00:00",
-                "name": "NombreArchivo2",
+                "base_file_name": "NombreArchivo2",
                 "date": "2022-04-04T06:23:16.000+00:00"
             }
         ]
@@ -47,7 +47,7 @@ N/A
         "message": "found",
         "result": [
             {
-                "name": "NombreArchivo",
+                "base_file_name": "NombreArchivo",
                 "versions": [
                     {
                         "_id": "NombreArchivo2022-01-04T06:00:00.000+00:00",
@@ -60,7 +60,7 @@ N/A
                 ]
             },
             {
-                "name": "NombreArchivo2",
+                "base_file_name": "NombreArchivo2",
                 "versions": [
                     {
                         "_id": "NombreArchivo22022-04-04T06:23:16.000+00:00",
@@ -137,13 +137,13 @@ N/A
         "message": "found",
         "result": {
             "historyID": "Archivo2022-01-04T06:00:00.000+00:00",
-            "name": "Archivo",
+            "base_file_name": "Archivo",
             "date": "2022-01-04T06:00:00.000+00:00",
-            "interno": [
+            "internal_attributes": [
                 "PlantaPorteria_num",
                 "EmpresaTransportista_num"
             ],
-            "externo": [
+            "external__attributes": [
                 "UsuarioPesadaEntrada_num",
                 "UsuarioDescarga_num"
             ],
@@ -157,12 +157,7 @@ N/A
                     "type": "pi",
                     "values": "PlantaPorteria_num"
                 }
-            ],
-            "file": {
-                "PlantaPorteria_num": ["1", "3"],
-                "ClaveTransportista_num": ["86", "24"],
-                "EmpresaTransportista_num": ["34", "12"]
-            }
+            ]
         }
     }
 ```
@@ -434,13 +429,13 @@ N/A
         "message": "found",
         "result": {
             "historyID": "Archivo2022-01-04T06:00:00.000+00:00",
-            "name": "Archivo",
+            "base_file_name": "Archivo",
             "date": "2022-01-04T06:00:00.000+00:00",
-            "interno": [
+            "internal_attributes": [
                 "PlantaPorteria_num",
                 "EmpresaTransportista_num"
             ],
-            "externo": [
+            "external__attributes": [
                 "UsuarioPesadaEntrada_num",
                 "UsuarioDescarga_num"
             ],
@@ -455,7 +450,7 @@ N/A
                     "values": "PlantaPorteria_num"
                 }
             ],
-            "file": {
+            "data": {
                 "PlantaPorteria_num": ["1", "3"],
                 "ClaveTransportista_num": ["86", "24"],
                 "EmpresaTransportista_num": ["34", "12"]
@@ -512,9 +507,9 @@ N/A
 
 **Descripción del problema:** N/A 
 
-**Hay algún pendiente?** Si
+**Hay algún pendiente?** No
 
-**Descripción del pendiente:** Cambiar Nombre de Variables
+**Descripción del pendiente:** N/A
 
 **Revision hecha por:** Joel Ramos
 
@@ -536,9 +531,9 @@ N/A
 
 **Descripción del problema:** N/A 
 
-**Hay algún pendiente?** Si
+**Hay algún pendiente?** No
 
-**Descripción del pendiente:** Revisar con Facundo formato de salida. Eliminar Datos totales.
+**Descripción del pendiente:** N/A
 
 **Revision hecha por:** Joel Ramos
 
@@ -608,9 +603,9 @@ N/A
 
 **Descripción del problema:** N/A 
 
-**Hay algún pendiente?** Si
+**Hay algún pendiente?** No
 
-**Descripción del pendiente:** Revisar con Facundo formato de salida.
+**Descripción del pendiente:** N/A
 
 **Revision hecha por:** Joel Ramos
 

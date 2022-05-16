@@ -11,7 +11,7 @@ from bson.objectid import ObjectId
 
 def searchOption1(request):
     # Buscar todos los registros de la coleccion "History" quitando las columnas "internos", "externos" y "graphs"
-    results = list(db["RunHistory"].find({}, {"internos": 0, "externos": 0, "graphs": 0}))
+    results = list(db["RunHistory"].find({}, {"internal_attributes": 0, "external__attributes": 0, "graphs": 0}))
     
     # Si hay registros regresarlos
     if len(results)>0:
@@ -23,7 +23,7 @@ def searchOption1(request):
 
 def searchOption2(request):
     # Buscar todos los registros de la coleccion "History" quitando las columnas "internos", "externos" y "graphs"
-    runs = list(db["RunHistory"].find({}, {"internos": 0, "externos": 0, "graphs": 0}))
+    runs = list(db["RunHistory"].find({}, {"internal_attributes": 0, "external__attributes": 0, "graphs": 0}))
     
     # Si hay registros regresarlos
     if len(runs)>0:
@@ -35,22 +35,22 @@ def searchOption2(request):
         # Para cada registro
         for run in runs:
             # Si el nombre del archivo no esta en la lista
-            if run["name"] not in names:
+            if run["base_file_name"] not in names:
                 # Agregar a la lista de nombres
-                names.append(run["name"])
+                names.append(run["base_file_name"])
         
         # Para cada nombre de archivo
         for name in names:
             # Crear el objeto con los datos del archivo
             file = {}
-            file["name"] = name
+            file["base_file_name"] = name
             # Lista de las versiones de cada archivo
             file["versions"] = []
             
             # Para cada registro
             for run in runs:
                 # Si el nombre del archivo es el mismo
-                if run["name"] == name:
+                if run["base_file_name"] == name:
                     # Objeto con el id y la fecha de la version
                     version = {
                         "_id": run["_id"],
@@ -101,9 +101,9 @@ def searchUserID(request, historyID):
     return JsonResponse(data)
 
 
-def searchHistoryDetailHelper(request, historyID):
+def searchHistoryDetail(request, historyID):
     # Buscar los registros de la coleccion "File" con el id_history e ignorar las columnas _id y id_history 
-    fileResults = list(db["FileData"].find({"id_history": historyID}, {'_id': 0, 'id_history': 0}))
+    fileResults = list(db["FileData"].find({"_id": historyID}, {'_id': 0, 'id_history': 0}))
     # Si hay registros regresarlos
     if len(fileResults) > 0:
         file = fileResults[0]["file"]
@@ -111,10 +111,10 @@ def searchHistoryDetailHelper(request, historyID):
         ExtIntResults = db["RunHistory"].find_one({"_id": historyID})
         
         # Extraer los agentes externos, internos y la fecha
-        extern = ExtIntResults["externos"]
-        intern = ExtIntResults["internos"]
+        external = ExtIntResults["external__attributes"]
+        internal = ExtIntResults["internal_attributes"]
         date = ExtIntResults["date"]
-        name = ExtIntResults["name"]
+        name = ExtIntResults["base_file_name"]
         try:
             graphs = ExtIntResults["graphs"]
         except:
@@ -124,23 +124,53 @@ def searchHistoryDetailHelper(request, historyID):
             'message':'found',
             'result': {
                 'historyID': historyID,
-                'name': name,
+                'base_file_name': name,
                 'date': date,
-                'interno': intern,
-                'externo': extern,
+                'internal_attributes': internal,
+                'external__attributes': external,
                 'graphs': graphs,
-                'file': file
+                'data': file
+            }
+        }
+        
+    else: # Si no hay registros regresar mensaje de error
+        data = {'message': 'Not found'}
+    return JsonResponse(data)
+
+def searchHistorySimpleDetail(request, historyID):
+    # Buscar el registro de la coleccion "History" que tiene el historyID correspondiente
+    ExtIntResults = list(db["RunHistory"].find({"_id": historyID}))
+    
+    # Si hay sí existe el historyID
+    if len(fileResults) > 0:
+        # Extraer el primer/unico registro
+        ExtIntResult = ExtIntResults[0]
+        
+        # Extraer los agentes externos, internos y la fecha
+        external = ExtIntResults["external__attributes"]
+        internal = ExtIntResults["internal_attributes"]
+        date = ExtIntResults["date"]
+        name = ExtIntResults["base_file_name"]
+        try:
+            graphs = ExtIntResults["graphs"]
+        except:
+            graphs = []
+        # Formato de los Datos
+        data = {
+            'message':'found',
+            'result': {
+                'historyID': historyID,
+                'base_file_name': name,
+                'date': date,
+                'internal_attributes': internal,
+                'external__attributes': external,
+                'graphs': graphs
             }
         }
         
     else: # Si no hay registros regresar mensaje de error
         data = {'message': 'Not found'}
     return data
-
-
-def searchHistoryDetail(request, historyID):
-    return JsonResponse(searchHistoryDetailHelper(request, historyID))
-
 
 def searchLastSession(request, userID):
     try: 
@@ -214,7 +244,7 @@ def updateGraphs(request, historyID):
     else:
         return JsonResponse({'message': 'Not found'})
 
-
+# Barras, Aeras, Burbujas
 def searchBarGraph(request, userID):
     return JsonResponse({'message': 'Not Implemented'})
 
@@ -264,4 +294,3 @@ def deleteGraph(request, userID, graphID):
     return JsonResponse(data)
 
 # * Pendientes: gets Asyncornos?, Cambiar Documentacion & Junta con frontend
-# Barras, Aeras, Burbujas
