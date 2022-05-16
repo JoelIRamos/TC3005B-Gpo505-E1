@@ -89,6 +89,10 @@ def searchUserID(request, historyID):
             # Obtener dicho registro para obtener el userID
             newRegister = colectionLS.find_one({"id_history": historyID})
             
+            # ToDo: 
+            # newRegister = colectionLS.insert_one({"id_history": historyID})
+            # id = newRegister.inserted_id
+            
             # Regresar el userID
             data = {'message': 'success', 'userID': str(newRegister['_id'])}
         else :
@@ -186,32 +190,78 @@ def deleteLastSession(request, userID):
     return JsonResponse(data)
 
 
-# ToDo: Cambiar Totalmente
-def updateHistory(request, userID):
-    # Hacer el objectid del userID
-    objUserID = ObjectId(userID) 
-    # Usar coleccion "LastSession"
-    colectionLS = db["LastSession"]
+def updateGraphs(request, historyID):
+    # Usar coleccion "RunHistory"
+    colection = db["RunHistory"]
     # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
-    lSresults = list(colectionLS.find({"_id": objUserID}))
+    results = list(colection.find({"_id": historyID}))
     
-    # Si existe el registro regresar los datos
-    if len(lSresults)>0:
-        # Extraer el histortID
-        historyID = lSresults[0]["id_history"]
-        # Extraer las graficas del request
-        graphs = json.loads(request.body)
+    # Si existe el registro
+    if len(results)>0:
+        # Usar la grafica del Body del request
+        graph = json.loads(request.body)
+        try: 
+            # Sacar las graficas actuales del registro
+            graphs = results[0]["graphs"] 
+            # Agregar la grafica al registro 
+            graphs.append(graph)
+        except:
+            graphs = [graph]
         
-        # Usar la coleccion "History"
-        colectionH = db["RunHistory"]
-        
-        # Hacer update a la tabla con dicho historyID
-        colectionH.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
-        
+        # Actualizar el registro
+        colection.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
         return JsonResponse({"message": "Success"})
     else:
         return JsonResponse({'message': 'Not found'})
 
+
+def searchBarGraph(request, userID):
+    return JsonResponse({'message': 'Not Implemented'})
+
+
+def searchBubbleGraph(request, userID):
+    return JsonResponse({'message': 'Not Implemented'})
+
+
+def searchAreaGraph(request, userID):
+    return JsonResponse({'message': 'Not Implemented'})
+
+
+def deleteGraph(request, userID, graphID):
+    try: 
+        # Hacer el objectid del userID
+        objUserID = ObjectId(userID)
+        # Usar coleccion "LastSession"
+        collectionLS = db["LastSession"]
+        # Buscar la lista de los registros que tienen el userID correspondiente (Maximo debe haber 1)
+        lSresult = list(collectionLS.find({"_id": objUserID}))
+        
+        # Si existe el registro 
+        if len(lSresult)>0:
+            # Extraer en historyID
+            historyID = lSresult[0]["id_history"]
+            # Usar la coleccion "RunHistory"
+            collectionRH = db["RunHistory"]
+            # Buscar el registro que tenga el historyID correspondiente
+            rHresult = collectionRH.find_one({"_id": historyID})
+            # Extraer la lista de graficas
+            graphs = rHresult["graphs"]
+            # Si el graphID esta fuera del alcance, mandar error
+            if (graphID < 0 or graphID > len(graphs)-1):
+                data = {'message': 'graphID not found'}
+            else: 
+                # Si no eliminar dicho elemento de la lista
+                graphs.pop(graphID)
+                
+                # Actualizar el registro con la nueva lista
+                collectionRH.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
+                
+                data = {'message': 'Success'}
+        else: # Si no existe el registro regresar mensaje de no encontrado
+            data = {'message': 'userID not found'}
+    except:
+        data = { 'message': 'userID is not a valid ObjectID' }
+    return JsonResponse(data)
 
 # * Pendientes: gets Asyncornos, Cambiar Documentacion & Junta con frontend
 # Barras, Aeras, Burbujas

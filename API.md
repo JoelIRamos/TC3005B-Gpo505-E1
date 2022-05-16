@@ -339,7 +339,7 @@ N/A
 > Funcion: 
 
 ### URL: 
-    /api/deleteGraph/<str:userID>/<graphID>/
+    /api/deleteGraph/<str:userID>/<int:graphID>/
 
 ### Parametros: 
 **userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
@@ -354,7 +354,7 @@ N/A
 ### Objeto Retorno Correcto
 ``` json
     {
-        "message": "success"
+        "message": "Success"
     }
 ```
 
@@ -370,6 +370,13 @@ N/A
 ``` json
     {
         "message": "graph not found"
+    }
+```
+
+**Versión 3**
+``` json
+    {
+        "message": "userID is not a valid ObjectID"
     }
 ```
 
@@ -400,6 +407,10 @@ N/A
 
 ----
 ----
+
+# Funciones tipo "Helpers"
+
+----
 ## **GET_HISTORY_DETAIL**
 > Funcion: Obtiene toda la información de una sola corrida
 
@@ -419,8 +430,9 @@ N/A
     {
         "message": "found",
         "result": {
-            "historyID": "historyID",
-            "date": "date",
+            "historyID": "Archivo2022-01-04T06:00:00.000+00:00",
+            "name": "Archivo",
+            "date": "2022-01-04T06:00:00.000+00:00",
             "interno": [
                 "PlantaPorteria_num",
                 "EmpresaTransportista_num"
@@ -457,14 +469,14 @@ N/A
 ```
 
 ----
-## **PUT_GRAPH**
+## **PUT_GRAPHS**
 > Funcion: Actualizar las gráficas que estaba haciendo el usuario
 
 ### URL: 
-    /api/putGraph/<str:userID>/
+    /api/putGraphs/<str:historyID>/
 
 ### Parametros: 
-**userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
+**historyID:** El id del una version de un archivo
 
 ### Bodys
 ``` json
