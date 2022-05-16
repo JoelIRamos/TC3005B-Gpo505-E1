@@ -132,48 +132,113 @@ class deleteLastSessionView(View):
         return deleteLastSession(request, userID)
 
 
-# View del endpoint de updateHistory
-class updateHistoryView(View):
+# View del endpoint de updateGraphs
+class updateGraphsView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
     
     data = {'message': 'endpoint not implemented'}
     
-    def get(self, request, userID=0):
+    def get(self, request, historyID=0):
         return JsonResponse(self.data)
+    
+    def post(self, request, historyID=0):
+        return JsonResponse(self.data)
+    
+    # * Metodo HTTP (PUT) del endpoint
+    def put(self, request, historyID): 
+        return updateGraphs(request, historyID)
+    
+    def delete(self, request, historyID=0):
+        return JsonResponse(self.data)
+
+# View del endpoint de searchBarGraph
+class searchBarGraphView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    data = {'message': 'endpoint not implemented'}
+    
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, userID):
+        return searchBarGraph(request, userID)
     
     def post(self, request, userID=0):
         return JsonResponse(self.data)
     
-    # * Metodo HTTP (PUT) del endpoint
-    def put(self, request, userID): 
-        return updateHistory(request, userID)
+    def put(self, request, userID=0): 
+        return JsonResponse(self.data)
     
-    def delete(self, request, userID=0):
+    def delete(self, request, historyID=0):
         return JsonResponse(self.data)
 
 
-# View del endpoint de insertToHistory
-class insertToHistoryView(View):
+# View del endpoint de searchBubbleGraph
+class searchBubbleGraphView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
     
     data = {'message': 'endpoint not implemented'}
     
-    def get(self, request, userID=0):
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, userID):
+        return searchBubbleGraph(request, userID)
+    
+    def post(self, request, userID=0):
         return JsonResponse(self.data)
     
-    # * Metodo HTTP (POST) del endpoint
-    def post(self, request, userID):
-        return insertToHistory(request, userID)
+    def put(self, request, userID=0): 
+        return JsonResponse(self.data)
     
-    def put(self, request, userID=0):
+    def delete(self, request, historyID=0):
+        return JsonResponse(self.data)
+
+
+# View del endpoint de searchAreaGraph
+class searchAreaGraphView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    data = {'message': 'endpoint not implemented'}
+    
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, userID):
+        return searchAreaGraph(request, userID)
+    
+    def post(self, request, userID=0):
+        return JsonResponse(self.data)
+    
+    def put(self, request, userID=0): 
         return JsonResponse(self.data)
     
     def delete(self, request, userID=0):
         return JsonResponse(self.data)
+
+
+# View del endpoint de deleteGraph
+class deleteGraphView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    data = {'message': 'endpoint not implemented'}
+    
+    def get(self, request, userID=0, graphID=0): 
+        return JsonResponse(self.data)
+    
+    def post(self, request, userID=0, graphID=0):
+        return JsonResponse(self.data)
+    
+    def put(self, request, userID=0, graphID=0):
+        return JsonResponse(self.data)
+    
+    # * Metodo HTTP (DELETE) del endpoint
+    def delete(self, request, userID, graphID):
+        return deleteGraph(request, userID, graphID)
 
 
 class FileUploadView(View):
