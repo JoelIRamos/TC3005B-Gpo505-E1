@@ -1,0 +1,41 @@
+# BUBBLE
+
+
+# Cual es x?
+# Cual es y?
+# Como obtengo r?
+
+# Poner labels??
+# En labels pones todas las PlantasPorteria distintas
+labels = [2, 3, ...];
+- Un color significa dato normal y el otro anomalia
+
+data = {
+  labels : labels, # ??
+  datasets: [
+    {
+      label: 'Normal',  
+      data: [
+      {x : 1, y : 5, r : 5},
+      {x : 2, y : 5, r : 5},
+      {x : 3, y : 5, r : 5},
+      {x : 4, y : 5, r : 5},
+      {x : 5, y : 5, r : 5}
+      ],
+      borderColor: Utils.CHART_COLORS.red,
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+    {
+      label: 'Anomalia',
+      data: [
+      {x : 1, y : 5, r : 5},
+      {x : 2, y : 5, r : 5},
+      {x : 3, y : 5, r : 5},
+      {x : 4, y : 5, r : 5},
+      {x : 5, y : 5, r : 5}
+      ],
+      borderColor: Utils.CHART_COLORS.blue,
+      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    },
+  ]
+};
