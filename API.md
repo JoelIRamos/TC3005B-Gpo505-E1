@@ -51,11 +51,11 @@ N/A
                 "versions": [
                     {
                         "_id": "NombreArchivo2022-01-04T06:00:00.000+00:00",
-                        "name": "2022-01-04T06:00:00.000+00:00"
+                        "date": "2022-01-04T06:00:00.000+00:00"
                     }, 
                     {
                         "_id": "NombreArchivo2022-04-01T06:01:20.000+00:00",
-                        "name": "2022-04-01T06:01:20.000+00:00"
+                        "date": "2022-04-01T06:01:20.000+00:00"
                     }
                 ]
             },
@@ -112,10 +112,9 @@ N/A
 **Versión 2**
 ``` json
     {
-        "message": "session unexistent"
+        "message": "historyID unexistent"
     }
 ```
-> ToDo: revisar session inexistente
 
 ----
 ## **GET_LAST_SESSION**
@@ -137,8 +136,9 @@ N/A
     {
         "message": "found",
         "result": {
-            "historyID": "historyID",
-            "date": "date",
+            "historyID": "Archivo2022-01-04T06:00:00.000+00:00",
+            "name": "Archivo",
+            "date": "2022-01-04T06:00:00.000+00:00",
             "interno": [
                 "PlantaPorteria_num",
                 "EmpresaTransportista_num"
@@ -168,9 +168,17 @@ N/A
 ```
 
 ### Objeto Retorno Incorrecto
+**Versión 1**
 ``` json
     {
         "message": "Not found"
+    }
+```
+
+**Version 2**
+``` json
+    {
+        "message": "userID is not a valid ObjectID"
     }
 ```
 
@@ -197,11 +205,20 @@ N/A
 ```
 
 ### Objeto Retorno Incorrecto
+**Versión 1**
 ``` json
     {
         "message": "Not found"
     }
 ```
+
+**Version 2**
+``` json
+    {
+        "message": "userID is not a valid ObjectID"
+    }
+```
+
 > ToDo: y hacer un timer dentro de la base de datos (10 minutos)
 ----
 ## **GET_BAR_GRAPH**
