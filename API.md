@@ -221,14 +221,12 @@ N/A
 > Funcion: Obtener los valores para crear una grafica de barras en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:userID>/<str:variableA>/<str:variableB>/
+    /api/getBarGraph/<str:userID>/<str:variable>/
 
 ### Parametros: 
 **userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
 
-**variableA:**
-
-**variableB:**
+**variable:** La variable que quieren usar para sacar la gráfica.
 
 ### Bodys
 ``` json
@@ -238,12 +236,19 @@ N/A
 ### Objeto Retorno Correcto
 ``` json
     {
-        "message": "success",
-        "result": {
-            "graphID": "",
-            "valuesX": [],
-            "valuesY": []
-        }
+        "labels" : [1, 2, 3, 4, 5, 6, 7],
+        "datasets": [
+            {
+                "label": "Normal",
+                "data": [20, 50, 60, 70, 80, 90, 20],
+                "backgroundColor": "rgba(255, 99, 132, 0.5)"
+            },
+            {
+                "label": "Anomalia",
+                "data": [20, 50, 60, 70, 80, 90, 20],
+                "backgroundColor": "rgba(53, 162, 235, 0.5)",
+            },
+        ]
     }
 ```
 
@@ -260,14 +265,12 @@ N/A
 > Funcion: Obtener los valores para crear una grafica de burbuja en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:userID>/<str:variableA>/<str:variableB>/
+    /api/getBarGraph/<str:userID>/<str:variable>/
 
 ### Parametros: 
 **userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
 
-**variableA:**
-
-**variableB:**
+**variable:** La variable que quieren usar para sacar la gráfica.
 
 ### Bodys
 ``` json
@@ -276,14 +279,7 @@ N/A
 
 ### Objeto Retorno Correcto
 ``` json
-    {
-        "message": "success",
-        "result": {
-            "graphID": "",
-            "valuesX": [],
-            "valuesY": []
-        }
-    }
+    
 ```
 
 ### Objeto Retorno Incorrecto
@@ -295,18 +291,16 @@ N/A
 
 ----
 > Falta Definir
-## **GET_AREA_GRAPH**
-> Funcion: Obtener los valores para crear una grafica de area en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
+## **GET_LINE_GRAPH**
+> Funcion: Obtener los valores para crear una grafica de linea en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:userID>/<str:variableA>/<str:variableB>/
+    /api/getBarGraph/<str:userID>/<str:variable>/
 
 ### Parametros: 
 **userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
 
-**variableA:**
-
-**variableB:**
+**variable:** La variable que quieren usar para sacar la gráfica.
 
 ### Bodys
 ``` json
@@ -316,12 +310,21 @@ N/A
 ### Objeto Retorno Correcto
 ``` json
     {
-        "message": "success",
-        "result": {
-            "graphID": "",
-            "valuesX": [],
-            "valuesY": []
-        }
+        "labels" : "labels",
+        "datasets": [
+            {
+                "label": "Normal",  
+                "data": [20,50,60,70,80,90,20],
+                "borderColor": "Utils.CHART_COLORS.red",
+                "backgroundColor": "rgba(255, 99, 132, 0.5)",
+            },
+            {
+                "label": "Anomalia",
+                "data": [20,50,60,70,80,90,20],
+                "borderColor": "Utils.CHART_COLORS.blue",
+                "backgroundColor": "rgba(53, 162, 235, 0.5)",
+            },
+        ]
     }
 ```
 

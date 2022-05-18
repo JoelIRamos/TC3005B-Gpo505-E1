@@ -142,17 +142,17 @@ def searchHistorySimpleDetail(request, historyID):
     ExtIntResults = list(db["RunHistory"].find({"_id": historyID}))
     
     # Si hay sí existe el historyID
-    if len(fileResults) > 0:
+    if len(ExtIntResults) > 0:
         # Extraer el primer/unico registro
         ExtIntResult = ExtIntResults[0]
         
         # Extraer los agentes externos, internos y la fecha
-        external = ExtIntResults["external__attributes"]
-        internal = ExtIntResults["internal_attributes"]
-        date = ExtIntResults["date"]
-        name = ExtIntResults["base_file_name"]
+        external = ExtIntResult["external__attributes"]
+        internal = ExtIntResult["internal_attributes"]
+        date = ExtIntResult["date"]
+        name = ExtIntResult["base_file_name"]
         try:
-            graphs = ExtIntResults["graphs"]
+            graphs = ExtIntResult["graphs"]
         except:
             graphs = []
         # Formato de los Datos
@@ -190,7 +190,7 @@ def searchLastSession(request, userID):
         historyID = lSresults[0]["id_history"]
         
         # Hacer la busqueda de la tabla con dicho historyID
-        data = searchHistoryDetailHelper(request, historyID)
+        data = searchHistorySimpleDetail(request, historyID)
         
         return JsonResponse(data)
     else:
