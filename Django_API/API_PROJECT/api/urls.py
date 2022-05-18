@@ -16,8 +16,8 @@ urlpatterns = [
     path('getBarGraph/<str:userID>/', views.searchBarGraphView.as_view(), name='get_bar_graph'),
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Burbuja
     path('getBubbleGraph/<str:userID>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
-    # * Mandar a pedir la informacion de una sesion en formato para una grafica de Area
-    path('getAreaGraph/<str:userID>/', views.searchAreaGraphView.as_view(), name='get_area_graph'),
+    # * Mandar a pedir la informacion de una sesion en formato para una grafica de Lineas
+    path('getLineGraph/<str:userID>/', views.searchLineGraphView.as_view(), name='get_line_graph'),
     
     # Rutas PUTs
     # * Insertar una grafica de una corrida

@@ -246,8 +246,8 @@ N/A
             {
                 "label": "Anomalia",
                 "data": [20, 50, 60, 70, 80, 90, 20],
-                "backgroundColor": "rgba(53, 162, 235, 0.5)",
-            },
+                "backgroundColor": "rgba(53, 162, 235, 0.5)"
+            }
         ]
     }
 ```
@@ -316,14 +316,14 @@ N/A
                 "label": "Normal",  
                 "data": [20,50,60,70,80,90,20],
                 "borderColor": "Utils.CHART_COLORS.red",
-                "backgroundColor": "rgba(255, 99, 132, 0.5)",
+                "backgroundColor": "rgba(255, 99, 132, 0.5)"
             },
             {
                 "label": "Anomalia",
                 "data": [20,50,60,70,80,90,20],
                 "borderColor": "Utils.CHART_COLORS.blue",
-                "backgroundColor": "rgba(53, 162, 235, 0.5)",
-            },
+                "backgroundColor": "rgba(53, 162, 235, 0.5)"
+            }
         ]
     }
 ```

@@ -106,7 +106,7 @@ def searchHistoryDetail(request, historyID):
     fileResults = list(db["FileData"].find({"_id": historyID}, {'_id': 0, 'id_history': 0}))
     # Si hay registros regresarlos
     if len(fileResults) > 0:
-        file = fileResults[0]["file"]
+        file = fileResults[0]["data"]
         # Buscar el registro de la coleccion "History" que tiene el historyID correspondiente
         ExtIntResults = db["RunHistory"].find_one({"_id": historyID})
         
@@ -253,7 +253,7 @@ def searchBubbleGraph(request, userID):
     return JsonResponse({'message': 'Not Implemented'})
 
 
-def searchAreaGraph(request, userID):
+def searchLineGraph(request, userID):
     return JsonResponse({'message': 'Not Implemented'})
 
 

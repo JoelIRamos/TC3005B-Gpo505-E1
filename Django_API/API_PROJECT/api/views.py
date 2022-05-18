@@ -198,7 +198,7 @@ class searchBubbleGraphView(View):
 
 
 # View del endpoint de searchAreaGraph
-class searchAreaGraphView(View):
+class searchLineGraphView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
@@ -207,7 +207,7 @@ class searchAreaGraphView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, userID):
-        return searchAreaGraph(request, userID)
+        return searchLineGraph(request, userID)
     
     def post(self, request, userID=0):
         return JsonResponse(self.data)
