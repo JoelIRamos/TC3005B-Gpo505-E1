@@ -13,11 +13,11 @@ urlpatterns = [
     path('getLastSession/<str:userID>/', views.searchLastSessionView.as_view(), name='get_last_session'),
     
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Barras
-    path('getBarGraph/<str:userID>/', views.searchBarGraphView.as_view(), name='get_bar_graph'),
+    path('getBarGraph/<str:userID>/<str:variable>/', views.searchBarGraphView.as_view(), name='get_bar_graph'),
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Burbuja
-    path('getBubbleGraph/<str:userID>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
+    path('getBubbleGraph/<str:userID>/<str:variable>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Lineas
-    path('getLineGraph/<str:userID>/', views.searchLineGraphView.as_view(), name='get_line_graph'),
+    path('getLineGraph/<str:userID>/<str:variable>/', views.searchLineGraphView.as_view(), name='get_line_graph'),
     
     # Rutas PUTs
     # * Insertar una grafica de una corrida

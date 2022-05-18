@@ -162,16 +162,16 @@ class searchBarGraphView(View):
     data = {'message': 'endpoint not implemented'}
     
     # * Metodo HTTP (GET) del endpoint
-    def get(self, request, userID):
+    def get(self, request, userID, variable):
         return searchBarGraph(request, userID)
     
-    def post(self, request, userID=0):
+    def post(self, request, userID=0, variable=0):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0): 
+    def put(self, request, userID=0, variable=0): 
         return JsonResponse(self.data)
     
-    def delete(self, request, historyID=0):
+    def delete(self, request, userID=0, variable=0):
         return JsonResponse(self.data)
 
 
@@ -184,16 +184,16 @@ class searchBubbleGraphView(View):
     data = {'message': 'endpoint not implemented'}
     
     # * Metodo HTTP (GET) del endpoint
-    def get(self, request, userID):
+    def get(self, request, userID, variable=0):
         return searchBubbleGraph(request, userID)
     
-    def post(self, request, userID=0):
+    def post(self, request, userID=0, variable=0):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0): 
+    def put(self, request, userID=0, variable=0): 
         return JsonResponse(self.data)
     
-    def delete(self, request, historyID=0):
+    def delete(self, request, historyID=0, variable=0):
         return JsonResponse(self.data)
 
 
@@ -207,15 +207,15 @@ class searchLineGraphView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, userID):
-        return searchLineGraph(request, userID)
+        return searchLineGraph(request, userID, variable)
     
-    def post(self, request, userID=0):
+    def post(self, request, userID=0, variable=0):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0): 
+    def put(self, request, userID=0, variable=0): 
         return JsonResponse(self.data)
     
-    def delete(self, request, userID=0):
+    def delete(self, request, userID=0, variable=0):
         return JsonResponse(self.data)
 
 
