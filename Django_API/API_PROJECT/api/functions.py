@@ -8,6 +8,9 @@ from api.db import db
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 
+import pandas as pd
+import numpy as np
+
 
 def searchOption1(request):
     # Buscar todos los registros de la coleccion "History" quitando las columnas "internos", "externos" y "graphs"
@@ -245,8 +248,69 @@ def updateGraphs(request, historyID):
         return JsonResponse({'message': 'Not found'})
 
 # Barras, Aeras, Burbujas
-def searchBarGraph(request, userID):
-    return JsonResponse({'message': 'Not Implemented'})
+def searchBarGraph(request, userID, variable):
+    try: 
+        # Hacer el objectid del userID
+        objUserID = ObjectId(userID)
+    except: 
+        return JsonResponse({'message': 'userID is not a valid ObjectID'})
+
+    # Usar coleccion "RunHistory"
+    colectionLS = db["LastSession"]
+    # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
+    resultsLS = list(colectionLS.find({"_id": objUserID}))
+    # Si existe el registro
+    if len(resultsLS)>0:
+        historyID = resultsLS[0]["id_history"]
+        print(historyID)
+
+        # Usar coleccion "RunHistory"
+        colectionFD = db["FileData"]
+        # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
+        resultsFD = list(colectionFD.find({"_id": historyID}))
+        if len(resultsFD) > 0:
+            # Crear data frame
+            df =  pd.DataFrame({'atributo' :resultsFD[0]['data'][variable], 'anomalia': resultsFD[0]['data']['anomaly_scores']})
+
+            # obtener los valores unicos de atributo
+            atributo = df['atributo'].unique().tolist()
+
+            # obtener total de anomalias
+            anomalias = df.groupby(df.columns.tolist(),as_index=False).size()
+            normalList = []
+            anomalyList = []
+            print(anomalias)
+            print(len(anomalias))
+            for i in range(len(anomalias)):
+                print(anomalias.iloc[i][1])
+                if anomalias.iloc[i][1] == -1:
+                    anomalyList.append(anomalias.iloc[i][2])
+                else:
+                    normalList.append(anomalias.iloc[i][2])
+            print(anomalyList)
+            print(normalList)
+            print(atributo)
+            data = {
+                'labels' : atributo,
+                'datasets' : [
+                    {
+                        'label': 'Normal',
+                        'data': ['normalList'],
+                        'backgroundColor': 'rgba(255, 99, 132, 0.5)', 
+                    },
+                    {
+                        'label': 'Anomalia',
+                        'data':  ['anomalyList'],
+                        'backgroundColor' :  'rgba(53, 162, 235, 0.5)'
+                    }
+                ]
+            }
+            print(data)
+        else:
+            data = { 'message': 'No data' }
+    else: # Si no existe el registro regresar mensaje de error
+        data = {'message': 'userID does not exit'}
+    return JsonResponse(data)
 
 
 def searchBubbleGraph(request, userID):

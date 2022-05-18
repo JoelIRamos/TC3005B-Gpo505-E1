@@ -163,7 +163,7 @@ class searchBarGraphView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, userID, variable):
-        return searchBarGraph(request, userID)
+        return searchBarGraph(request, userID, variable)
     
     def post(self, request, userID=0, variable=0):
         return JsonResponse(self.data)
