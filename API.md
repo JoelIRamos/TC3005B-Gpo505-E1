@@ -558,7 +558,7 @@ N/A
 
 **Descripción del problema:** N/A 
 
-**Hay algún pendiente?** Si
+**Hay algún pendiente?** Revisar que exista la columna en la base de datos
 
 **Descripción del pendiente:** Falta definir el endpoint
 
