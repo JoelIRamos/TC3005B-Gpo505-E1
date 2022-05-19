@@ -247,8 +247,8 @@ def updateGraphs(request, historyID):
     else:
         return JsonResponse({'message': 'Not found'})
 
-# Barras, Aeras, Burbujas
-def searchBarGraph(request, userID, variable):
+# Barras, Linea helper
+def searchBarLineGraphHelper(request, userID, variable):
     try: 
         # Hacer el objectid del userID
         objUserID = ObjectId(userID)
@@ -262,7 +262,6 @@ def searchBarGraph(request, userID, variable):
     # Si existe el registro
     if len(resultsLS)>0:
         historyID = resultsLS[0]["id_history"]
-        print(historyID)
 
         # Usar coleccion "RunHistory"
         colectionFD = db["FileData"]
@@ -279,47 +278,37 @@ def searchBarGraph(request, userID, variable):
             anomalias = df.groupby(df.columns.tolist(),as_index=False).size()
             normalList = []
             anomalyList = []
-            print(anomalias)
-            print(len(anomalias))
+
             for i in range(len(anomalias)):
-                print(anomalias.iloc[i][1])
                 if anomalias.iloc[i][1] == -1:
                     anomalyList.append(anomalias.iloc[i][2])
                 else:
                     normalList.append(anomalias.iloc[i][2])
-            print(anomalyList)
-            print(normalList)
-            print(atributo)
+
+            anomalyList = np.array(anomalyList)
+            normalList = np.array(normalList)
+
+            # solamente se envia el total de atributos y el total de anomalias de cada uno
             data = {
-                'labels' : atributo,
-                'datasets' : [
-                    {
-                        'label': 'Normal',
-                        'data': ['normalList'],
-                        'backgroundColor': 'rgba(255, 99, 132, 0.5)', 
-                    },
-                    {
-                        'label': 'Anomalia',
-                        'data':  ['anomalyList'],
-                        'backgroundColor' :  'rgba(53, 162, 235, 0.5)'
-                    }
-                ]
+                'labels': atributo,
+                'anomalyList': anomalyList.tolist(),
+                'normalList': normalList.tolist()
             }
-            print(data)
+
         else:
             data = { 'message': 'No data' }
     else: # Si no existe el registro regresar mensaje de error
         data = {'message': 'userID does not exit'}
     return JsonResponse(data)
 
+def searchBarGraph(request, userID, variable):
+    return searchBarLineGraphHelper(request, userID, variable)
+
+def searchLineGraph(request, userID, variable):
+    return searchBarLineGraphHelper(request, userID, variable)
 
 def searchBubbleGraph(request, userID):
     return JsonResponse({'message': 'Not Implemented'})
-
-
-def searchLineGraph(request, userID):
-    return JsonResponse({'message': 'Not Implemented'})
-
 
 def deleteGraph(request, userID, graphID):
     try: 

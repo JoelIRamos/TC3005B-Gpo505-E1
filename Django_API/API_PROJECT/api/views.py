@@ -206,7 +206,7 @@ class searchLineGraphView(View):
     data = {'message': 'endpoint not implemented'}
     
     # * Metodo HTTP (GET) del endpoint
-    def get(self, request, userID):
+    def get(self, request, userID, variable):
         return searchLineGraph(request, userID, variable)
     
     def post(self, request, userID=0, variable=0):

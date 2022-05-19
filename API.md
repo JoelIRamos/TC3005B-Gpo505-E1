@@ -236,19 +236,15 @@ N/A
 ### Objeto Retorno Correcto
 ``` json
     {
-        "labels" : [1, 2, 3, 4, 5, 6, 7],
-        "datasets": [
-            {
-                "label": "Normal",
-                "data": [20, 50, 60, 70, 80, 90, 20],
-                "backgroundColor": "rgba(255, 99, 132, 0.5)"
-            },
-            {
-                "label": "Anomalia",
-                "data": [20, 50, 60, 70, 80, 90, 20],
-                "backgroundColor": "rgba(53, 162, 235, 0.5)"
-            }
-        ]
+  "labels": [
+    1
+  ],
+  "anomalyList": [
+    1
+  ],
+  "normalList": [
+    2
+  ]
     }
 ```
 
