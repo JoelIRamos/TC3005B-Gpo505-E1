@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.shortcuts import render
 from django.http.response import JsonResponse
 
@@ -98,7 +99,7 @@ def searchUserID(request, historyID):
             
             # Regresar el userID
             data = {'message': 'success', 'userID': str(newRegister['_id'])}
-        else :
+        else:
             data = {'message': 'historyID unexistent'}
     
     return JsonResponse(data)
@@ -259,30 +260,68 @@ def searchBarLineGraphHelper(request, userID, variable):
     colectionLS = db["LastSession"]
     # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
     resultsLS = list(colectionLS.find({"_id": objUserID}))
-    # Si existe el registro
+    # Si existe el usuario
     if len(resultsLS)>0:
         historyID = resultsLS[0]["id_history"]
 
-        # Usar coleccion "RunHistory"
+        # Usar coleccion "FileData"
         colectionFD = db["FileData"]
-        # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
+        # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
         resultsFD = list(colectionFD.find({"_id": historyID}))
+        # Si existe el historial
         if len(resultsFD) > 0:
             # Crear data frame
             df =  pd.DataFrame({'atributo' :resultsFD[0]['data'][variable], 'anomalia': resultsFD[0]['data']['anomaly_scores']})
-
-            # obtener los valores unicos de atributo
+            # print(df)
+            
+            # Obtener los valores unicos de atributo
             atributo = df['atributo'].unique().tolist()
+            print(atributo)
 
             # obtener total de anomalias
             anomalias = df.groupby(df.columns.tolist(),as_index=False).size()
+            # print(anomalias)
             normalList = []
             anomalyList = []
 
             for i in range(len(anomalias)):
                 if anomalias.iloc[i][1] == -1:
+                    categoryValue = anomalias.iloc[i][0]
+                    # Extraer el valor anterior
+                    try:
+                        before = anomalias.iloc[i-1][0]
+                    except:
+                        before = -1
+                    
+                    # Extraer el valor posterior
+                    try:
+                        after = anomalias.iloc[i+1][0]
+                    except: 
+                        after = -1
+                    
+                    # Verficar si el valor tiene una contraparte
+                    if (categoryValue != before) and (categoryValue != after):
+                        normalList.append(0)
+                    
                     anomalyList.append(anomalias.iloc[i][2])
                 else:
+                    categoryValue = anomalias.iloc[i][0]
+                    # Extraer el valor anterior
+                    try:
+                        before = anomalias.iloc[i-1][0]
+                    except:
+                        before = -1
+                    
+                    # Extraer el valor posterior
+                    try:
+                        after = anomalias.iloc[i+1][0]
+                    except: 
+                        after = -1
+                    
+                    # Verficar si el valor tiene una contraparte
+                    if (categoryValue != before) and (categoryValue != after):
+                        anomalyList.append(0)
+                    
                     normalList.append(anomalias.iloc[i][2])
 
             anomalyList = np.array(anomalyList)
