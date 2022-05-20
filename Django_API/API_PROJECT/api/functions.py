@@ -1,3 +1,4 @@
+# from typing_extensions import LiteralString
 from unicodedata import category
 from django.shortcuts import render
 from django.http.response import JsonResponse
@@ -249,7 +250,8 @@ def updateGraphs(request, historyID):
         return JsonResponse({'message': 'Not found'})
 
 # Barras, Linea helper
-def searchBarLineGraphHelper(request, userID, variable):
+def searchBarLineGraphHelper(request, userID, variable, filter):
+    filter = float(filter)
     try: 
         # Hacer el objectid del userID
         objUserID = ObjectId(userID)
@@ -270,32 +272,38 @@ def searchBarLineGraphHelper(request, userID, variable):
         resultsFD = list(colectionFD.find({"_id": historyID}))
         # Si existe el historial
         if len(resultsFD) > 0:
-            # Crear data frame
-            df =  pd.DataFrame({'atributo' :resultsFD[0]['data'][variable], 'anomalia': resultsFD[0]['data']['anomaly_scores']})
-            # print(df)
+            # Extraer los 'anomaly_socores' del registro
+            anomaly_scores = resultsFD[0]["data"]["anomaly_scores"]
+            anomalys = []
             
-            # Obtener los valores unicos de atributo
-            atributo = df['atributo'].unique().tolist()
-            print(atributo)
+            # Llenar la lista de anomalias
+            for i in range(len(anomaly_scores)):
+                if (anomaly_scores[i] >= filter):
+                    anomalys.append(1)
+                else: 
+                    anomalys.append(-1)
+            
+            # Crear data frame
+            df =  pd.DataFrame({'atribute' :resultsFD[0]['data'][variable], 'anomaliy': anomalys})
 
-            # obtener total de anomalias
-            anomalias = df.groupby(df.columns.tolist(),as_index=False).size()
-            # print(anomalias)
+            # Obtener total de anomalias
+            anomalyTable = df.groupby(df.columns.tolist(),as_index=False).size()
+            print(anomalyTable)
             normalList = []
             anomalyList = []
 
-            for i in range(len(anomalias)):
-                if anomalias.iloc[i][1] == -1:
-                    categoryValue = anomalias.iloc[i][0]
+            for i in range(len(anomalyTable)):
+                if anomalyTable.iloc[i][1] == -1:
+                    categoryValue = anomalyTable.iloc[i][0]
                     # Extraer el valor anterior
                     try:
-                        before = anomalias.iloc[i-1][0]
+                        before = anomalyTable.iloc[i-1][0]
                     except:
                         before = -1
                     
                     # Extraer el valor posterior
                     try:
-                        after = anomalias.iloc[i+1][0]
+                        after = anomalyTable.iloc[i+1][0]
                     except: 
                         after = -1
                     
@@ -303,18 +311,18 @@ def searchBarLineGraphHelper(request, userID, variable):
                     if (categoryValue != before) and (categoryValue != after):
                         normalList.append(0)
                     
-                    anomalyList.append(anomalias.iloc[i][2])
+                    anomalyList.append(anomalyTable.iloc[i][2])
                 else:
-                    categoryValue = anomalias.iloc[i][0]
+                    categoryValue = anomalyTable.iloc[i][0]
                     # Extraer el valor anterior
                     try:
-                        before = anomalias.iloc[i-1][0]
+                        before = anomalyTable.iloc[i-1][0]
                     except:
                         before = -1
                     
                     # Extraer el valor posterior
                     try:
-                        after = anomalias.iloc[i+1][0]
+                        after = anomalyTable.iloc[i+1][0]
                     except: 
                         after = -1
                     
@@ -322,14 +330,15 @@ def searchBarLineGraphHelper(request, userID, variable):
                     if (categoryValue != before) and (categoryValue != after):
                         anomalyList.append(0)
                     
-                    normalList.append(anomalias.iloc[i][2])
+                    normalList.append(anomalyTable.iloc[i][2])
 
             anomalyList = np.array(anomalyList)
             normalList = np.array(normalList)
+            atributeList = anomalyTable['atribute'].unique().tolist()
 
-            # solamente se envia el total de atributos y el total de anomalias de cada uno
+            # Solamente se envia el total de atributos y el total de anomalias de cada uno
             data = {
-                'labels': atributo,
+                'labels': atributeList,
                 'anomalyList': anomalyList.tolist(),
                 'normalList': normalList.tolist()
             }
@@ -340,11 +349,11 @@ def searchBarLineGraphHelper(request, userID, variable):
         data = {'message': 'userID does not exit'}
     return JsonResponse(data)
 
-def searchBarGraph(request, userID, variable):
-    return searchBarLineGraphHelper(request, userID, variable)
+def searchBarGraph(request, userID, variable, filter):
+    return searchBarLineGraphHelper(request, userID, variable, filter)
 
-def searchLineGraph(request, userID, variable):
-    return searchBarLineGraphHelper(request, userID, variable)
+def searchLineGraph(request, userID, variable, filter):
+    return searchBarLineGraphHelper(request, userID, variable, filter)
 
 def searchBubbleGraph(request, userID):
     return JsonResponse({'message': 'Not Implemented'})
@@ -385,4 +394,4 @@ def deleteGraph(request, userID, graphID):
         data = { 'message': 'userID is not a valid ObjectID' }
     return JsonResponse(data)
 
-# * Pendientes: gets Asyncornos?, Cambiar Documentacion & Junta con frontend
+# * Pendientes: Cambiar Documentacion 

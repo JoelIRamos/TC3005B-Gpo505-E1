@@ -162,16 +162,16 @@ class searchBarGraphView(View):
     data = {'message': 'endpoint not implemented'}
     
     # * Metodo HTTP (GET) del endpoint
-    def get(self, request, userID, variable):
-        return searchBarGraph(request, userID, variable)
+    def get(self, request, userID, variable, filter):
+        return searchBarGraph(request, userID, variable, filter)
     
-    def post(self, request, userID=0, variable=0):
+    def post(self, request, userID=0, variable=0, filter=0):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0, variable=0): 
+    def put(self, request, userID=0, variable=0, filter=0): 
         return JsonResponse(self.data)
     
-    def delete(self, request, userID=0, variable=0):
+    def delete(self, request, userID=0, variable=0, filter=0):
         return JsonResponse(self.data)
 
 
@@ -206,16 +206,16 @@ class searchLineGraphView(View):
     data = {'message': 'endpoint not implemented'}
     
     # * Metodo HTTP (GET) del endpoint
-    def get(self, request, userID, variable):
-        return searchLineGraph(request, userID, variable)
+    def get(self, request, userID, variable, filter):
+        return searchLineGraph(request, userID, variable, filter)
     
-    def post(self, request, userID=0, variable=0):
+    def post(self, request, userID=0, variable=0, filter=0):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0, variable=0): 
+    def put(self, request, userID=0, variable=0, filter=0): 
         return JsonResponse(self.data)
     
-    def delete(self, request, userID=0, variable=0):
+    def delete(self, request, userID=0, variable=0, filter=0):
         return JsonResponse(self.data)
 
 

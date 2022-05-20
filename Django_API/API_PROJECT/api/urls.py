@@ -13,9 +13,11 @@ urlpatterns = [
     path('getLastSession/<str:userID>/', views.searchLastSessionView.as_view(), name='get_last_session'),
     
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Barras
-    path('getBarGraph/<str:userID>/<str:variable>/', views.searchBarGraphView.as_view(), name='get_bar_graph'),
+    path('getBarGraph/<str:userID>/<str:variable>/<str:filter>/', views.searchBarGraphView.as_view(), name='get_bar_graph_with_filter'),
+    # path('getBarGraph/<str:userID>/<str:variable>/', views.searchBarGraphView.as_view(), name='get_bar_graph_without_filter'),
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Lineas
-    path('getLineGraph/<str:userID>/<str:variable>/', views.searchLineGraphView.as_view(), name='get_line_graph'),
+    path('getLineGraph/<str:userID>/<str:variable>/<str:filter>/', views.searchLineGraphView.as_view(), name='get_line_graph_with_filter'),
+    # path('getBarGraph/<str:userID>/<str:variable>/', views.searchBarGraphView.as_view(), name='get_bar_graph_without_filter'),
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Burbuja
     path('getBubbleGraph/<str:userID>/<str:variable>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
     
