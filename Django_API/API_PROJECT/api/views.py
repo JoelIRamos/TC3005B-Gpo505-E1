@@ -10,9 +10,9 @@ from django.http import HttpResponse
 from api.db import db 
 from api.functions import *
 
-from bson.json_util import dumps
+# from bson.json_util import dumps
 
-import pandas as pd
+# import pandas as pd
 import numpy as np
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import LabelEncoder
@@ -57,13 +57,13 @@ class searchHistoryDetailView(View):
     def get(self, request, historyID):
         return searchHistoryDetail(request, historyID)
     
-    def post(self, request, historyID=0):
+    def post(self, request, historyID='0'):
         return JsonResponse(self.data)
     
-    def put(self, request, historyID=0):
+    def put(self, request, historyID='0'):
         return JsonResponse(self.data)
     
-    def delete(self, request, historyID=0):
+    def delete(self, request, historyID='0'):
         return JsonResponse(self.data)
 
 
@@ -79,13 +79,13 @@ class searchLastSessionView(View):
     def get(self, request, userID):
         return searchLastSession(request, userID)
     
-    def post(self, request, userID=0):
+    def post(self, request, userID='0'):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0):
+    def put(self, request, userID='0'):
         return JsonResponse(self.data)
     
-    def delete(self, request, userID=0):
+    def delete(self, request, userID='0'):
         return JsonResponse(self.data)
 
 
@@ -97,17 +97,17 @@ class searchUserIDView(View):
     
     data = {'message': 'endpoint not implemented'}
     
+    # * Metodo HTTP (GET) del endpoint
     def get(self, request, historyID):
         return searchUserID(request, historyID)
     
-    # * Metodo HTTP (GET) del endpoint
-    def post(self, request, userID=0, historyID=0):
+    def post(self, request, userID='0', historyID='0'):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0, historyID=0):
+    def put(self, request, userID='0', historyID='0'):
         return JsonResponse(self.data)
     
-    def delete(self, request, userID=0, historyID=0):
+    def delete(self, request, userID='0', historyID='0'):
         return JsonResponse(self.data)
 
 # View del endpoint de deleteLastSession
@@ -118,13 +118,13 @@ class deleteLastSessionView(View):
     
     data = {'message': 'endpoint not implemented'}
     
-    def get(self, request, userID=0): 
+    def get(self, request, userID='0'): 
         return JsonResponse(self.data)
     
-    def post(self, request, userID=0):
+    def post(self, request, userID='0'):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0):
+    def put(self, request, userID='0'):
         return JsonResponse(self.data)
     
     # * Metodo HTTP (DELETE) del endpoint
@@ -140,17 +140,17 @@ class updateGraphsView(View):
     
     data = {'message': 'endpoint not implemented'}
     
-    def get(self, request, historyID=0):
+    def get(self, request, historyID='0'):
         return JsonResponse(self.data)
     
-    def post(self, request, historyID=0):
+    def post(self, request, historyID='0'):
         return JsonResponse(self.data)
     
     # * Metodo HTTP (PUT) del endpoint
     def put(self, request, historyID): 
         return updateGraphs(request, historyID)
     
-    def delete(self, request, historyID=0):
+    def delete(self, request, historyID='0'):
         return JsonResponse(self.data)
 
 # View del endpoint de searchBarGraph
@@ -162,16 +162,37 @@ class searchBarGraphView(View):
     data = {'message': 'endpoint not implemented'}
     
     # * Metodo HTTP (GET) del endpoint
-    def get(self, request, userID, variable, filter):
-        return searchBarGraph(request, userID, variable, filter)
+    def get(self, request, userID, attribute, filter):
+        return searchBarGraph(request, userID, attribute, filter)
     
-    def post(self, request, userID=0, variable=0, filter=0):
+    def post(self, request, userID='0', attribute='0', filter='0'):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0, variable=0, filter=0): 
+    def put(self, request, userID='0', attribute='0', filter='0'): 
         return JsonResponse(self.data)
     
-    def delete(self, request, userID=0, variable=0, filter=0):
+    def delete(self, request, userID='0', attribute='0', filter='0'):
+        return JsonResponse(self.data)
+
+# View del endpoint de searchLineGraph
+class searchLineGraphView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    data = {'message': 'endpoint not implemented'}
+    
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, userID, attribute, filter):
+        return searchLineGraph(request, userID, attribute, filter)
+    
+    def post(self, request, userID='0', attribute='0', filter='0'):
+        return JsonResponse(self.data)
+    
+    def put(self, request, userID='0', attribute='0', filter='0'): 
+        return JsonResponse(self.data)
+    
+    def delete(self, request, userID='0', attribute='0', filter='0'):
         return JsonResponse(self.data)
 
 
@@ -184,38 +205,16 @@ class searchBubbleGraphView(View):
     data = {'message': 'endpoint not implemented'}
     
     # * Metodo HTTP (GET) del endpoint
-    def get(self, request, userID, variable=0):
-        return searchBubbleGraph(request, userID, variable)
+    def get(self, request, userID, attribute):
+        return searchBubbleGraph(request, userID, attribute)
     
-    def post(self, request, userID=0, variable=0):
+    def post(self, request, userID='0', attribute='0'):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0, variable=0): 
+    def put(self, request, userID='0', attribute='0'): 
         return JsonResponse(self.data)
     
-    def delete(self, request, historyID=0, variable=0):
-        return JsonResponse(self.data)
-
-
-# View del endpoint de searchAreaGraph
-class searchLineGraphView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
-    
-    data = {'message': 'endpoint not implemented'}
-    
-    # * Metodo HTTP (GET) del endpoint
-    def get(self, request, userID, variable, filter):
-        return searchLineGraph(request, userID, variable, filter)
-    
-    def post(self, request, userID=0, variable=0, filter=0):
-        return JsonResponse(self.data)
-    
-    def put(self, request, userID=0, variable=0, filter=0): 
-        return JsonResponse(self.data)
-    
-    def delete(self, request, userID=0, variable=0, filter=0):
+    def delete(self, request, historyID='0', attribute='0'):
         return JsonResponse(self.data)
 
 
@@ -227,13 +226,13 @@ class deleteGraphView(View):
     
     data = {'message': 'endpoint not implemented'}
     
-    def get(self, request, userID=0, graphID=0): 
+    def get(self, request, userID='0', graphID='0'): 
         return JsonResponse(self.data)
     
-    def post(self, request, userID=0, graphID=0):
+    def post(self, request, userID='0', graphID='0'):
         return JsonResponse(self.data)
     
-    def put(self, request, userID=0, graphID=0):
+    def put(self, request, userID='0', graphID='0'):
         return JsonResponse(self.data)
     
     # * Metodo HTTP (DELETE) del endpoint

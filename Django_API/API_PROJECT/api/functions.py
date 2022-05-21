@@ -394,4 +394,4 @@ def deleteGraph(request, userID, graphID):
         data = { 'message': 'userID is not a valid ObjectID' }
     return JsonResponse(data)
 
-# * Pendientes: Cambiar Documentacion 
+# * Pendientes: Cambiar Documentacion, trigger y burbuja
