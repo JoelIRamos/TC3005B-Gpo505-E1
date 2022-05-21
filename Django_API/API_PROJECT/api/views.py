@@ -255,26 +255,38 @@ class FileUploadView(View):
             request (request): The request object
 
         Returns:
-            HttpResponse: Contains a list of the columns of the csv file
+            JsonResponse: The response object
         """
-        #columns_IF = request.data['columns_IF']
-        columns_IF = ['ID_TRANSPORTISTA', 'EMPRESA_TRANSPORTISTA', 'C_ID_ORDEN_CABECERA', 'C_POSICION_ORDEN', 'Q_CANTIDAD']
-        file = request.FILES['file']
-        if file != None:
-            file_id = file.name.replace(' ', '_').replace('.csv','') + '_' + datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            
+        if request.FILES['file'] != None:
+            # Get the file from the request
+            file = request.FILES['file']
+            # Get current time
+            date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            # Get the file name without extension
+            base_file_name = file.name.replace(' ', '_').replace('.csv','')
+            # Create the file id
+            file_id = base_file_name + '_' + date
+            # Saves the file in the default storage
             file_name = default_storage.save(file_id+'.csv', file)
             
-            process_file.delay(file_name, columns_IF)
-
-            queue = np.array([])
+            internal_attributes = ['ID_TRANSPORTISTA', 'weightDifference', 'D_UBICACION', 'USUARIO_EGRESO', 'N_PESO_TARA', 'mediana']
+            external_attributes = ['C_ID_ORDEN_CABECERA', 'C_POSICION_ORDEN', 'Q_CANTIDAD', 'N_PESO_BRUTO', 'TIPO_TRANSPORTE']
+            # Gets internal and external attributes from request
+            #internal_attributes = request.data['internal_attributes']
+            #external_attributes = request.data['external_attributes']
             
+            # Sends the file to the processing function
+            process_file.delay(file_name, base_file_name, date ,internal_attributes, external_attributes)
+
+            # Adds the file to the file queue
+            queue = np.array([])
             if not exists('../API_PROJECT/queue.npy'):
                 queue = np.append(queue, file_id)
             else:
                 queue = np.load('queue.npy')
                 queue = np.append(queue, file_id)
             
+            # Saves the queue
             saved = False
             while (not saved):
                 try:
@@ -283,10 +295,10 @@ class FileUploadView(View):
                 except:
                     print('Error saving queue, trying again...')
             
+            # Returns the file id and queue
             return JsonResponse({"message": "File received", "file_id": file_id, "queue": queue.tolist()})
         else:
             return JsonResponse({"message": "No file"})
-        #return HttpResponse("Name of file is: " + str(file))
         
     
     
@@ -300,18 +312,6 @@ class FileUploadView(View):
             render: Renders the file upload page
         """
         return render(request, 'upload_file.html', {'form': UploadFileForm()})
-
-
-
-
-
-        """
-        chunk = 1024*1024   # Process 1 MB at a time.
-        f = np.memmap("test.csv")
-        num_newlines = sum(np.sum(f[i:i+chunk] == ord('\n'))
-                        for i in range(0, len(f), chunk))
-        del f
-        """
 
 
     
