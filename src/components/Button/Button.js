@@ -18,7 +18,7 @@ const Button = ({text, style, icon}) => {
   }
 
   const icons = {
-    cloud: < FaCloudUploadAlt className={iconStyle} />,
+    cloud: <FaCloudUploadAlt className={iconStyle} />,
     chart: <FaChartBar className={iconStyle} />,
     history: <FaHistory  className={iconStyle}/>,
   }

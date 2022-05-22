@@ -1,4 +1,34 @@
 .icon{
     color: red;
     transition: all 200ms;
-  }
+}
+
+.generic-btn{
+  margin-right: auto;
+  margin-left: 4%;
+  padding: .5%;
+  display: block;
+  background-color: rgb(255, 67, 20);
+  font-size: 1.5rem;
+  border-radius: 35px;
+  cursor: pointer;
+  width: 10%;
+  color: rgb(255, 255, 255);
+  border: solid 1.5px rgb(255, 67, 20);
+  transition: all 200ms;
+}
+
+.generic-btn:hover{
+  margin-right: auto;
+  margin-left: 4%;
+  padding: .5%;
+  display: block;
+  background-color: rgb(255, 255, 255);
+  font-size: 1.5rem;
+  border-radius: 35px;
+  cursor: pointer;
+  width: 10%;
+  color: rgb(255, 67, 20);
+  border: solid 1.5px rgb(255, 67, 20);
+  transition: all 200ms;
+}

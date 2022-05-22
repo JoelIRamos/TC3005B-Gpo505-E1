@@ -1,0 +1,51 @@
+.contenedor-datos-home{
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    color: rgb(255, 255, 255);
+    height: 59%;
+    width: 50%;
+    text-align: center;
+    margin-right: 3%;
+    margin-left: 3%;
+    margin-top: 8%;
+    filter: drop-shadow(8px 8px 8px rgb(0, 0, 0));
+}
+
+.contenedor-info{
+    text-align: center;
+    padding-top: 20%;
+    font-size: 1.2vw;
+}
+
+.icono{
+    height: 1vw;
+}
+
+.contenedor-icono{
+    display: flex;
+    height: 80%;
+    justify-content: center;
+}
+
+.home-button{
+    display: flex;
+    background-color: transparent;
+    border: transparent;
+    cursor: pointer;
+}
+
+
+.red{
+    background-color: #f25c29;
+
+}
+
+.yellow{
+    background-color: #ffa82f;
+}
+
+.gray{
+    background-color: rgb(102, 102, 102);
+}

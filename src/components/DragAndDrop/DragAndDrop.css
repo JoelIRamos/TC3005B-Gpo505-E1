@@ -1,0 +1,39 @@
+.dnd-table{
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    color: rgb(255, 255, 255);
+    height: 705%;
+    width: 28%;
+    text-align: center;
+    margin-top: 3%;
+    margin-bottom: 1%;
+    margin-right: 2%;
+    margin-left: 2%;
+    background-color: rgb(250, 142, 0);
+}
+
+.dnd-table-title{
+    height: 1%;
+    margin-top: 3%;
+    margin-bottom: 0%;
+    right: 50%;
+    color: rgb(0, 0, 0);
+}
+
+.dnd-table-attribute{
+    background-color: rgb(255, 255, 255);
+    border:rgb(0, 0, 0) solid;
+    color: rgb(0, 0, 0);
+    border-radius: 5px;
+    padding: 4%;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.dnd-droppableArea{
+    height: 95%;
+}
