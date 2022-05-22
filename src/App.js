@@ -1,8 +1,10 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import UpFileview from './views/uploadFileView';
+import HomeScreenview from './views/homeScreen';
+import UpLoadFileview from './views/uploadFileView';
 import Dashboard from './views/dashboardView';
 import Historial from './views/historyView';
+//import SeleccionAtributos from './views/attributeSelectionView'
 import { useState } from 'react';
 
 // Atributos dummy
@@ -52,6 +54,7 @@ const datos = [
 function App() {
   // Archivo .csv
   const [file, setFile] = useState(null)
+  const [headersFile, setHeadersFile] = useState([])
 
   // Funcion para lectura del archivo cuando se dropea
   const onFileDrop = (e) => {
@@ -89,18 +92,22 @@ function App() {
     const headers = str.slice(0, str.indexOf('\n')).split(delim);
     headers[headers.length - 1] = headers[headers.length - 1].slice(0, headers[headers.length - 1].length - 1)
     const headersJson = JSON.stringify(headers);
-    console.log(headersJson);
-    backPost(headersJson);
+    setHeadersFile(headers);
+    //backPost(headersJson);
   }
 
   // Lectura de archivo
   const setCsvFile = () => {
+    const csvFile = file;
     const reader = new FileReader();
+    console.log("reading file");
 
     reader.onload = (e) => {
       const text = e.target.result;
       processCSV(text);
     }
+
+    reader.readAsText(csvFile);
   }
 
   // Estado de click y chart para la lista de gráficos 
@@ -140,10 +147,14 @@ function App() {
     setClick(!click)
   }
 
+  //<Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove}/>}/>
+  //<Route path='/FileUpLoad' element={<SeleccionAtributos/>}/>
+
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<UpFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove}/>}/>
+        <Route path='/' element={<HomeScreenview/>}/>
+        <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setHeadersFile={setHeadersFile}/>}/>
         <Route path='/Dashboard' element={<Dashboard atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>

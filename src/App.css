@@ -1,6 +1,5 @@
 body{
   margin: 0;
-  background-color: #f0f0f0;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -9,7 +8,53 @@ input, select, button{
 }
 
 .App{
+  
   height: 100vh;
+  background-color: rgb(255, 255, 255);
+}
+
+.background{
+  display: flex;
+  height: inherit;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: saturate(1.2);
+  background-color: rgb(0, 0, 0);
+}
+
+.home-background{
+  display: flex;
+  height: inherit;
+  background-image: url("/public/img/Termium.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.home-button{
+  display: flex;
+  background-color: transparent;
+  border: transparent;
+  cursor: pointer;
+}
+
+.home-btn-container{
+  display: flex;
+  border: 1px solid rgb(255, 255, 255);
+  height: 75%;
+  width: 90.5%;
+  justify-content: center;
+  margin: auto;
+  margin-top: 9%;
+}
+
+.atrribute-container{
+  height: 87%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .row{
@@ -33,7 +78,7 @@ input, select, button{
   display: flex;
   justify-content: space-between;
   position: absolute;
-  margin-top: 105px;
+  margin-top: 9%;
   margin-left: 2%;
   margin-right: 2%;
   width: calc(100vw - 4%);
@@ -59,49 +104,49 @@ input, select, button{
   background-color: rgb(255, 255, 255);
   width: 100%;
   height: 100%;
-  margin-top: 3%;
-  margin-left: 7%;
+  margin-top: 10%;
+  margin-left: 20%;
   border-radius: 4px;
-  overflow: auto;
+  overflow-y: scroll;
 }
 
 .tarjeta-historial {
+  height: 10%;
+  width: 90%;
   margin-top: 3%;
-  margin-left: 8%;
-  height: 9vh;
-  width: 65vw;
+  margin-left: 6%;
   border: 1px solid rgb(83,83,83);
   border-radius: 5px;
 }
 
 .busqueda {
   margin-top: 3%;
-  margin-left: 10%;
-  height: 7vh;
-  width: 62vw;
+  margin-left: 6%;
+  height: 10%;
+  width: 90%;
   border: 1px solid rgb(83,83,83);
   border-radius: 35px;
 }
 
 .icono-busqueda {
-  margin-top: .8%;
-  margin-left: 1.5%;
+  margin-top: .9%;
+  margin-left: 1.2%;
   font-size: 200%;
   position: absolute;
 }
 
 .icono-flecha {
   margin-top: .8%;
-  margin-left: 74%;
+  margin-left: 54%;
   font-size: 200%;
   position: absolute;
 }
 
 .area-historial {
   justify-content: left;
-  height: 80vh;
-  width: 80vw;
-  display: flex;
+   height: 80vh;
+   width: 80vw;
+   display: flex;
 }
 
 a{
