@@ -130,28 +130,7 @@ class deleteLastSessionView(View):
     # * Metodo HTTP (DELETE) del endpoint
     def delete(self, request, userID):
         return deleteLastSession(request, userID)
-
-
-# View del endpoint de updateGraphs
-class updateGraphsView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
     
-    data = {'message': 'endpoint not implemented'}
-    
-    def get(self, request, historyID='0'):
-        return JsonResponse(self.data)
-    
-    def post(self, request, historyID='0'):
-        return JsonResponse(self.data)
-    
-    # * Metodo HTTP (PUT) del endpoint
-    def put(self, request, historyID): 
-        return updateGraphs(request, historyID)
-    
-    def delete(self, request, historyID='0'):
-        return JsonResponse(self.data)
 
 # View del endpoint de searchBarGraph
 class searchBarGraphView(View):
@@ -312,7 +291,3 @@ class FileUploadView(View):
             render: Renders the file upload page
         """
         return render(request, 'upload_file.html', {'form': UploadFileForm()})
-
-
-    
-

@@ -24,10 +24,6 @@ urlpatterns = [
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Burbuja
     path('getBubbleGraph/<str:userID>/<str:attribute>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
     
-    # Rutas PUTs
-    # * Insertar una grafica de una corrida
-    path('putGraphs/<str:historyID>/', views.updateGraphsView.as_view(), name='put_graphs'),
-    
     # Rutas DELETEs
     # * Eliminar una sesion del usuario
     path('deleteLastSession/<str:userID>/', views.deleteLastSessionView.as_view(), name='delete_last_session'),

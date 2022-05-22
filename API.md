@@ -16,55 +16,32 @@ N/A
 ```
 
 ### Objeto Retorno Correcto
-> Decidir Cual Opción
-
-**Opción 1**
 ``` json
     {
         "message": "found",
         "result": [
             {
-                "_id": "NombreArchivo2022-01-04T06:00:00.000+00:00",
-                "base_file_name": "NombreArchivo",
-                "date": "2022-01-04T06:00:00.000+00:00"
-            },
-            {
-                "_id": "NombreArchivo2022-04-01T06:01:20.000+00:00",
-                "base_file_name": "NombreArchivo",
-                "date": "2022-04-01T06:01:20.000+00:00"
-            },
-            {
-                "_id": "NombreArchivo22022-04-04T06:23:16.000+00:00",
-                "base_file_name": "NombreArchivo2",
-                "date": "2022-04-04T06:23:16.000+00:00"
-            }
-        ]
-    }
-```
-**Opción 2**
-``` json
-    {
-        "message": "found",
-        "result": [
-            {
-                "base_file_name": "NombreArchivo",
+                "base_file_name": "Analisis_Chatarra_Ene21-ene22",
                 "versions": [
                     {
-                        "_id": "NombreArchivo2022-01-04T06:00:00.000+00:00",
-                        "date": "2022-01-04T06:00:00.000+00:00"
-                    }, 
+                    "_id": "Analisis_Chatarra_Ene21-ene22_2022-05-16_19-25-55",
+                    "date": "2022-05-16_19-25-55"
+                    },
                     {
-                        "_id": "NombreArchivo2022-04-01T06:01:20.000+00:00",
-                        "date": "2022-04-01T06:01:20.000+00:00"
-                    }
-                ]
-            },
-            {
-                "base_file_name": "NombreArchivo2",
-                "versions": [
+                    "_id": "Analisis_Chatarra_Ene21-ene22_2022-05-16_19-53-41",
+                    "date": "2022-05-16_19-53-41"
+                    },
                     {
-                        "_id": "NombreArchivo22022-04-04T06:23:16.000+00:00",
-                        "date": "2022-04-04T06:23:16.000+00:00"
+                    "_id": "Analisis_Chatarra_Ene21-ene22_2022-05-20_20-13-57",
+                    "date": "2022-05-20_20-13-57"
+                    },
+                    {
+                    "_id": "Analisis_Chatarra_Ene21-ene22_2022-05-20_20-18-18",
+                    "date": "2022-05-20_20-18-18"
+                    },
+                    {
+                    "_id": "Analisis_Chatarra_Ene21-ene22_2022-05-20_20-24-20",
+                    "date": "2022-05-20_20-24-20"
                     }
                 ]
             }
@@ -136,9 +113,9 @@ N/A
     {
         "message": "found",
         "result": {
-            "historyID": "Archivo2022-01-04T06:00:00.000+00:00",
-            "base_file_name": "Archivo",
-            "date": "2022-01-04T06:00:00.000+00:00",
+            "historyID": "Analisis_Chatarra_Ene21-ene22_2022-05-20_20-13-57",
+            "base_file_name": "Analisis_Chatarra_Ene21-ene22",
+            "date": "2022-05-20_20-13-57",
             "internal_attributes": [
                 "PlantaPorteria_num",
                 "EmpresaTransportista_num"
@@ -149,14 +126,53 @@ N/A
             ],
             "graphs": [
                 {
-                    "type": "bar graph",
-                    "x-axis": "UsuarioPesadaEntrada_num",
-                    "y-axis": "EmpresaTransportista_num"
+                    "type": "Bar",
+                    "labels": [
+                        "ABASTECEDORA RIVELL SA DE CV",
+                        "ABC METALES SIDERURGICOS S.A. DE C.",
+                        "ACEREMEX S. A. DE C. V.",
+                        "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
+                        "ADN ENERGIA S DE RL DE CV",
+                    ],
+                    "anomalyList": [
+                        85,
+                        125,
+                        80,
+                        6,
+                        1,
+                    ],
+                    "normalList": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ]
                 },
                 {
-                    "type": "pi",
-                    "values": "PlantaPorteria_num"
-                }
+                    "type": "Line",
+                    "labels": [
+                        "ABASTECEDORA RIVELL SA DE CV",
+                        "ABC METALES SIDERURGICOS S.A. DE C.",
+                        "ACEREMEX S. A. DE C. V.",
+                        "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
+                        "ADN ENERGIA S DE RL DE CV",
+                    ],
+                    "anomalyList": [
+                        85,
+                        125,
+                        80,
+                        6,
+                        1,
+                    ],
+                    "normalList": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ]
+                },
             ]
         }
     }
@@ -215,18 +231,18 @@ N/A
 ```
 
 > ToDo: y hacer un timer dentro de la base de datos (10 minutos)
+
 ----
-> Falta Definir
 ## **GET_BAR_GRAPH**
 > Funcion: Obtener los valores para crear una grafica de barras en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:userID>/<str:variable>/
+    /api/getBarGraph/<str:userID>/<str:attribute>/
 
 ### Parametros: 
 **userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
 
-**variable:** La variable que quieren usar para sacar la gráfica.
+**attribute:** La variable que quieren usar para sacar la gráfica.
 
 ### Bodys
 ``` json
@@ -236,15 +252,80 @@ N/A
 ### Objeto Retorno Correcto
 ``` json
     {
-  "labels": [
-    1
-  ],
-  "anomalyList": [
-    1
-  ],
-  "normalList": [
-    2
-  ]
+        "type": "Bar",
+        "labels": [
+            "ABASTECEDORA RIVELL SA DE CV",
+            "ABC METALES SIDERURGICOS S.A. DE C.",
+            "ACEREMEX S. A. DE C. V.",
+            "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
+            "ADN ENERGIA S DE RL DE CV"
+        ],
+        "anomalyList": [
+            85,
+            125,
+            80,
+            6,
+            1
+        ],
+        "normalList": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+    }
+```
+
+### Objeto Retorno Incorrecto
+``` json
+    {
+        "message": "not found"
+    }
+```
+
+----
+## **GET_LINE_GRAPH**
+> Funcion: Obtener los valores para crear una grafica de linea en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
+
+### URL: 
+    /api/getBarGraph/<str:userID>/<str:attribute>/
+
+### Parametros: 
+**userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
+
+**attribute:** La variable que quieren usar para sacar la gráfica.
+
+### Bodys
+``` json
+N/A
+```
+
+### Objeto Retorno Correcto
+``` json
+    {
+        "type": "Line",
+        "labels": [
+            "ABASTECEDORA RIVELL SA DE CV",
+            "ABC METALES SIDERURGICOS S.A. DE C.",
+            "ACEREMEX S. A. DE C. V.",
+            "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
+            "ADN ENERGIA S DE RL DE CV"
+        ],
+        "anomalyList": [
+            85,
+            125,
+            80,
+            6,
+            1
+        ],
+        "normalList": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
     }
 ```
 
@@ -261,12 +342,12 @@ N/A
 > Funcion: Obtener los valores para crear una grafica de burbuja en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:userID>/<str:variable>/
+    /api/getBarGraph/<str:userID>/<str:attribute>/
 
 ### Parametros: 
 **userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
 
-**variable:** La variable que quieren usar para sacar la gráfica.
+**attribute:** La variable que quieren usar para sacar la gráfica.
 
 ### Bodys
 ``` json
@@ -275,53 +356,7 @@ N/A
 
 ### Objeto Retorno Correcto
 ``` json
-    
-```
 
-### Objeto Retorno Incorrecto
-``` json
-    {
-        "message": "not found"
-    }
-```
-
-----
-> Falta Definir
-## **GET_LINE_GRAPH**
-> Funcion: Obtener los valores para crear una grafica de linea en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
-
-### URL: 
-    /api/getBarGraph/<str:userID>/<str:variable>/
-
-### Parametros: 
-**userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
-
-**variable:** La variable que quieren usar para sacar la gráfica.
-
-### Bodys
-``` json
-N/A
-```
-
-### Objeto Retorno Correcto
-``` json
-    {
-        "labels" : "labels",
-        "datasets": [
-            {
-                "label": "Normal",  
-                "data": [20,50,60,70,80,90,20],
-                "borderColor": "Utils.CHART_COLORS.red",
-                "backgroundColor": "rgba(255, 99, 132, 0.5)"
-            },
-            {
-                "label": "Anomalia",
-                "data": [20,50,60,70,80,90,20],
-                "borderColor": "Utils.CHART_COLORS.blue",
-                "backgroundColor": "rgba(53, 162, 235, 0.5)"
-            }
-        ]
-    }
 ```
 
 ### Objeto Retorno Incorrecto
@@ -405,8 +440,8 @@ N/A
 ----
 ----
 
-# Funciones tipo "Helpers"
-
+# Funciones de Ayuda para Testing
+> No son Endpoints Oficiales, se desactivaran antes del despliegue
 ----
 ## **GET_HISTORY_DETAIL**
 > Funcion: Obtiene toda la información de una sola corrida
@@ -427,9 +462,9 @@ N/A
     {
         "message": "found",
         "result": {
-            "historyID": "Archivo2022-01-04T06:00:00.000+00:00",
-            "base_file_name": "Archivo",
-            "date": "2022-01-04T06:00:00.000+00:00",
+            "historyID": "Analisis_Chatarra_Ene21-ene22_2022-05-20_20-13-57",
+            "base_file_name": "Analisis_Chatarra_Ene21-ene22",
+            "date": "2022-05-20_20-13-57",
             "internal_attributes": [
                 "PlantaPorteria_num",
                 "EmpresaTransportista_num"
@@ -440,20 +475,54 @@ N/A
             ],
             "graphs": [
                 {
-                    "type": "bar graph",
-                    "x-axis": "UsuarioPesadaEntrada_num",
-                    "y-axis": "EmpresaTransportista_num"
+                    "type": "Bar",
+                    "labels": [
+                        "ABASTECEDORA RIVELL SA DE CV",
+                        "ABC METALES SIDERURGICOS S.A. DE C.",
+                        "ACEREMEX S. A. DE C. V.",
+                        "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
+                        "ADN ENERGIA S DE RL DE CV",
+                    ],
+                    "anomalyList": [
+                        85,
+                        125,
+                        80,
+                        6,
+                        1,
+                    ],
+                    "normalList": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ]
                 },
                 {
-                    "type": "pi",
-                    "values": "PlantaPorteria_num"
-                }
-            ],
-            "data": {
-                "PlantaPorteria_num": ["1", "3"],
-                "ClaveTransportista_num": ["86", "24"],
-                "EmpresaTransportista_num": ["34", "12"]
-            }
+                    "type": "Line",
+                    "labels": [
+                        "ABASTECEDORA RIVELL SA DE CV",
+                        "ABC METALES SIDERURGICOS S.A. DE C.",
+                        "ACEREMEX S. A. DE C. V.",
+                        "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
+                        "ADN ENERGIA S DE RL DE CV",
+                    ],
+                    "anomalyList": [
+                        85,
+                        125,
+                        80,
+                        6,
+                        1,
+                    ],
+                    "normalList": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ]
+                },
+            ]
         }
     }
 ```
@@ -478,9 +547,28 @@ N/A
 ### Bodys
 ``` json
     {
-        "type": "bar graph",
-        "x-axis": "UsuarioPesadaEntrada_num",
-        "y-axis": "EmpresaTransportista_num"
+        "type": "Line",
+        "labels": [
+            "ABASTECEDORA RIVELL SA DE CV",
+            "ABC METALES SIDERURGICOS S.A. DE C.",
+            "ACEREMEX S. A. DE C. V.",
+            "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
+            "ADN ENERGIA S DE RL DE CV"
+        ],
+        "anomalyList": [
+            85,
+            125,
+            80,
+            6,
+            1
+        ],
+        "normalList": [
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
     }
 ```
 
@@ -554,35 +642,37 @@ N/A
 
 **Descripción del problema:** N/A 
 
-**Hay algún pendiente?** Revisar que exista la columna en la base de datos
+**Hay algún pendiente?** Si
 
-**Descripción del pendiente:** Falta definir el endpoint
+**Descripción del pendiente:** Añadir el tipo de grafica
+
+**Revision hecha por:** Joel Ramos
+
+### GET_LINE_GRAPH
+
+**Hay algún problema?** No
+
+**Descripción del problema:** N/A 
+
+**Hay algún pendiente?** Si
+
+**Descripción del pendiente:** Añadir el tipo de grafica
 
 **Revision hecha por:** Joel Ramos
 
 ### GET_BUBBLE_GRAPH
 
-**Hay algún problema?** No
+**Hay algún problema?** Si
 
-**Descripción del problema:** N/A 
-
-**Hay algún pendiente?** Si
-
-**Descripción del pendiente:** Falta definir el endpoint
-
-**Revision hecha por:** Joel Ramos
-
-### GET_AREA_GRAPH
-
-**Hay algún problema?** No
-
-**Descripción del problema:** N/A 
+**Descripción del problema:** Falta hacer la función
 
 **Hay algún pendiente?** Si
 
-**Descripción del pendiente:** Falta definir el endpoint
+**Descripción del pendiente:** Entender como generar los datos para aplicar la grafica
 
 **Revision hecha por:** Joel Ramos
+
+
 
 ### DELETE_GRAPH
 

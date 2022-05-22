@@ -91,12 +91,9 @@ def searchUserID(request, historyID):
         if (len(rHresult)>0):
             # Insertar el historyID en la coleccion de LastSession (esto crea automaticamente un userID)
             colectionLS.insert_one({"id_history": historyID})
+            
             # Obtener dicho registro para obtener el userID
             newRegister = colectionLS.find_one({"id_history": historyID})
-            
-            # ToDo: 
-            # newRegister = colectionLS.insert_one({"id_history": historyID})
-            # id = newRegister.inserted_id
             
             # Regresar el userID
             data = {'message': 'success', 'userID': str(newRegister['_id'])}
@@ -225,7 +222,8 @@ def deleteLastSession(request, userID):
     return JsonResponse(data)
 
 
-def updateGraphs(request, historyID):
+# Función de ayuda para actualizar las graficas
+def updateGraphs(historyID, graph):
     # Usar coleccion "RunHistory"
     colection = db["RunHistory"]
     # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
@@ -234,7 +232,7 @@ def updateGraphs(request, historyID):
     # Si existe el registro
     if len(results)>0:
         # Usar la grafica del Body del request
-        graph = json.loads(request.body)
+        # graph = json.loads(request.body)
         try: 
             # Sacar las graficas actuales del registro
             graphs = results[0]["graphs"] 
@@ -245,12 +243,12 @@ def updateGraphs(request, historyID):
         
         # Actualizar el registro
         colection.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
-        return JsonResponse({"message": "Success"})
+        return {"message": "Success"}
     else:
-        return JsonResponse({'message': 'Not found'})
+        return {'message': 'updateGraphs: Not found'}
 
 # Barras, Linea helper
-def searchBarLineGraphHelper(request, userID, variable, filter):
+def searchBarLineGraphHelper(request, userID, variable, filter, type):
     filter = float(filter)
     try: 
         # Hacer el objectid del userID
@@ -288,7 +286,7 @@ def searchBarLineGraphHelper(request, userID, variable, filter):
 
             # Obtener total de anomalias
             anomalyTable = df.groupby(df.columns.tolist(),as_index=False).size()
-            print(anomalyTable)
+            # print(anomalyTable)
             normalList = []
             anomalyList = []
 
@@ -338,10 +336,15 @@ def searchBarLineGraphHelper(request, userID, variable, filter):
 
             # Solamente se envia el total de atributos y el total de anomalias de cada uno
             data = {
+                'type': type,
                 'labels': atributeList,
                 'anomalyList': anomalyList.tolist(),
                 'normalList': normalList.tolist()
             }
+            
+            resultUG = updateGraphs(historyID, data)
+            if resultUG["message"] != "Success":
+                return JsonResponse(resultUG["message"])
 
         else:
             data = { 'message': 'No data' }
@@ -350,10 +353,10 @@ def searchBarLineGraphHelper(request, userID, variable, filter):
     return JsonResponse(data)
 
 def searchBarGraph(request, userID, variable, filter):
-    return searchBarLineGraphHelper(request, userID, variable, filter)
+    return searchBarLineGraphHelper(request, userID, variable, filter, "Bar")
 
 def searchLineGraph(request, userID, variable, filter):
-    return searchBarLineGraphHelper(request, userID, variable, filter)
+    return searchBarLineGraphHelper(request, userID, variable, filter, "Line")
 
 def searchBubbleGraph(request, userID):
     return JsonResponse({'message': 'Not Implemented'})
@@ -394,4 +397,4 @@ def deleteGraph(request, userID, graphID):
         data = { 'message': 'userID is not a valid ObjectID' }
     return JsonResponse(data)
 
-# * Pendientes: Cambiar Documentacion, trigger y burbuja
+# * Pendientes: Documentacion, trigger y burbuja
