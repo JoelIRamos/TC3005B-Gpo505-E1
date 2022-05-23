@@ -165,89 +165,40 @@ async def updateGraphs(historyID, graph):
 # Barras, Linea helper
 def searchBarLineGraphHelper(request, historyID, variable, filter, type):
     filter = float(filter)
+
+    print("start")
     # Usar coleccion "FileData"
     colectionFD = db["FileData"]
+    print("coleccion")
     # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
-    resultsFD = list(colectionFD.find({"_id": historyID}))
+    resultsFD = list(colectionFD.find({"_id": historyID}, {"data." + variable : 1, "data.anomaly_scores": 1}))
+    #print(resultsFD)
+    print("resultFD")
     # Si existe el historial
     if len(resultsFD) > 0:
-        # Extraer los 'anomaly_socores' del registro
-        anomaly_scores = resultsFD[0]["data"]["anomaly_scores"]
-        anomalys = []
-        
-        # Llenar la lista de anomalias
-        for i in range(len(anomaly_scores)):
-            if (anomaly_scores[i] >= filter):
-                anomalys.append(1)
-            else: 
-                anomalys.append(-1)
-        
         # Crear data frame
-        df =  pd.DataFrame({'atribute' :resultsFD[0]['data'][variable], 'anomaliy': anomalys})
-
-        # Obtener total de anomalias
-        anomalyTable = df.groupby(df.columns.tolist(),as_index=False).size()
-        # print(anomalyTable)
-        normalList = []
-        anomalyList = []
-
-        for i in range(len(anomalyTable)):
-            if anomalyTable.iloc[i][1] == -1:
-                categoryValue = anomalyTable.iloc[i][0]
-                # Extraer el valor anterior
-                try:
-                    before = anomalyTable.iloc[i-1][0]
-                except:
-                    before = -1
-                
-                # Extraer el valor posterior
-                try:
-                    after = anomalyTable.iloc[i+1][0]
-                except: 
-                    after = -1
-                
-                # Verficar si el valor tiene una contraparte
-                if (categoryValue != before) and (categoryValue != after):
-                    normalList.append(0)
-                
-                anomalyList.append(anomalyTable.iloc[i][2])
-            else:
-                categoryValue = anomalyTable.iloc[i][0]
-                # Extraer el valor anterior
-                try:
-                    before = anomalyTable.iloc[i-1][0]
-                except:
-                    before = -1
-                
-                # Extraer el valor posterior
-                try:
-                    after = anomalyTable.iloc[i+1][0]
-                except: 
-                    after = -1
-                
-                # Verficar si el valor tiene una contraparte
-                if (categoryValue != before) and (categoryValue != after):
-                    anomalyList.append(0)
-                
-                normalList.append(anomalyTable.iloc[i][2])
-            
-        # Crear data frame
-        df =  pd.DataFrame({'anomalyList' : np.array(anomalyList), 'normalLists': np.array(normalList), 'atributeList': anomalyTable['atribute'].unique()})
-        
-        df = df.sort_values(by=['anomalyList'], ascending=False)
-
-        # Solamente se envia el total de atributos y el total de anomalias de cada uno
+        df =  pd.DataFrame({'attribute' :resultsFD[0]['data'][variable], 'anomaly': resultsFD[0]['data']['anomaly_scores']})
+        print("dataframe1")
+        #print(df)
+        # Filtrar las anomalias
+        # ! Igual o menor que??
+        rslt_df = df[df['anomaly'] <= filter]
+        print("rslt_df")
+        # Contar el total de anomalias por atributo
+        anomalyTable = rslt_df.groupby(['attribute'])['attribute'].count().to_frame('total').reset_index()
+        print("groupby")
+        # sort anomalyTable
+        anomalyTable.sort_values(by=['total'], inplace=True, ascending=False, kind='mergesort')
+        print("anomalyTable")
         data = {
             'type': type,
-            'labels': df['atributeList'].tolist(),
-            'anomalyList': df['anomalyList'].tolist(),
-            'normalList': df['normalLists'].tolist()
-        }
-        
-        updateGraphs(historyID, data)
-        
+            'labels': anomalyTable['attribute'].tolist(),
+            'anomalyList': anomalyTable['total'].tolist()
+            #'normalList': df['normalLists'].tolist()
+        }            
+            #updateGraphs(historyID, data)
     else:
-        data = { 'message': 'Not Found' }
+            data = { 'message': 'No data' }
     return JsonResponse(data)
 
 def searchBarGraph(request, historyID, variable, filter):
