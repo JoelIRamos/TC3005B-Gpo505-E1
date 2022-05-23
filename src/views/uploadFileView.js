@@ -39,7 +39,7 @@ const onDragEnd = (result, seleccionDeListas) => {
   }
 };
 
-function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers}) {
+function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, backGet}) {
   
   const seleccionDeListas = 
   {

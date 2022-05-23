@@ -2,9 +2,14 @@
     background-color: #fff;
     border-radius: 10px;
     padding: 20px 20px;
-    height: 300px;
     padding-bottom: 40px;
+    width: 70%;
     position: relative;
+  }
+
+  .container-graph{
+      position: relative;
+      width: 100%;
   }
 
 .container-titulo-btn{

@@ -15,7 +15,9 @@ const GraphContainer = ({data, atributo1, atributo2, clicked, clickedLi, click, 
         <button className='btn-graph' onClick={clicked}>{< FaCog />}</button>
       </div>
       < GraphList graphs={graphs} state={click} onClick={clickedLi}  />
-      < Graph atributo1={atributo1} chart={chart} data={data} />
+      <div className='container-graph'>
+        < Graph atributo1={atributo1} chart={chart} data={data} />
+      </div>
     </div>
   )
 }

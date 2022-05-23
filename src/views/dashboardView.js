@@ -4,6 +4,7 @@ import '../App.css';
 import ContenedorDatos from '../components/ContenedorDatos/ContenedorDatos.js';
 import FormAtributos from '../components/FormAtributos/FormAtributos.js';
 import GraphContainer from '../components/GraphContainer/GraphContainer.js';
+import ContainerDB from '../components/ContainerDB/ContainerDB.js';
 
 function dashboardView({datos , atributos, onSelect1, onSelect2, atributo1, atributo2, clicked, clickedLi, click, chart, showForm}) {
 
@@ -22,28 +23,15 @@ function dashboardView({datos , atributos, onSelect1, onSelect2, atributo1, atri
   return (
     <div className="App">
       <Navbar selected='dashboard' />
-      <div className="container-db">
-        <div className='col col-1'>
-          < Titulo />
-          <GraphContainer showForm={showForm} atributo2={atributo2} click={click} chart={chart} data = {datos} atributo1={atributo1} clicked={clicked} clickedLi={clickedLi} />
-        </div>
-        <div className="col col-2">
-          <div className="row">
+      < Titulo />
+      <div className="row">
             <ContenedorDatos datos={11216} label='Total de Anomalías Detectadas' color='red'/>
             <ContenedorDatos datos='52%' label='Porcentaje de Anomalías' color='red'/>
-          </div>
-          <div className="row">
             <ContenedorDatos datos={4536} label='Anomalías Detectadas' color='yellow'/>
             <ContenedorDatos datos='39%' label='Porcentaje de Anomalías' color='yellow'/>
-          </div>
-          <div className='row'>
-            < FormAtributos idForm={1} atributos={atributos} onSelect={onSelect1} showForm = {true} />
-          </div>
-          <div className='row'>
-            < FormAtributos idForm={2} atributos={atributos} onSelect={onSelect2} showForm = {showForm} />
-          </div>
-        </div>
       </div>
+      < ContainerDB datos={datos} atributos={atributos} onSelect1={onSelect1} onSelect2={onSelect2} atributo1={atributo1} atributo2={atributo2} clicked={clicked} clickedLi={clickedLi} click={click} chart={chart} showForm={showForm} />
+      <div className='container-button-add'><button className='button-add'>+</button></div>
     </div>
   );
 }

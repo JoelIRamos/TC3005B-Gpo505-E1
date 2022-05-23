@@ -87,6 +87,12 @@ function App() {
       .catch(error => console.log(error))
   }
 
+  const backGet = () =>{
+    fetch('http://127.0.0.1:8000/api/getBarGraph/6286eaf06130f0d515a178ca/EMPRESA_TRANSPORTISTA/0/')
+    .then(response => response.json())
+    .then(data => console.log(data))
+  }
+
   // Obtencion de headers desde el CSV y llamado a la función para POST
   const processCSV = (str, delim=',') => {
     const headers = str.slice(0, str.indexOf('\n')).split(delim);
@@ -154,7 +160,7 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<HomeScreenview/>}/>
-        <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setHeadersFile={setHeadersFile}/>}/>
+        <Route path='/FileUpLoad' element={<UpLoadFileview backGet={backGet} setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setHeadersFile={setHeadersFile}/>}/>
         <Route path='/Dashboard' element={<Dashboard atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>

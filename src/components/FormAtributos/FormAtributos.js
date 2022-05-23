@@ -2,7 +2,7 @@ import React from 'react'
 import Atributos from '../Atributos/Atributos'
 import './FormAtributos.css'
 
-const FormAtributos_1 = ({atributos, onSelect, showForm, idForm}) => {
+const FormAtributos = ({atributos, onSelect, showForm, idForm}) => {
 
     const radioEvent = (e) => {
         onSelect(e.target.value)
@@ -23,4 +23,4 @@ const FormAtributos_1 = ({atributos, onSelect, showForm, idForm}) => {
   )
 }
 
-export default FormAtributos_1
+export default FormAtributos

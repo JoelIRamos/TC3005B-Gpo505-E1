@@ -1,0 +1,18 @@
+.container-db{
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+    width: 100%
+  }
+
+  .container-db-general{
+      width: calc(100vw - 4%);
+  }
+
+  .container-form-a{
+      display: flex;
+      flex-direction: column;
+      width: 30%;
+  }

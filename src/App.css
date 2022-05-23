@@ -8,7 +8,6 @@ input, select, button{
 }
 
 .App{
-  
   height: 100vh;
   background-color: rgb(255, 255, 255);
 }
@@ -74,15 +73,6 @@ input, select, button{
   height: calc(100vh - 105px);
 }
 
-.container-db{
-  display: flex;
-  justify-content: space-between;
-  position: absolute;
-  margin-top: 9%;
-  margin-left: 2%;
-  margin-right: 2%;
-  width: calc(100vw - 4%);
-}
 
 .col-1{
   width: 58%;
@@ -97,6 +87,22 @@ input, select, button{
   flex-direction: column;
   height: calc(100vh - 105px);
   row-gap: 20px;
+}
+
+.container-button-add{
+  display: flex;
+  width: calc(100vw - 4%);
+  justify-content: center;
+}
+
+.button-add{
+  background-color: #F25C29;
+  border: none;
+  border-radius: 15px;
+  color: white;
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
 }
 
 .historial {
