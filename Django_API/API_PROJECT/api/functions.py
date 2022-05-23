@@ -402,3 +402,23 @@ def deleteGraph(request, userID, graphID):
     return JsonResponse(data)
 
 # * Pendientes: Documentacion, trigger y burbuja
+'''
+Terminar y Actualizar:
+    Documento de Funcionalidades (Avanzado)
+	Especificación de Requerimientos (Nuevos Requerimientos)
+	Historias de Usuario (Nuevas Historias)
+	Plan de Calidad (Pruebas)
+
+Crear: 
+	Bitacora de Pruebas (Nuevo)
+	Manual de Usuario (Nuevo)
+	Manual de Despliegue (Nuevo)
+
+Terminados:
+    Modelo de Calidad
+    Documento Vision
+    Plan de Comunicación
+    Plan de Recursos
+    Plan y Analisis de Riesgos
+
+'''
