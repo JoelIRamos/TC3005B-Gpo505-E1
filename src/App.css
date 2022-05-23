@@ -168,9 +168,39 @@ a{
   max-height: 120px;
 }
 
-.button{
+.button-gen{
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  padding: .8vw;
+  background-color: rgb(255, 67, 20);
+  font-size: 1.5vw;
+  border-radius: 35px;
+  cursor: pointer;
+  width: 10vw;
+  color: rgb(255, 255, 255);
+  border: solid 1.5px rgb(255, 67, 20);
+  transition: all 200ms;
+}
+
+.button-gen:hover{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .8vw;
+  background-color: rgb(255, 255, 255);
+  font-size: 1.5vw;
+  border-radius: 35px;
+  cursor: pointer;
+  width: 10vw;
+  color: rgb(255, 67, 20);
+  border: solid 1.5px rgb(255, 67, 20);
+  transition: all 200ms;
+}
+
+.att-options-container{
+  margin-top: 1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -10,7 +10,7 @@
     margin-bottom: 1%;
     margin-right: 2%;
     margin-left: 2%;
-    background-color: rgb(250, 142, 0);
+    background-color: rgb(255, 198, 175);
 }
 
 .dnd-table-title{
@@ -26,7 +26,7 @@
     border:rgb(0, 0, 0) solid;
     color: rgb(0, 0, 0);
     border-radius: 5px;
-    padding: 4%;
+    padding: 1vw;
     width: 70%;
     margin-left: auto;
     margin-right: auto;

@@ -39,14 +39,14 @@ const onDragEnd = (result, seleccionDeListas) => {
   }
 };
 
-function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, backGet}) {
+function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, backPostResp, setBackPostResp}) {
   
   // HTTP request a backend (aun en prueba)
   const backPost = (internalAtt, externalAtt) => {
     const intAttJSON = JSON.stringify(internalAtt);
     const extAttJSON = JSON.stringify(externalAtt);
     var formData = new FormData();
-    console.log("here")
+    console.log("Posting to backend...")
     formData.append('internal_attributes', intAttJSON); // Array tipo JSON de los atributos internos del archivo
     formData.append('external_attributes', extAttJSON); // Array tipo JSON de los atributos externos del archivo
     formData.append('file', file); // Archivo completo
@@ -56,7 +56,7 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, back
     })
       .then(response => response.json())
       .then(success => {
-        console.log(success);
+        setBackPostResp(success);
       })
       .catch(error => console.log(error))
   }
@@ -93,11 +93,13 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, back
         </div>
         :
         <>
-          <Link to='/Queue'>
-            <div className='button'>
-              <button onClick={() => backPost(seleccionDeListas["attI"], seleccionDeListas["attE"])}>Siguiente</button>
-            </div>
-          </Link>
+          <div className="att-options-container">
+            <Link to='/Queue'>
+              
+                <button className='button-gen' onClick={() => backPost(seleccionDeListas["attI"].items, seleccionDeListas["attE"].items)}>Siguiente</button>
+              
+            </Link>
+          </div>
           <div className="atrribute-container">
             <DragDropContext onDragEnd={result => onDragEnd(result, seleccionDeListas)}>
               {Object.entries(seleccionDeListas).map(([id, data]) => {
