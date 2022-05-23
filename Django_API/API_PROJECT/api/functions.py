@@ -285,9 +285,30 @@ def deleteGraph(request, historyID, graphID):
     return JsonResponse(data)
 
 def updateGraph(request, historyID, graphID):
-    collection = db["FileData"]
-    collection.delete_one({"_id": historyID})
-    return JsonResponse({'message': 'Success'})
+    # Usar la coleccion "RunHistory"
+    collectionRH = db["RunHistory"]
+    # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
+    resultsRH = list(collectionRH.find({"_id": historyID}))
+    # Si existe el historial
+    if len(resultsRH) > 0:
+        # Extraer la lista de graficas
+        graphs = resultsRH[0]["graphs"]
+        
+        # Si el graphID esta fuera del alcance, mandar error
+        if (graphID < 0 or graphID > len(graphs)-1):
+            data = {'message': 'graphID Not Found'}
+        else: 
+            # Si no eliminar dicho elemento de la lista
+            newgraph = json.loads(request.body)
+            graphs[graphID] = newgraph
+            
+            # Actualizar el registro con la nueva lista
+            collectionRH.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
+            
+            data = {'message': 'Success'}
+    else:
+        data = {'message': 'Not Found'}
+    return JsonResponse(data)
 
 # * Pendientes: Documentacion, trigger y burbuja
 '''
