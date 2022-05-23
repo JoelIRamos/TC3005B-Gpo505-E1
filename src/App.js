@@ -47,31 +47,6 @@ function App() {
     setFile(null)
   }
 
-<<<<<<< HEAD
-  // HTTP request a backend (aun en prueba)
-  const backPost = (headersJson) => {
-    var formData = new FormData();
-    formData.append('headers', headersJson); // Array tipo JSON de los headers del archivo
-    formData.append('file', file); // Archivo completo
-    fetch('http://localhost:8000/api/upload_file/', {
-      method: 'POST',
-      body: formData,
-    })
-      .then(response => response.json())
-      .then(success => {
-        // Do something with the successful response
-      })
-      .catch(error => console.log(error))
-  }
-
-  const backGet = () =>{
-    fetch('http://127.0.0.1:8000/api/getBarGraph/6286eaf06130f0d515a178ca/EMPRESA_TRANSPORTISTA/0/')
-    .then(response => response.json())
-    .then(data => setDatos(data))
-  }
-
-=======
->>>>>>> 7d0a1be094360d89052c836f7d4bc9818af8815c
   // Obtencion de headers desde el CSV y llamado a la función para POST
   const processCSV = (str, delim=',') => {
     const headers = str.slice(0, str.indexOf('\n')).split(delim);
@@ -135,14 +110,9 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<HomeScreenview/>}/>
-<<<<<<< HEAD
-        <Route path='/FileUpLoad' element={<UpLoadFileview  setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setHeadersFile={setHeadersFile}/>}/>
-        <Route path='/Dashboard' element={<Dashboard backGet={backGet} atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
-=======
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setHeadersFile={setHeadersFile}/>}/>
         <Route path='/Queue' element={<Queue/>}/>
         <Route path='/Dashboard' element={<Dashboard atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
->>>>>>> 7d0a1be094360d89052c836f7d4bc9818af8815c
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>
     </Router>
