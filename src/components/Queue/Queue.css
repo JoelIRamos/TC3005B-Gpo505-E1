@@ -1,0 +1,36 @@
+.queue{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    width: 40%;
+    height: 75%;
+    border-radius: 5px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 10vw;
+}
+
+.queue-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+    padding: 1.5vw;
+}
+
+.view-container{
+    justify-content: center;
+    align-items: center;
+}
+
+.button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.title{
+
+}

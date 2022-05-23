@@ -8,6 +8,7 @@ import './Navbar.css'
 
 function InvNavbar() {
   return (
+    <>
       <nav className="nav-horizontal-home">
         <div className="logo-container">
           <Link to='/'>
@@ -20,6 +21,7 @@ function InvNavbar() {
             <FaUserCircle size={50}/>
           </div>
       </nav>
+    </>
   )
 }
 

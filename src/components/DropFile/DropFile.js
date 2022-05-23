@@ -52,4 +52,4 @@ const DropFile = ({file, onFileDrop, fileRemove, setCsvFile, viewUpdate}) => {
   )
 }
 
-export default DropFile
+export default DropFile;

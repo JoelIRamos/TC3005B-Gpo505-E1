@@ -4,6 +4,7 @@ import HomeScreenview from './views/homeScreen';
 import UpLoadFileview from './views/uploadFileView';
 import Dashboard from './views/dashboardView';
 import Historial from './views/historyView';
+import Queue from './views/fileQueueView'
 //import SeleccionAtributos from './views/attributeSelectionView'
 import { useState } from 'react';
 
@@ -71,29 +72,12 @@ function App() {
     setFile(null)
   }
 
-  // HTTP request a backend (aun en prueba)
-  const backPost = (headersJson) => {
-    var formData = new FormData();
-    formData.append('headers', headersJson); // Array tipo JSON de los headers del archivo
-    formData.append('file', file); // Archivo completo
-    fetch('http://localhost:8000/api/upload_file/', {
-      method: 'POST',
-      body: formData,
-    })
-      .then(response => response.json())
-      .then(success => {
-        // Do something with the successful response
-      })
-      .catch(error => console.log(error))
-  }
-
   // Obtencion de headers desde el CSV y llamado a la función para POST
   const processCSV = (str, delim=',') => {
     const headers = str.slice(0, str.indexOf('\n')).split(delim);
     headers[headers.length - 1] = headers[headers.length - 1].slice(0, headers[headers.length - 1].length - 1)
     const headersJson = JSON.stringify(headers);
     setHeadersFile(headers);
-    //backPost(headersJson);
   }
 
   // Lectura de archivo
@@ -147,14 +131,12 @@ function App() {
     setClick(!click)
   }
 
-  //<Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove}/>}/>
-  //<Route path='/FileUpLoad' element={<SeleccionAtributos/>}/>
-
   return (
     <Router>
       <Routes>
         <Route path='/' element={<HomeScreenview/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setHeadersFile={setHeadersFile}/>}/>
+        <Route path='/Queue' element={<Queue/>}/>
         <Route path='/Dashboard' element={<Dashboard atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>
