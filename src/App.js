@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomeScreenview from './views/homeScreen';
 import UpLoadFileview from './views/uploadFileView';
@@ -7,27 +7,22 @@ import Historial from './views/historyView';
 import Queue from './views/fileQueueView'
 //import SeleccionAtributos from './views/attributeSelectionView'
 import { useState } from 'react';
+import { wait } from '@testing-library/user-event/dist/utils';
 
 // Atributos dummy
 const atributos = [
-  'claveTransportista',
-  'empresaTransportadora',
-  'identificacion',
-  'numeroProveedores',
-  'UsuarioPermisoCirculacionIngreso',
-  'UsuarioEgreso',
-  'UsuarioPesadaEntrada',
-  'UsuarioControla',
-  'UsuarioInsAuditoria',
-  'UsuarioInspeccion',
-  'UsuarioDescarga',
-  'UsuarioPesadaSalida',
+  'ID_TRANSPORTISTA',
+  'EMPRESA_TRANSPORTISTA',
+  'C-ID-ORDEN-CABECERA',
+  'C_POSICION_ORDEN',
+  'Q_CANTIDAD',
 ]
 
 // Datos dummy
 
 function App() {
   // Archivo .csv
+  const [isGraph, setIsGraph] = useState(false)
   const [file, setFile] = useState(null)
   const [headersFile, setHeadersFile] = useState([])
   const [datos, setDatos] = useState();
@@ -42,7 +37,27 @@ function App() {
     }
   }
 
-  // Funcion que remueve el archivo cargado
+  const backGet =  async ()  => {
+    const response = await fetch('http://127.0.0.1:8000/api/getBarGraph/6286eaf06130f0d515a178ca/EMPRESA_TRANSPORTISTA/0/')
+    if(!response.ok){
+      throw new Error('Data coud not be fetched!')
+    } else{
+      return response.json()
+    }
+      // .then(getGraph())
+  }
+    useEffect(() => {
+      backGet()
+        .then((res) => {
+          setDatos(res)
+          setIsGraph(true)
+        })
+        .catch((e) => {
+          console.log(e.message)
+        })
+    })
+
+  // Funcion que quita el archivo cargado
   const fileRemove = () => {
     setFile(null)
   }
@@ -78,9 +93,9 @@ function App() {
   const [showForm, setShowForm] = useState(false);
 
   // Estado de atributo para desplegar los atributos en la grafica
-  const [atributo1, setAtributo1] = useState('claveTransportista')
+  const [atributo1, setAtributo1] = useState('EMPRESA_TRANSPORTISTA')
 
-  const [atributo2, setAtributo2] = useState('claveTransportista')
+  const [atributo2, setAtributo2] = useState('ID_TRANSPORTISTA')
 
   // Funcion que guarda el atributo nuevo para visualizar en la grafica
   const saveAtributo1 = (atributo) => {
@@ -112,7 +127,7 @@ function App() {
         <Route path='/' element={<HomeScreenview/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setHeadersFile={setHeadersFile}/>}/>
         <Route path='/Queue' element={<Queue/>}/>
-        <Route path='/Dashboard' element={<Dashboard atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
+        <Route path='/Dashboard' element={<Dashboard backGet={backGet} isGraph={isGraph} atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>
     </Router>

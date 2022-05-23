@@ -5,9 +5,17 @@ import ContenedorDatos from '../components/ContenedorDatos/ContenedorDatos.js';
 import FormAtributos from '../components/FormAtributos/FormAtributos.js';
 import GraphContainer from '../components/GraphContainer/GraphContainer.js';
 import ContainerDB from '../components/ContainerDB/ContainerDB.js';
+import { useState } from 'react';
 
-function dashboardView({datos , atributos, onSelect1, onSelect2, atributo1, atributo2, clicked, clickedLi, click, chart, showForm, backGet}) {
+function dashboardView({datos , atributos, onSelect1, onSelect2, atributo1, atributo2, clicked, clickedLi, click, chart, showForm, backGet, isGraph}) {
 
+  var GraphCont = <></>
+  if (isGraph){
+    GraphCont = < ContainerDB className='display-none' datos={datos} atributos={atributos} onSelect1={onSelect1} onSelect2={onSelect2} atributo1={atributo1} atributo2={atributo2} clicked={clicked} clickedLi={clickedLi} click={click} chart={chart} showForm={showForm} />
+  } else {
+     GraphCont = <></>
+  }
+  
   // Props: 
   //   datos = datos dummy
   //   atributos = lista de atributos
@@ -30,7 +38,7 @@ function dashboardView({datos , atributos, onSelect1, onSelect2, atributo1, atri
             <ContenedorDatos datos={4536} label='Anomalías Detectadas' color='yellow'/>
             <ContenedorDatos datos='39%' label='Porcentaje de Anomalías' color='yellow'/>
       </div>
-      < ContainerDB className='display-none' datos={datos} atributos={atributos} onSelect1={onSelect1} onSelect2={onSelect2} atributo1={atributo1} atributo2={atributo2} clicked={clicked} clickedLi={clickedLi} click={click} chart={chart} showForm={showForm} />
+      {GraphCont}
       <div className='container-button-add'><button onClick={backGet} className='button-add'>+</button></div>
     </div>
   );
