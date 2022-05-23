@@ -1,4 +1,6 @@
+from email.mime import base
 import queue
+import django
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -227,11 +229,62 @@ class FileUploadView(View):
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
     
-    def post(self, request):
+    def save_file_to_storage(self, file):
+        """Saves the file to the storage
+
+        Args:
+            file (file): file to be processed
+
+        Returns:
+            tuple: (file name, file id, base name, date)
+        """        
+        # Get current time
+        date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        
+        # Get the file name without extension
+        base_file_name = file.name.replace(' ', '_').replace('.csv','')
+        
+        # Create the file id
+        run_id = base_file_name + '_' + date
+        
+        # Saves the file in the default storage
+        file_name = default_storage.save(run_id+'.csv', file)
+        
+        return file_name, run_id, base_file_name, date
+
+    def add_to_queue(self, file_id: str) -> np.array:
+        """Adds the file to the queue
+
+        Args:
+            file_id (str): id of the file to be added to the queue
+            
+        Returns:
+            queue: queue with the file id
+        """        
+        # creates a new queue if it doesn't exist
+        queue = np.array([])
+        if not exists('../API_PROJECT/queue.npy'):
+            queue = np.append(queue, file_id)
+        else:
+            queue = np.load('queue.npy')
+            queue = np.append(queue, file_id)
+        
+        # Saves the queue
+        saved = False
+        while (not saved):
+            try:
+                np.save('queue.npy', queue)
+                saved = True
+            except:
+                print('Error saving queue, trying again...')
+                
+        return queue
+    
+    def post(self, request) -> JsonResponse:
         """Post method for the file upload
 
         Args:
-            request (request): The request object
+            request (WSGIRequest): request object
 
         Returns:
             JsonResponse: The response object
@@ -239,49 +292,30 @@ class FileUploadView(View):
         if request.FILES['file'] != None:
             # Get the file from the request
             file = request.FILES['file']
-            # Get current time
-            date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            # Get the file name without extension
-            base_file_name = file.name.replace(' ', '_').replace('.csv','')
-            # Create the file id
-            file_id = base_file_name + '_' + date
-            # Saves the file in the default storage
-            file_name = default_storage.save(file_id+'.csv', file)
             
-            internal_attributes = ['ID_TRANSPORTISTA', 'weightDifference', 'D_UBICACION', 'USUARIO_EGRESO', 'N_PESO_TARA', 'mediana']
-            external_attributes = ['C_ID_ORDEN_CABECERA', 'C_POSICION_ORDEN', 'Q_CANTIDAD', 'N_PESO_BRUTO', 'TIPO_TRANSPORTE']
+            #internal_attributes = ['ID_TRANSPORTISTA', 'weightDifference', 'D_UBICACION', 'USUARIO_EGRESO', 'N_PESO_TARA', 'mediana']
+            #external_attributes = ['C_ID_ORDEN_CABECERA', 'C_POSICION_ORDEN', 'Q_CANTIDAD', 'N_PESO_BRUTO', 'TIPO_TRANSPORTE']
             # Gets internal and external attributes from request
-            #internal_attributes = request.data['internal_attributes']
-            #external_attributes = request.data['external_attributes']
+            internal_attributes = request.POST['internal_attributes']
+            external_attributes = request.POST['external_attributes']
+            print(internal_attributes, external_attributes)
             
+            # Saves the file to the storage and gets the file name, file id, base name and date
+            file_name, run_id, base_file_name, date = self.save_file_to_storage(file)
+            print(file_name, run_id, base_file_name, date)
             # Sends the file to the processing function
-            process_file.delay(file_name, base_file_name, date ,internal_attributes, external_attributes)
-
-            # Adds the file to the file queue
-            queue = np.array([])
-            if not exists('../API_PROJECT/queue.npy'):
-                queue = np.append(queue, file_id)
-            else:
-                queue = np.load('queue.npy')
-                queue = np.append(queue, file_id)
+            process_file.delay(file_name, base_file_name, run_id, date ,internal_attributes, external_attributes)
             
-            # Saves the queue
-            saved = False
-            while (not saved):
-                try:
-                    np.save('queue.npy', queue)
-                    saved = True
-                except:
-                    print('Error saving queue, trying again...')
+            # Adds the file to the queue
+            queue = self.add_to_queue(run_id)
             
-            # Returns the file id and queue
-            return JsonResponse({"message": "File received", "file_id": file_id, "queue": queue.tolist()})
+            return JsonResponse({"message": 1, "run_id": run_id, "queue": queue.tolist()})
         else:
-            return JsonResponse({"message": "No file"})
+            return JsonResponse({"message": 0})
         
     
     
-    def get(self, request):
+    def get(self, request) -> UploadFileForm:
         """Get method for the file upload
 
         Args:
@@ -290,4 +324,10 @@ class FileUploadView(View):
         Returns:
             render: Renders the file upload page
         """
-        return render(request, 'upload_file.html', {'form': UploadFileForm()})
+        queue = np.load('queue.npy')
+        return JsonResponse({"queue": queue.tolist()})
+        # return render(request, 'upload_file.html', {'form': UploadFileForm()})
+
+
+    
+

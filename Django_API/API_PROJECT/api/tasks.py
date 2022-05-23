@@ -116,7 +116,7 @@ def apply_model(df: pd.DataFrame, model: IsolationForest) -> pd.DataFrame:
     # Applies the model to the dataframe and adds the result to the dataframe
     df['anomaly_scores'] = model.decision_function(df)  
 
-def upload_to_db(df: pd.DataFrame, file_name: str, base_file_name: str, date: str, internal_attributes: list, external_attributes: list):
+def upload_to_db(df: pd.DataFrame, run_id: str, base_file_name: str, date: str, internal_attributes: list, external_attributes: list):
     """Uploads the dataframe to a database
 
     Args:
@@ -133,7 +133,7 @@ def upload_to_db(df: pd.DataFrame, file_name: str, base_file_name: str, date: st
     
     # Creates a new document in the history collection with the data of the run
     history_collection.insert_one({
-        "_id" : file_name,
+        "_id" : run_id,
         "base_file_name" : base_file_name,
         "date" : date,
         "internal_attributes" : internal_attributes,
@@ -142,17 +142,39 @@ def upload_to_db(df: pd.DataFrame, file_name: str, base_file_name: str, date: st
     
     # Creates a new document in the file data collection with the data of the processed file
     file_data_collection.insert_one({
-        "_id" : file_name,
+        "_id" : run_id,
         "data" : df.to_dict(orient='list')
     })
 
+def remove_from_queue(file_name: str):
+    """Removes a file from the queue
+
+    Args:
+        file_name (str): Name of the file to remove
+    """
+    queue = np.array([])
+    if exists('queue.npy'):
+        queue = np.load('queue.npy')
+        queue = np.delete(queue, np.where(queue == file_name))
+    
+    # Saves the updated queue
+    saved = False
+    while (not saved):
+        try:
+            np.save('queue.npy', queue)
+            saved = True
+        except:
+            print('Error saving queue, trying again...')
+    
+
 @shared_task
-def process_file(file_name: str, base_file_name: str, date: str, internal_attributes: list, external_attributes: list):
+def process_file(file_name: str, base_file_name: str, run_id: str, date: str, internal_attributes: list, external_attributes: list):
     """Reads a csv file, cleans it applies an Isolation Forest algorithm and uploads the data to a database 
 
     Args:
         file_name (str): Name of the file to process
         base_file_name (str): Name of the file without extension and date
+        run_id (str): ID of the file
         date (str): Date of the file
         internal_attributes (list): List of internal attributes to keep
         external_attributes (list): List of external attributes to keep
@@ -176,24 +198,12 @@ def process_file(file_name: str, base_file_name: str, date: str, internal_attrib
     decode_labels(df, les)
 
     # Uploads results to database
-    upload_to_db(df, file_name.replace('.csv',''), base_file_name, date, internal_attributes, external_attributes)
+    #upload_to_db(df, run_id, base_file_name, date, internal_attributes, external_attributes)
     
     # Removes the file from the queue of files to process
-    queue = np.array([])
-    if exists('queue.npy'):
-        queue = np.load('queue.npy')
-        queue = np.delete(queue, 0)
-    
-    # Saves the updated queue
-    saved = False
-    while (not saved):
-        try:
-            np.save('queue.npy', queue)
-            saved = True
-        except:
-            print('Error saving queue, trying again...')
+    remove_from_queue(run_id)
             
-    df.to_csv(file_name.replace('.csv','')+'_processed.csv', index=False)
+    #df.to_csv(file_name.replace('.csv','')+'_processed.csv', index=False)
     
     # Sleeps for a while to avoid overloading the server
     time.sleep(2)
