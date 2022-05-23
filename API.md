@@ -644,8 +644,7 @@ N/A
 
 **Hay algún pendiente?** Si
 
-**Descripción del pendiente:** Añadir el tipo de grafica
-
+**Descripción del pendiente:** Ordenar Datos
 **Revision hecha por:** Joel Ramos
 
 ### GET_LINE_GRAPH
@@ -656,7 +655,7 @@ N/A
 
 **Hay algún pendiente?** Si
 
-**Descripción del pendiente:** Añadir el tipo de grafica
+**Descripción del pendiente:** Ordenar Datos
 
 **Revision hecha por:** Joel Ramos
 

@@ -329,20 +329,24 @@ def searchBarLineGraphHelper(request, userID, variable, filter, type):
                         anomalyList.append(0)
                     
                     normalList.append(anomalyTable.iloc[i][2])
-
-            anomalyList = np.array(anomalyList)
-            normalList = np.array(normalList)
-            atributeList = anomalyTable['atribute'].unique().tolist()
+            
+            # Crear data frame
+            df =  pd.DataFrame({'anomalyList' : np.array(anomalyList), 'normalLists': np.array(normalList), 'atributeList': anomalyTable['atribute'].unique()})
+            
+            df = df.sort_values(by=['anomalyList'], ascending=False)
 
             # Solamente se envia el total de atributos y el total de anomalias de cada uno
             data = {
                 'type': type,
-                'labels': atributeList,
-                'anomalyList': anomalyList.tolist(),
-                'normalList': normalList.tolist()
+                'labels': df['atributeList'].tolist(),
+                'anomalyList': df['anomalyList'].tolist(),
+                'normalList': df['normalLists'].tolist()
             }
             
+            # ToDo: Hacer llamada asyncorna
             resultUG = updateGraphs(historyID, data)
+            
+            # * No es necesario puesto que el historyID ya fue revisado
             if resultUG["message"] != "Success":
                 return JsonResponse(resultUG["message"])
 
