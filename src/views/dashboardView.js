@@ -30,7 +30,7 @@ function dashboardView({datos , atributos, onSelect1, onSelect2, atributo1, atri
             <ContenedorDatos datos={4536} label='Anomalías Detectadas' color='yellow'/>
             <ContenedorDatos datos='39%' label='Porcentaje de Anomalías' color='yellow'/>
       </div>
-      < ContainerDB datos={datos} atributos={atributos} onSelect1={onSelect1} onSelect2={onSelect2} atributo1={atributo1} atributo2={atributo2} clicked={clicked} clickedLi={clickedLi} click={click} chart={chart} showForm={showForm} />
+      < ContainerDB className='display-none' datos={datos} atributos={atributos} onSelect1={onSelect1} onSelect2={onSelect2} atributo1={atributo1} atributo2={atributo2} clicked={clicked} clickedLi={clickedLi} click={click} chart={chart} showForm={showForm} />
       <div className='container-button-add'><button onClick={backGet} className='button-add'>+</button></div>
     </div>
   );

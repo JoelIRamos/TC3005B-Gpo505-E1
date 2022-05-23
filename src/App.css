@@ -124,6 +124,10 @@ input, select, button{
   border-radius: 5px;
 }
 
+.display-none{
+  display: none;
+}
+
 .busqueda {
   margin-top: 3%;
   margin-left: 6%;
