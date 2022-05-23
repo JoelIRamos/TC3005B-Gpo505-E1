@@ -25,7 +25,7 @@ function App() {
   const [isGraph, setIsGraph] = useState(false)
   const [file, setFile] = useState(null)
   const [headersFile, setHeadersFile] = useState([])
-  const [datos, setDatos] = useState();
+  const [datos, setDatos] = useState({anomalyList: [4325, 423, 4325,435, 5345], labels: ['Dato1', 'Dato2', 'Dato3', 'Dato4', 'Dato5']});
 
   // Respuesta del post al backend
   const [backPostResp, setBackPostResp] = useState();
@@ -48,24 +48,24 @@ function App() {
   }
 
   const backGet =  async ()  => {
-    const response = await fetch('http://127.0.0.1:8000/api/getBarGraph/6286eaf06130f0d515a178ca/EMPRESA_TRANSPORTISTA/0/')
-    if(!response.ok){
-      throw new Error('Data coud not be fetched!')
-    } else{
-      return response.json()
-    }
-      // .then(getGraph())
+    setIsGraph(true)
+    // const response = await fetch('http://127.0.0.1:8000/api/getBarGraph/6286eaf06130f0d515a178ca/EMPRESA_TRANSPORTISTA/0/')
+    // if(!response.ok){
+    //   throw new Error('Data coud not be fetched!')
+    // } else{
+    //   return response.json()
+    // }
   }
-    useEffect(() => {
-      backGet()
-        .then((res) => {
-          setDatos(res)
-          setIsGraph(true)
-        })
-        .catch((e) => {
-          console.log(e.message)
-        })
-    })
+    // useEffect(() => {
+    //   backGet()
+    //     .then((res) => {
+    //       setDatos(res)
+    //       setIsGraph(true)
+    //     })
+    //     .catch((e) => {
+    //       console.log(e.message)
+    //     })
+    // })
 
   // Funcion que quita el archivo cargado
   const fileRemove = () => {
