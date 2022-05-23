@@ -27,6 +27,16 @@ function App() {
   const [headersFile, setHeadersFile] = useState([])
   const [datos, setDatos] = useState();
 
+  // Respuesta del post al backend
+  const [backPostResp, setBackPostResp] = useState();
+
+  //Id de corrida
+  const [idCorrida, setIdCorrida] = useState();
+
+  // Atributos internos y externos
+  const [listaAttInternos, setListaAttInternos] = useState();
+  const [listaAttExternos, setListaAttExternos] = useState();
+
   // Funcion para lectura del archivo cuando se dropea
   const onFileDrop = (e) => {
     const newFile = e.target.files[0]
@@ -125,9 +135,9 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<HomeScreenview/>}/>
-        <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setHeadersFile={setHeadersFile}/>}/>
-        <Route path='/Queue' element={<Queue/>}/>
-        <Route path='/Dashboard' element={<Dashboard backGet={backGet} isGraph={isGraph} atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
+        <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} backPostResp={backPostResp} setBackPostResp={setBackPostResp}/>}/>
+        <Route path='/Queue' element={<Queue backPostResp={backPostResp}/>}/>
+        <Route path='/Dashboard' element={<Dashboard atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>
     </Router>
