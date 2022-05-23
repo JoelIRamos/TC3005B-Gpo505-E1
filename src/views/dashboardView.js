@@ -6,7 +6,7 @@ import FormAtributos from '../components/FormAtributos/FormAtributos.js';
 import GraphContainer from '../components/GraphContainer/GraphContainer.js';
 import ContainerDB from '../components/ContainerDB/ContainerDB.js';
 
-function dashboardView({datos , atributos, onSelect1, onSelect2, atributo1, atributo2, clicked, clickedLi, click, chart, showForm}) {
+function dashboardView({datos , atributos, onSelect1, onSelect2, atributo1, atributo2, clicked, clickedLi, click, chart, showForm, backGet}) {
 
   // Props: 
   //   datos = datos dummy
@@ -31,7 +31,7 @@ function dashboardView({datos , atributos, onSelect1, onSelect2, atributo1, atri
             <ContenedorDatos datos='39%' label='Porcentaje de Anomalías' color='yellow'/>
       </div>
       < ContainerDB datos={datos} atributos={atributos} onSelect1={onSelect1} onSelect2={onSelect2} atributo1={atributo1} atributo2={atributo2} clicked={clicked} clickedLi={clickedLi} click={click} chart={chart} showForm={showForm} />
-      <div className='container-button-add'><button className='button-add'>+</button></div>
+      <div className='container-button-add'><button onClick={backGet} className='button-add'>+</button></div>
     </div>
   );
 }

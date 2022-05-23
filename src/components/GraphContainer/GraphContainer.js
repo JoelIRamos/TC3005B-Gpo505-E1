@@ -16,7 +16,7 @@ const GraphContainer = ({data, atributo1, atributo2, clicked, clickedLi, click, 
       </div>
       < GraphList graphs={graphs} state={click} onClick={clickedLi}  />
       <div className='container-graph'>
-        < Graph atributo1={atributo1} chart={chart} data={data} />
+        < Graph atributo1={atributo1} chart={chart} datosGraph={data} />
       </div>
     </div>
   )
