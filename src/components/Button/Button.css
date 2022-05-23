@@ -4,12 +4,10 @@
 }
 
 .generic-btn{
-  margin-right: auto;
-  margin-left: 4%;
-  padding: .5%;
+  padding: .8vw;
   display: block;
   background-color: rgb(255, 67, 20);
-  font-size: 1.5rem;
+  font-size: 1.5vw;
   border-radius: 35px;
   cursor: pointer;
   width: 10%;
@@ -19,12 +17,10 @@
 }
 
 .generic-btn:hover{
-  margin-right: auto;
-  margin-left: 4%;
-  padding: .5%;
+  padding: .8vw;
   display: block;
   background-color: rgb(255, 255, 255);
-  font-size: 1.5rem;
+  font-size: 1.5vw;
   border-radius: 35px;
   cursor: pointer;
   width: 10%;

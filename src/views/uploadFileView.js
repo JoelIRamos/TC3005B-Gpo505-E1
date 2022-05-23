@@ -5,7 +5,7 @@ import DropFile from '../components/DropFile/DropFile.js';
 import DnDTable from '../components/DragAndDrop/DragAndDropTable.js'
 import Button from '../components/Button/GenericButton.js';
 import { useState } from 'react';
-import {v4 as uuid} from 'uuid';
+import { Link } from "react-router-dom";
 
 const onDragEnd = (result, seleccionDeListas) => {
   if(!result.destination)
@@ -41,6 +41,26 @@ const onDragEnd = (result, seleccionDeListas) => {
 
 function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, backGet}) {
   
+  // HTTP request a backend (aun en prueba)
+  const backPost = (internalAtt, externalAtt) => {
+    const intAttJSON = JSON.stringify(internalAtt);
+    const extAttJSON = JSON.stringify(externalAtt);
+    var formData = new FormData();
+    console.log("here")
+    formData.append('internal_attributes', intAttJSON); // Array tipo JSON de los atributos internos del archivo
+    formData.append('external_attributes', extAttJSON); // Array tipo JSON de los atributos externos del archivo
+    formData.append('file', file); // Archivo completo
+    fetch('http://localhost:8000/api/upload_file/', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(success => {
+        console.log(success);
+      })
+      .catch(error => console.log(error))
+  }
+
   const seleccionDeListas = 
   {
     "attE":{
@@ -64,8 +84,6 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, back
     setUpLoadView(!upLoadView);
   }
 
-  
-
   return (
     <div className="App">
       <Navbar selected='upload'/>
@@ -74,15 +92,22 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, back
           <DropFile setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} setUpLoadView={setUpLoadView} viewUpdate={viewUpdate}/>
         </div>
         :
-        <div className="atrribute-container">
-          <DragDropContext onDragEnd={result => onDragEnd(result, seleccionDeListas)}>
-            {Object.entries(seleccionDeListas).map(([id, data]) => {
-              return(
-                <DnDTable titulo={data.name} dropID={id} headers={data.items}/>
-              )
-            })}
-          </DragDropContext>
-        </div>
+        <>
+          <Link to='/Queue'>
+            <div className='button'>
+              <button onClick={() => backPost(seleccionDeListas["attI"], seleccionDeListas["attE"])}>Siguiente</button>
+            </div>
+          </Link>
+          <div className="atrribute-container">
+            <DragDropContext onDragEnd={result => onDragEnd(result, seleccionDeListas)}>
+              {Object.entries(seleccionDeListas).map(([id, data]) => {
+                return(
+                  <DnDTable titulo={data.name} dropID={id} headers={data.items}/>
+                )
+              })}
+            </DragDropContext>
+          </div>
+        </>
       }
     </div>
     

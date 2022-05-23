@@ -1,9 +1,9 @@
 import React from 'react'
 import './Button.css'
 
-const GenButton = ({text, viewUpdate}) =>{
+const GenButton = ({text, funcCall}) =>{
   return (
-    <button className="generic-btn" onClick={viewUpdate}> {text} </button>
+    <button className="generic-btn" onClick={funcCall}> {text} </button>
   )
 }
 
