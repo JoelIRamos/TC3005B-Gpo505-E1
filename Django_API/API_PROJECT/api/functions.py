@@ -1,4 +1,5 @@
 # from typing_extensions import LiteralString
+from typing import Collection
 from unicodedata import category
 from django.shortcuts import render
 from django.http.response import JsonResponse
@@ -9,24 +10,12 @@ import json
 from api.db import db 
 from bson.json_util import dumps
 from bson.objectid import ObjectId
-
+ 
 import pandas as pd
 import numpy as np
 
 
-def searchOption1(request):
-    # Buscar todos los registros de la coleccion "History" quitando las columnas "internos", "externos" y "graphs"
-    results = list(db["RunHistory"].find({}, {"internal_attributes": 0, "external__attributes": 0, "graphs": 0}))
-    
-    # Si hay registros regresarlos
-    if len(results)>0:
-        data = {'message':'found', 'result': results}
-        
-    else: # Si no hay registros regresar mensaje de error
-        data = {'message': 'Not found'}
-    return JsonResponse(data)
-
-def searchOption2(request):
+def searchHistoryList(request): 
     # Buscar todos los registros de la coleccion "History" quitando las columnas "internos", "externos" y "graphs"
     runs = list(db["RunHistory"].find({}, {"internal_attributes": 0, "external__attributes": 0, "graphs": 0}))
     
@@ -73,35 +62,6 @@ def searchOption2(request):
         data = {'message': 'Not found'}
     return JsonResponse(data)
 
-def searchHistoryList(request): 
-    return searchOption2(request)
-
-def searchUserID(request, historyID):
-    # Usar coleccion "LastSession"
-    colectionLS = db["LastSession"]
-    # Buscar si hay registros que tienen el historyID correspondiente (Maximo debe haber 1)
-    lSresults = list(colectionLS.find({"id_history": historyID}))
-    
-    # Verificar que no exista un registro con el historyID en la coleccion de LastSession
-    if len(lSresults)>0:
-        data = {'message': 'session already in use'}
-    else: 
-        # Verificar si existe un registro con el historyID en la coleccion de History
-        rHresult = list(db["RunHistory"].find({"_id": historyID}))
-        if (len(rHresult)>0):
-            # Insertar el historyID en la coleccion de LastSession (esto crea automaticamente un userID)
-            colectionLS.insert_one({"id_history": historyID})
-            
-            # Obtener dicho registro para obtener el userID
-            newRegister = colectionLS.find_one({"id_history": historyID})
-            
-            # Regresar el userID
-            data = {'message': 'success', 'userID': str(newRegister['_id'])}
-        else:
-            data = {'message': 'historyID unexistent'}
-    
-    return JsonResponse(data)
-
 
 def searchHistoryDetail(request, historyID):
     # Buscar los registros de la coleccion "File" con el id_history e ignorar las columnas _id y id_history 
@@ -113,7 +73,7 @@ def searchHistoryDetail(request, historyID):
         ExtIntResults = db["RunHistory"].find_one({"_id": historyID})
         
         # Extraer los agentes externos, internos y la fecha
-        external = ExtIntResults["external__attributes"]
+        external = ExtIntResults["external_attributes"]
         internal = ExtIntResults["internal_attributes"]
         date = ExtIntResults["date"]
         name = ExtIntResults["base_file_name"]
@@ -129,7 +89,7 @@ def searchHistoryDetail(request, historyID):
                 'base_file_name': name,
                 'date': date,
                 'internal_attributes': internal,
-                'external__attributes': external,
+                'external_attributes': external,
                 'graphs': graphs,
                 'data': file
             }
@@ -139,7 +99,7 @@ def searchHistoryDetail(request, historyID):
         data = {'message': 'Not found'}
     return JsonResponse(data)
 
-def searchHistorySimpleDetail(request, historyID):
+def searchHistory(request, historyID):
     # Buscar el registro de la coleccion "History" que tiene el historyID correspondiente
     ExtIntResults = list(db["RunHistory"].find({"_id": historyID}))
     
@@ -149,7 +109,7 @@ def searchHistorySimpleDetail(request, historyID):
         ExtIntResult = ExtIntResults[0]
         
         # Extraer los agentes externos, internos y la fecha
-        external = ExtIntResult["external__attributes"]
+        external = ExtIntResult["external_attributes"]
         internal = ExtIntResult["internal_attributes"]
         date = ExtIntResult["date"]
         name = ExtIntResult["base_file_name"]
@@ -165,65 +125,18 @@ def searchHistorySimpleDetail(request, historyID):
                 'base_file_name': name,
                 'date': date,
                 'internal_attributes': internal,
-                'external__attributes': external,
+                'external_attributes': external,
                 'graphs': graphs
             }
         }
         
     else: # Si no hay registros regresar mensaje de error
         data = {'message': 'Not found'}
-    return data
-
-def searchLastSession(request, userID):
-    try: 
-        # Hacer el objectid del userID
-        objUserID = ObjectId(userID)
-    except: 
-        return JsonResponse({'message': 'userID is not a valid ObjectID'})
-    
-    # Usar coleccion "LastSession"
-    colectionLS = db["LastSession"]
-    # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
-    lSresults = list(colectionLS.find({"_id": objUserID}))
-    
-    # Si existe el registro regresar los datos
-    if len(lSresults)>0:
-        # Extraer el histortID
-        historyID = lSresults[0]["id_history"]
-        
-        # Hacer la busqueda de la tabla con dicho historyID
-        data = searchHistorySimpleDetail(request, historyID)
-        
-        return JsonResponse(data)
-    else:
-        return JsonResponse({'message': 'Not found'})
-
-# * Recordar Hacer trigger de timer en MongoDB
-def deleteLastSession(request, userID):
-    try: 
-        # Hacer el objectid del userID
-        objUserID = ObjectId(userID)
-        # Usar coleccion "LastSession"
-        collection = db["LastSession"]
-        # Buscar la lista de los registros que tienen el userID correspondiente (Maximo debe haber 1)
-        result = list(collection.find({"_id": objUserID}))
-        
-        # Si existe el registro borrarlo
-        if len(result)>0:
-            # Eliminar el registro
-            collection.delete_one({"_id": objUserID})
-            # Regresar mensaje de exito
-            data = {'message': 'Success'}
-            
-        else: # Si no existe el registro regresar mensaje de error
-            data = {'message': 'Not found'}
-    except:
-        data = { 'message': 'userID is not a valid ObjectID' }
     return JsonResponse(data)
 
 
 # Función de ayuda para actualizar las graficas
-def updateGraphs(historyID, graph):
+async def updateGraphs(historyID, graph):
     # Usar coleccion "RunHistory"
     colection = db["RunHistory"]
     # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
@@ -243,163 +156,138 @@ def updateGraphs(historyID, graph):
         
         # Actualizar el registro
         colection.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
-        return {"message": "Success"}
+        # return {"message": "Success"}
+        print("Success")
     else:
-        return {'message': 'updateGraphs: Not found'}
+        print("updateGraphs: Not found")
+        # return {'message': 'updateGraphs: Not found'}
 
 # Barras, Linea helper
-def searchBarLineGraphHelper(request, userID, variable, filter, type):
+def searchBarLineGraphHelper(request, historyID, variable, filter, type):
     filter = float(filter)
-    try: 
-        # Hacer el objectid del userID
-        objUserID = ObjectId(userID)
-    except: 
-        return JsonResponse({'message': 'userID is not a valid ObjectID'})
+    # Usar coleccion "FileData"
+    colectionFD = db["FileData"]
+    # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
+    resultsFD = list(colectionFD.find({"_id": historyID}))
+    # Si existe el historial
+    if len(resultsFD) > 0:
+        # Extraer los 'anomaly_socores' del registro
+        anomaly_scores = resultsFD[0]["data"]["anomaly_scores"]
+        anomalys = []
+        
+        # Llenar la lista de anomalias
+        for i in range(len(anomaly_scores)):
+            if (anomaly_scores[i] >= filter):
+                anomalys.append(1)
+            else: 
+                anomalys.append(-1)
+        
+        # Crear data frame
+        df =  pd.DataFrame({'atribute' :resultsFD[0]['data'][variable], 'anomaliy': anomalys})
 
-    # Usar coleccion "RunHistory"
-    colectionLS = db["LastSession"]
-    # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
-    resultsLS = list(colectionLS.find({"_id": objUserID}))
-    # Si existe el usuario
-    if len(resultsLS)>0:
-        historyID = resultsLS[0]["id_history"]
+        # Obtener total de anomalias
+        anomalyTable = df.groupby(df.columns.tolist(),as_index=False).size()
+        # print(anomalyTable)
+        normalList = []
+        anomalyList = []
 
-        # Usar coleccion "FileData"
-        colectionFD = db["FileData"]
-        # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
-        resultsFD = list(colectionFD.find({"_id": historyID}))
-        # Si existe el historial
-        if len(resultsFD) > 0:
-            # Extraer los 'anomaly_socores' del registro
-            anomaly_scores = resultsFD[0]["data"]["anomaly_scores"]
-            anomalys = []
+        for i in range(len(anomalyTable)):
+            if anomalyTable.iloc[i][1] == -1:
+                categoryValue = anomalyTable.iloc[i][0]
+                # Extraer el valor anterior
+                try:
+                    before = anomalyTable.iloc[i-1][0]
+                except:
+                    before = -1
+                
+                # Extraer el valor posterior
+                try:
+                    after = anomalyTable.iloc[i+1][0]
+                except: 
+                    after = -1
+                
+                # Verficar si el valor tiene una contraparte
+                if (categoryValue != before) and (categoryValue != after):
+                    normalList.append(0)
+                
+                anomalyList.append(anomalyTable.iloc[i][2])
+            else:
+                categoryValue = anomalyTable.iloc[i][0]
+                # Extraer el valor anterior
+                try:
+                    before = anomalyTable.iloc[i-1][0]
+                except:
+                    before = -1
+                
+                # Extraer el valor posterior
+                try:
+                    after = anomalyTable.iloc[i+1][0]
+                except: 
+                    after = -1
+                
+                # Verficar si el valor tiene una contraparte
+                if (categoryValue != before) and (categoryValue != after):
+                    anomalyList.append(0)
+                
+                normalList.append(anomalyTable.iloc[i][2])
             
-            # Llenar la lista de anomalias
-            for i in range(len(anomaly_scores)):
-                if (anomaly_scores[i] >= filter):
-                    anomalys.append(1)
-                else: 
-                    anomalys.append(-1)
-            
-            # Crear data frame
-            df =  pd.DataFrame({'atribute' :resultsFD[0]['data'][variable], 'anomaliy': anomalys})
+        # Crear data frame
+        df =  pd.DataFrame({'anomalyList' : np.array(anomalyList), 'normalLists': np.array(normalList), 'atributeList': anomalyTable['atribute'].unique()})
+        
+        df = df.sort_values(by=['anomalyList'], ascending=False)
 
-            # Obtener total de anomalias
-            anomalyTable = df.groupby(df.columns.tolist(),as_index=False).size()
-            # print(anomalyTable)
-            normalList = []
-            anomalyList = []
-
-            for i in range(len(anomalyTable)):
-                if anomalyTable.iloc[i][1] == -1:
-                    categoryValue = anomalyTable.iloc[i][0]
-                    # Extraer el valor anterior
-                    try:
-                        before = anomalyTable.iloc[i-1][0]
-                    except:
-                        before = -1
-                    
-                    # Extraer el valor posterior
-                    try:
-                        after = anomalyTable.iloc[i+1][0]
-                    except: 
-                        after = -1
-                    
-                    # Verficar si el valor tiene una contraparte
-                    if (categoryValue != before) and (categoryValue != after):
-                        normalList.append(0)
-                    
-                    anomalyList.append(anomalyTable.iloc[i][2])
-                else:
-                    categoryValue = anomalyTable.iloc[i][0]
-                    # Extraer el valor anterior
-                    try:
-                        before = anomalyTable.iloc[i-1][0]
-                    except:
-                        before = -1
-                    
-                    # Extraer el valor posterior
-                    try:
-                        after = anomalyTable.iloc[i+1][0]
-                    except: 
-                        after = -1
-                    
-                    # Verficar si el valor tiene una contraparte
-                    if (categoryValue != before) and (categoryValue != after):
-                        anomalyList.append(0)
-                    
-                    normalList.append(anomalyTable.iloc[i][2])
-            
-            # Crear data frame
-            df =  pd.DataFrame({'anomalyList' : np.array(anomalyList), 'normalLists': np.array(normalList), 'atributeList': anomalyTable['atribute'].unique()})
-            
-            df = df.sort_values(by=['anomalyList'], ascending=False)
-
-            # Solamente se envia el total de atributos y el total de anomalias de cada uno
-            data = {
-                'type': type,
-                'labels': df['atributeList'].tolist(),
-                'anomalyList': df['anomalyList'].tolist(),
-                'normalList': df['normalLists'].tolist()
-            }
-            
-            # ToDo: Hacer llamada asyncorna
-            resultUG = updateGraphs(historyID, data)
-            
-            # * No es necesario puesto que el historyID ya fue revisado
-            if resultUG["message"] != "Success":
-                return JsonResponse(resultUG["message"])
-
-        else:
-            data = { 'message': 'No data' }
-    else: # Si no existe el registro regresar mensaje de error
-        data = {'message': 'userID does not exit'}
+        # Solamente se envia el total de atributos y el total de anomalias de cada uno
+        data = {
+            'type': type,
+            'labels': df['atributeList'].tolist(),
+            'anomalyList': df['anomalyList'].tolist(),
+            'normalList': df['normalLists'].tolist()
+        }
+        
+        updateGraphs(historyID, data)
+        
+    else:
+        data = { 'message': 'Not Found' }
     return JsonResponse(data)
 
-def searchBarGraph(request, userID, variable, filter):
-    return searchBarLineGraphHelper(request, userID, variable, filter, "Bar")
+def searchBarGraph(request, historyID, variable, filter):
+    return searchBarLineGraphHelper(request, historyID, variable, filter, "Bar")
 
-def searchLineGraph(request, userID, variable, filter):
-    return searchBarLineGraphHelper(request, userID, variable, filter, "Line")
+def searchLineGraph(request, historyID, variable, filter):
+    return searchBarLineGraphHelper(request, historyID, variable, filter, "Line")
 
-def searchBubbleGraph(request, userID):
+def searchBubbleGraph(request, historyID):
     return JsonResponse({'message': 'Not Implemented'})
 
-def deleteGraph(request, userID, graphID):
-    try: 
-        # Hacer el objectid del userID
-        objUserID = ObjectId(userID)
-        # Usar coleccion "LastSession"
-        collectionLS = db["LastSession"]
-        # Buscar la lista de los registros que tienen el userID correspondiente (Maximo debe haber 1)
-        lSresult = list(collectionLS.find({"_id": objUserID}))
+def deleteGraph(request, historyID, graphID):
+    # Usar la coleccion "RunHistory"
+    collectionRH = db["RunHistory"]
+    # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
+    resultsRH = list(collectionRH.find({"_id": historyID}))
+    # Si existe el historial
+    if len(resultsRH) > 0:
+        # Extraer la lista de graficas
+        graphs = resultsRH[0]["graphs"]
         
-        # Si existe el registro 
-        if len(lSresult)>0:
-            # Extraer en historyID
-            historyID = lSresult[0]["id_history"]
-            # Usar la coleccion "RunHistory"
-            collectionRH = db["RunHistory"]
-            # Buscar el registro que tenga el historyID correspondiente
-            rHresult = collectionRH.find_one({"_id": historyID})
-            # Extraer la lista de graficas
-            graphs = rHresult["graphs"]
-            # Si el graphID esta fuera del alcance, mandar error
-            if (graphID < 0 or graphID > len(graphs)-1):
-                data = {'message': 'graphID not found'}
-            else: 
-                # Si no eliminar dicho elemento de la lista
-                graphs.pop(graphID)
-                
-                # Actualizar el registro con la nueva lista
-                collectionRH.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
-                
-                data = {'message': 'Success'}
-        else: # Si no existe el registro regresar mensaje de no encontrado
-            data = {'message': 'userID not found'}
-    except:
-        data = { 'message': 'userID is not a valid ObjectID' }
+        # Si el graphID esta fuera del alcance, mandar error
+        if (graphID < 0 or graphID > len(graphs)-1):
+            data = {'message': 'graphID Not Found'}
+        else: 
+            # Si no eliminar dicho elemento de la lista
+            graphs.pop(graphID)
+            
+            # Actualizar el registro con la nueva lista
+            collectionRH.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
+            
+            data = {'message': 'Success'}
+    else:
+        data = {'message': 'Not Found'}
     return JsonResponse(data)
+
+def updateGraph(request, historyID, graphID):
+    collection = db["FileData"]
+    collection.delete_one({"_id": historyID})
+    return JsonResponse({'message': 'Success'})
 
 # * Pendientes: Documentacion, trigger y burbuja
 '''

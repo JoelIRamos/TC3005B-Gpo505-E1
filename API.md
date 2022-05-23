@@ -57,51 +57,14 @@ N/A
 ```
 
 ----
-## **GET_USER_ID**
-> Funcion: Iniciar una session de una corrida, para que este pueda crear las gráficas 
-
-### URL: 
-    /api/getUserID/<str:historyID>/
-
-### Parametros: 
-**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
-
-### Bodys
-``` json
-N/A
-```
-
-### Objeto Retorno Correcto
-``` json
-    {
-        "message": "success",
-        "userID": "627fd92b7ca61d828d29ca10"
-    }
-```
-
-### Objeto Retorno Incorrecto
-**Versión 1**
-``` json
-    {
-        "message": "session already in use"
-    }
-```
-**Versión 2**
-``` json
-    {
-        "message": "historyID unexistent"
-    }
-```
-
-----
 ## **GET_LAST_SESSION**
 > Funcion: Obtener la información de las gráficas que estaba manejando el usuario
 
 ### URL: 
-    /api/getLastSession/<str:userID>/
+    /api/getLastSession/<str:historyID>/
 
 ### Parametros: 
-**userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
+**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
 
 ### Bodys
 ``` json
@@ -140,13 +103,6 @@ N/A
                         80,
                         6,
                         1,
-                    ],
-                    "normalList": [
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
                     ]
                 },
                 {
@@ -164,13 +120,6 @@ N/A
                         80,
                         6,
                         1,
-                    ],
-                    "normalList": [
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
                     ]
                 },
             ]
@@ -186,61 +135,15 @@ N/A
     }
 ```
 
-**Version 2**
-``` json
-    {
-        "message": "userID is not a valid ObjectID"
-    }
-```
-
-----
-## **DELETE_LAST_SESSION**
-> Funcion: Cuando el usuario terminó, liberar la sesion para que pueda seguirse modificando si es que llega a volver. 
-
-### URL: 
-    /api/deleteLastSession/<str:userID>/
-
-### Parametros: 
-**userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
-
-### Bodys
-``` json
-N/A
-```
-
-### Objeto Retorno Correcto
-``` json
-    {
-        "message": "Success"
-    }
-```
-
-### Objeto Retorno Incorrecto
-**Versión 1**
-``` json
-    {
-        "message": "Not found"
-    }
-```
-
-**Version 2**
-``` json
-    {
-        "message": "userID is not a valid ObjectID"
-    }
-```
-
-> ToDo: y hacer un timer dentro de la base de datos (10 minutos)
-
 ----
 ## **GET_BAR_GRAPH**
 > Funcion: Obtener los valores para crear una grafica de barras en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:userID>/<str:attribute>/
+    /api/getBarGraph/<str:historyID>/<str:attribute>/
 
 ### Parametros: 
-**userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
+**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
 
 **attribute:** La variable que quieren usar para sacar la gráfica.
 
@@ -266,13 +169,6 @@ N/A
             80,
             6,
             1
-        ],
-        "normalList": [
-            0,
-            0,
-            0,
-            0,
-            0
         ]
     }
 ```
@@ -280,7 +176,7 @@ N/A
 ### Objeto Retorno Incorrecto
 ``` json
     {
-        "message": "not found"
+        "message": "Not found"
     }
 ```
 
@@ -289,10 +185,10 @@ N/A
 > Funcion: Obtener los valores para crear una grafica de linea en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:userID>/<str:attribute>/
+    /api/getBarGraph/<str:historyID>/<str:attribute>/
 
 ### Parametros: 
-**userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
+**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
 
 **attribute:** La variable que quieren usar para sacar la gráfica.
 
@@ -318,13 +214,6 @@ N/A
             80,
             6,
             1
-        ],
-        "normalList": [
-            0,
-            0,
-            0,
-            0,
-            0
         ]
     }
 ```
@@ -332,7 +221,7 @@ N/A
 ### Objeto Retorno Incorrecto
 ``` json
     {
-        "message": "not found"
+        "message": "Not found"
     }
 ```
 
@@ -342,10 +231,10 @@ N/A
 > Funcion: Obtener los valores para crear una grafica de burbuja en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:userID>/<str:attribute>/
+    /api/getBarGraph/<str:historyID>/<str:attribute>/
 
 ### Parametros: 
-**userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
+**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
 
 **attribute:** La variable que quieren usar para sacar la gráfica.
 
@@ -362,7 +251,7 @@ N/A
 ### Objeto Retorno Incorrecto
 ``` json
     {
-        "message": "not found"
+        "message": "Not found"
     }
 ```
 
@@ -371,10 +260,10 @@ N/A
 > Funcion: Eliminar una grafica de acuerdo a su indice de posición
 
 ### URL: 
-    /api/deleteGraph/<str:userID>/<int:graphID>/
+    /api/deleteGraph/<str:historyID>/<int:graphID>/
 
 ### Parametros: 
-**userID:** El id del usuario (el cual fue generado cuando se hizo la peticion getUserID)
+**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
 
 **graphID** El id de la grafica (el cual fue generado cuando se hizo alguna de las peticiones para obtener una gráfica)
 
@@ -394,21 +283,59 @@ N/A
 **Versión 1**
 ``` json
     {
-        "message": "user not found"
+        "message": "Not Found"
     }
 ```
 
 **Versión 2**
 ``` json
     {
-        "message": "graph not found"
+        "message": "graphID Not Found"
+    }
+```
+----
+## **PUT_GRAPH**
+> Funcion: Actualizar la gráfica que estaba haciendo el usuario
+
+### URL: 
+    /api/putGraphs/<str:historyID>/<int:graphID>/
+
+### Parametros: 
+**historyID:** El id del una version de un archivo
+**graphID:** El id del una grafica
+
+### Bodys
+``` json
+    {
+        "type": "Line",
+        "labels": [
+            "ABASTECEDORA RIVELL SA DE CV",
+            "ABC METALES SIDERURGICOS S.A. DE C.",
+            "ACEREMEX S. A. DE C. V.",
+            "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
+            "ADN ENERGIA S DE RL DE CV"
+        ],
+        "anomalyList": [
+            85,
+            125,
+            80,
+            6,
+            1
+        ]
     }
 ```
 
-**Versión 3**
+### Objeto Retorno Correcto
 ``` json
     {
-        "message": "userID is not a valid ObjectID"
+        "message": "Success"
+    }
+```
+
+### Objeto Retorno Incorrecto
+``` json
+    {
+        "message": "Not found"
     }
 ```
 
@@ -489,13 +416,6 @@ N/A
                         80,
                         6,
                         1,
-                    ],
-                    "normalList": [
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
                     ]
                 },
                 {
@@ -513,13 +433,6 @@ N/A
                         80,
                         6,
                         1,
-                    ],
-                    "normalList": [
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
                     ]
                 },
             ]
@@ -539,7 +452,7 @@ N/A
 > Funcion: Actualizar las gráficas que estaba haciendo el usuario
 
 ### URL: 
-    /api/putGraphs/<str:historyID>/
+    /api/putGraph/<str:historyID>/
 
 ### Parametros: 
 **historyID:** El id del una version de un archivo
