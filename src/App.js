@@ -137,7 +137,7 @@ function App() {
         <Route path='/' element={<HomeScreenview/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} backPostResp={backPostResp} setBackPostResp={setBackPostResp}/>}/>
         <Route path='/Queue' element={<Queue backPostResp={backPostResp}/>}/>
-        <Route path='/Dashboard' element={<Dashboard atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
+        <Route path='/Dashboard' element={<Dashboard backGet={backGet} isGraph={isGraph} atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>
     </Router>
