@@ -16,8 +16,6 @@ from api.functions import *
 
 # import pandas as pd
 import numpy as np
-from sklearn.ensemble import IsolationForest
-from sklearn.preprocessing import LabelEncoder
 from datetime import datetime
 from os.path import exists
 
@@ -311,28 +309,29 @@ class FileUploadView(View):
         Returns:
             JsonResponse: The response object
         """
-        if request.FILES['file'] != None:
+        try:
             # Get the file from the request
             file = request.FILES['file']
             
-            #internal_attributes = ['ID_TRANSPORTISTA', 'weightDifference', 'D_UBICACION', 'USUARIO_EGRESO', 'N_PESO_TARA', 'mediana']
-            #external_attributes = ['C_ID_ORDEN_CABECERA', 'C_POSICION_ORDEN', 'Q_CANTIDAD', 'N_PESO_BRUTO', 'TIPO_TRANSPORTE']
+            internal_attributes = ['ID_TRANSPORTISTA','weightDifference','D_UBICACION','USUARIO_EGRESO','N_PESO_TARA','mediana']
+            external_attributes = ['C_ID_ORDEN_CABECERA','C_POSICION_ORDEN','Q_CANTIDAD','N_PESO_BRUTO','TIPO_TRANSPORTE']
+            informational_attributes = ['C_SOCIEDAD','D_PATENTE']
             # Gets internal and external attributes from request
-            internal_attributes = request.POST['internal_attributes']
-            external_attributes = request.POST['external_attributes']
-            print(internal_attributes, external_attributes)
+            # internal_attributes = json.loads(request.POST['internal_attributes'])
+            # external_attributes = json.loads(request.POST['external_attributes'])
+            # informational_attributes = json.loads(request.POST['information_attributes'])
             
             # Saves the file to the storage and gets the file name, file id, base name and date
             file_name, run_id, base_file_name, date = self.save_file_to_storage(file)
             print(file_name, run_id, base_file_name, date)
             # Sends the file to the processing function
-            process_file.delay(file_name, base_file_name, run_id, date ,internal_attributes, external_attributes)
+            process_file.delay(file_name, base_file_name, run_id, date ,internal_attributes, external_attributes, informational_attributes)
             
             # Adds the file to the queue
             queue = self.add_to_queue(run_id)
             
             return JsonResponse({"message": 1, "run_id": run_id, "queue": queue.tolist()})
-        else:
+        except:
             return JsonResponse({"message": 0})
         
     
@@ -347,8 +346,8 @@ class FileUploadView(View):
             render: Renders the file upload page
         """
         queue = np.load('queue.npy')
+        return render(request, 'upload_file.html', {'form': UploadFileForm()})
         return JsonResponse({"queue": queue.tolist()})
-        # return render(request, 'upload_file.html', {'form': UploadFileForm()})
 
 
     

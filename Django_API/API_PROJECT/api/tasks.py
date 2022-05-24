@@ -24,28 +24,33 @@ def clean_df(df: pd.DataFrame):
         if df[column].isna().sum() > 0:
             df[column] = df[column].fillna('NA')
 
-def load_file_to_df(file_name: str, columns_IF: list) -> pd.DataFrame:
+def load_file_to_df(file_name: str, columns_model: list, columns_informational: list) -> pd.DataFrame:
     """loads a csv file to a dataframe
 
     Args:
         file_name (str): Name of the file to load
-        columns_IF (list): List of columns to keep in the dataframe
-
+        columns_to_keep (list): List of columns to keep
     Returns:
         DataFrame: Dataframe with the data
     """    
     # Creates a dataframe to store the data from the file
-    df_p = pd.DataFrame()
+    df_whole = pd.DataFrame()
     # Opens the file
-    file = default_storage.open(file_name)
 
+    # with open(file_name, 'rb') as f:
+    #     enc = chardet.detect(f.read())['encoding']
+    # print(enc)
+
+    file = default_storage.open(file_name)
+    #encoding='ISO-8859-1'
     # Reads the file in chunks of 10000 lines at a time and stores the data in the dataframe
-    for chunk in pd.read_csv(file, chunksize=10000, low_memory=False, usecols=columns_IF):
+    for chunk in pd.read_csv(file, chunksize=10000, low_memory=False, usecols=(columns_model + columns_informational), delimiter=','):
         # Cleans the dataframe from null or NaN values
         clean_df(chunk)
         # Appends the cleaned chunk to the dataframe to store the data
-        df_p = pd.concat([df_p, chunk])
-    
+        df_whole = pd.concat([df_whole, chunk])
+
+    df_model = df_whole.loc[:, columns_model]
     # Closes the file
     file.close()
     # Deletes the file variable
@@ -54,7 +59,7 @@ def load_file_to_df(file_name: str, columns_IF: list) -> pd.DataFrame:
     default_storage.delete(file_name)
     
     # Returns the dataframe with the data
-    return df_p
+    return df_whole, df_model
 
 def encode_labels(df: pd.DataFrame) -> dict:
     """Encode labels of a dataframe
@@ -103,7 +108,7 @@ def train_model(df: pd.DataFrame, model: IsolationForest):
     # Trains the model
     model.fit(df)
     
-def apply_model(df: pd.DataFrame, model: IsolationForest) -> pd.DataFrame:
+def apply_model(df_model: pd.DataFrame, model: IsolationForest, df_whole: pd.DataFrame) -> pd.DataFrame:
     """Applies a trained Isolation Forest algorithm to the dataframe
 
     Args:
@@ -114,9 +119,9 @@ def apply_model(df: pd.DataFrame, model: IsolationForest) -> pd.DataFrame:
         DataFrame: DataFrame with the data classified
     """
     # Applies the model to the dataframe and adds the result to the dataframe
-    df['anomaly_scores'] = model.decision_function(df)  
+    df_whole['anomaly_scores'] = model.decision_function(df_model)  
 
-def upload_to_db(df: pd.DataFrame, run_id: str, base_file_name: str, date: str, internal_attributes: list, external_attributes: list):
+def upload_to_db(df: pd.DataFrame, run_id: str, base_file_name: str, date: str, internal_attributes: list, external_attributes: list, informational_attributes: list):
     """Uploads the dataframe to a database
 
     Args:
@@ -126,10 +131,11 @@ def upload_to_db(df: pd.DataFrame, run_id: str, base_file_name: str, date: str, 
         date (str): Date of the file
         internal_attributes (list): List of internal attributes
         external_attributes (list): List of external attributes
+        informational_attributes (list): List of informational attributes
     """
     # Gets collections references from database
-    history_collection = db["RunHistory"]
-    file_data_collection = db["FileData"]
+    history_collection = db['RunHistory']
+    file_data_collection = db['FileData']
     
     # Creates a new document in the history collection with the data of the run
     history_collection.insert_one({
@@ -137,7 +143,8 @@ def upload_to_db(df: pd.DataFrame, run_id: str, base_file_name: str, date: str, 
         "base_file_name" : base_file_name,
         "date" : date,
         "internal_attributes" : internal_attributes,
-        "external_attributes" : external_attributes
+        "external_attributes" : external_attributes,
+        "informational_attributes" : informational_attributes
     })
     
     # Creates a new document in the file data collection with the data of the processed file
@@ -168,7 +175,7 @@ def remove_from_queue(file_name: str):
     
 
 @shared_task
-def process_file(file_name: str, base_file_name: str, run_id: str, date: str, internal_attributes: list, external_attributes: list):
+def process_file(file_name: str, base_file_name: str, run_id: str, date: str, internal_attributes: list, external_attributes: list, informational_attributes: list):
     """Reads a csv file, cleans it applies an Isolation Forest algorithm and uploads the data to a database 
 
     Args:
@@ -178,32 +185,35 @@ def process_file(file_name: str, base_file_name: str, run_id: str, date: str, in
         date (str): Date of the file
         internal_attributes (list): List of internal attributes to keep
         external_attributes (list): List of external attributes to keep
-    """
+        informational_attributes (list): List of informational attributes to keep
+    """    
+    
     # Combines internal and external attributes to be used in the model
-    columns_IF = internal_attributes + external_attributes
+    columns_model = internal_attributes + external_attributes
+    columns_informational = informational_attributes
     # Creates model
     model = IsolationForest()
     
     #loads the csv file to a dataframe
-    df = load_file_to_df(file_name, columns_IF)
+    df_whole, df_model = load_file_to_df(file_name, columns_model, columns_informational)
 
     # Encodes labels
-    les = encode_labels(df)
+    les = encode_labels(df_model)
 
     # Trains model and applies it to the dataframe
-    train_model(df, model)
-    apply_model(df, model)
+    train_model(df_model, model)
+    apply_model(df_model, model, df_whole)
 
     # Decodes labels
-    decode_labels(df, les)
+    #decode_labels(df_model, les)
 
     # Uploads results to database
-    #upload_to_db(df, run_id, base_file_name, date, internal_attributes, external_attributes)
+    upload_to_db(df_whole, run_id, base_file_name, date, internal_attributes, external_attributes, informational_attributes)
     
     # Removes the file from the queue of files to process
     remove_from_queue(run_id)
             
-    #df.to_csv(file_name.replace('.csv','')+'_processed.csv', index=False)
+    #df_whole.to_csv(file_name.replace('.csv','')+'_processed.csv', index=False)
     
     # Sleeps for a while to avoid overloading the server
     time.sleep(2)
