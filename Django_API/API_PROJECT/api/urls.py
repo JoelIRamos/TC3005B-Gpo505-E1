@@ -25,7 +25,7 @@ urlpatterns = [
     # // path('getLineGraph/<str:userID>/<str:attribute>/<str:filter>/', views.searchLineGraphView.as_view(), name='get_line_graph'),
     
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Burbuja
-    path('getBubbleGraph/<str:historyID>/<str:attribute>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
+    path('getBubbleGraph/<str:historyID>/<str:attribute1>/<str:attribute2>/<str:filter>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
     # // path('getBubbleGraph/<str:userID>/<str:attribute>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
     
     # // # Rutas DELETEs

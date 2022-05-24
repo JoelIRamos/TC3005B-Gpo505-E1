@@ -189,8 +189,61 @@ def searchLineGraph(request, historyID, variable, filter):
     return searchBarLineGraphHelper(request, historyID, variable, filter, "Line")
 
 
-def searchBubbleGraph(request, historyID):
-    return JsonResponse({'message': 'Not Implemented'})
+def searchBubbleGraph(request, historyID, attribute1, attribute2, filter):
+    filter = float(filter)
+
+    print("start")
+    # Usar coleccion "FileData"
+    colectionFD = db["FileData"]
+    print("coleccion")
+    # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
+    resultsFD = list(colectionFD.find({"_id": historyID}, {"data." + attribute1 : 1, "data." + attribute2 : 1, "data.anomaly_scores": 1}))
+    #print(resultsFD)
+    print("resultFD")
+    # Si existe el historial
+    if len(resultsFD) > 0:
+        # Crear data frame
+        df =  pd.DataFrame({'attribute1' :resultsFD[0]['data'][attribute1],'attribute2' :resultsFD[0]['data'][attribute2], 
+        'anomaly': resultsFD[0]['data']['anomaly_scores']})
+        # Filtrar las anomalias
+        # ! Igual o menor que??
+        rslt_df = df[df['anomaly'] <= filter]
+        #print(rslt_df)
+        anomalyRelation = df.groupby(['attribute1', 'attribute2']).size().to_frame('size')
+        anomalyRelation.reset_index( inplace=True)
+        #print(anomalyRelation)
+        
+        anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
+        bubbleData = []
+        #print(anomalyRelation)
+        #df.shape[0]
+        #df.index
+        #print(len(anomalyRelation))
+        #print("value1")
+        #print(anomalyRelation.iloc[1,0])
+        #print("value2")
+        #print(anomalyRelation.iloc[0]['size'])
+        for i in range(len(anomalyRelation)):
+            bubbleData.append(
+                {
+                    'x': str(anomalyRelation.iloc[i]['attribute1']), 
+                    'y': str(anomalyRelation.iloc[i]['attribute2']), 
+                    'r': int(anomalyRelation.iloc[i]['size'])
+                }
+            )
+        
+        bubbleData = np.array(bubbleData)
+
+        
+        data = {
+            'type':'Bubble',
+            #'labels': anomalyTable['attribute'].tolist(),
+            'data' : bubbleData.tolist()
+            #'normalList': df['normalLists'].tolist()
+        }            
+    else:
+            data = { 'message': 'No data' }
+    return JsonResponse(data)
 
 
 def deleteGraph(request, historyID, graphID):
