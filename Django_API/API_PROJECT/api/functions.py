@@ -77,6 +77,8 @@ def searchHistoryDetail(request, historyID):
         internal = ExtIntResults["internal_attributes"]
         date = ExtIntResults["date"]
         name = ExtIntResults["base_file_name"]
+        informational = ExtIntResults["informational_attributes"]
+        
         try:
             graphs = ExtIntResults["graphs"]
         except:
@@ -90,6 +92,7 @@ def searchHistoryDetail(request, historyID):
                 'date': date,
                 'internal_attributes': internal,
                 'external_attributes': external,
+                'informational_attributes': informational,
                 'graphs': graphs,
                 'data': file
             }
@@ -98,6 +101,7 @@ def searchHistoryDetail(request, historyID):
     else: # Si no hay registros regresar mensaje de error
         data = {'message': 'Not found'}
     return JsonResponse(data)
+
 
 def searchHistory(request, historyID):
     # Buscar el registro de la coleccion "History" que tiene el historyID correspondiente
@@ -113,6 +117,8 @@ def searchHistory(request, historyID):
         internal = ExtIntResult["internal_attributes"]
         date = ExtIntResult["date"]
         name = ExtIntResult["base_file_name"]
+        informational = ExtIntResults["informational_attributes"]
+        
         try:
             graphs = ExtIntResult["graphs"]
         except:
@@ -126,6 +132,7 @@ def searchHistory(request, historyID):
                 'date': date,
                 'internal_attributes': internal,
                 'external_attributes': external,
+                'informational_attributes': informational,
                 'graphs': graphs
             }
         }
@@ -134,33 +141,6 @@ def searchHistory(request, historyID):
         data = {'message': 'Not found'}
     return JsonResponse(data)
 
-
-# Función de ayuda para actualizar las graficas
-async def updateGraphs(historyID, graph):
-    # Usar coleccion "RunHistory"
-    colection = db["RunHistory"]
-    # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
-    results = list(colection.find({"_id": historyID}))
-    
-    # Si existe el registro
-    if len(results)>0:
-        # Usar la grafica del Body del request
-        # graph = json.loads(request.body)
-        try: 
-            # Sacar las graficas actuales del registro
-            graphs = results[0]["graphs"] 
-            # Agregar la grafica al registro 
-            graphs.append(graph)
-        except:
-            graphs = [graph]
-        
-        # Actualizar el registro
-        colection.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
-        # return {"message": "Success"}
-        print("Success")
-    else:
-        print("updateGraphs: Not found")
-        # return {'message': 'updateGraphs: Not found'}
 
 # Barras, Linea helper
 def searchBarLineGraphHelper(request, historyID, variable, filter, type):
@@ -196,19 +176,22 @@ def searchBarLineGraphHelper(request, historyID, variable, filter, type):
             'anomalyList': anomalyTable['total'].tolist()
             #'normalList': df['normalLists'].tolist()
         }            
-            #updateGraphs(historyID, data)
     else:
             data = { 'message': 'No data' }
     return JsonResponse(data)
 
+
 def searchBarGraph(request, historyID, variable, filter):
     return searchBarLineGraphHelper(request, historyID, variable, filter, "Bar")
+
 
 def searchLineGraph(request, historyID, variable, filter):
     return searchBarLineGraphHelper(request, historyID, variable, filter, "Line")
 
+
 def searchBubbleGraph(request, historyID):
     return JsonResponse({'message': 'Not Implemented'})
+
 
 def deleteGraph(request, historyID, graphID):
     # Usar la coleccion "RunHistory"
@@ -261,7 +244,33 @@ def updateGraph(request, historyID, graphID):
         data = {'message': 'Not Found'}
     return JsonResponse(data)
 
-# * Pendientes: Documentacion, trigger y burbuja
+
+# Función de ayuda para actualizar las graficas
+async def updateGraphs(historyID, graph):
+    # Usar coleccion "RunHistory"
+    colection = db["RunHistory"]
+    # Encontrar los registros que tienen el userID correspondiente (Maximo debe haber 1)
+    results = list(colection.find({"_id": historyID}))
+    
+    # Si existe el registro
+    if len(results)>0:
+        # Usar la grafica del Body del request
+        try: 
+            # Sacar las graficas actuales del registro
+            graphs = results[0]["graphs"] 
+            # Agregar la grafica al registro 
+            graphs.append(graph)
+        except:
+            graphs = [graph]
+        
+        # Actualizar el registro
+        colection.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
+        print("Success")
+    else:
+        print("updateGraphs: Not found")
+
+
+# * Pendientes: Documentacion y burbuja
 '''
 Terminar y Actualizar:
     Documento de Funcionalidades (Avanzado)
