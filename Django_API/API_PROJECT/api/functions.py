@@ -117,7 +117,7 @@ def searchHistory(request, historyID):
         internal = ExtIntResult["internal_attributes"]
         date = ExtIntResult["date"]
         name = ExtIntResult["base_file_name"]
-        informational = ExtIntResults["informational_attributes"]
+        informational = ExtIntResult["informational_attributes"]
         
         try:
             graphs = ExtIntResult["graphs"]
@@ -132,7 +132,7 @@ def searchHistory(request, historyID):
                 'date': date,
                 'internal_attributes': internal,
                 'external_attributes': external,
-                'informational_attributes': informational,
+                # 'informational_attributes': informational,
                 'graphs': graphs
             }
         }
