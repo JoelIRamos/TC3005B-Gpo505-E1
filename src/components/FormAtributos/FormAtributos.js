@@ -13,8 +13,8 @@ const FormAtributos = ({atributos, onSelect, showForm, idForm}) => {
             <h3>Atributo Interno</h3>
             <form>
                 <div className="container-atributos" onChange={radioEvent}>
-                    {atributos.map((element) => (
-                        <Atributos key={idForm} idForm={idForm} atributos={element} />
+                    {atributos.map((element, i) => (
+                        <Atributos key={i} idForm={idForm} atributos={element} />
                     ))}
                 </div>
             </form>

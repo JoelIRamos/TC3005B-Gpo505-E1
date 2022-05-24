@@ -6,8 +6,8 @@ const GraphList = ({graphs, state, onClick}) => {
   return (
     <div className={`dropdown ${state && 'active'}`}>
         <ul>
-            {graphs.map((element) => (
-                <GraphListContet element={element} onClick={onClick} />
+            {graphs.map((element, i) => (
+                <GraphListContet key={i} element={element} onClick={onClick} />
             ))}
         </ul>
     </div>

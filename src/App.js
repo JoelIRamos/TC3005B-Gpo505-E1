@@ -5,6 +5,7 @@ import UpLoadFileview from './views/uploadFileView';
 import Dashboard from './views/dashboardView';
 import Historial from './views/historyView';
 import Queue from './views/fileQueueView'
+import ContainerDB from './components/ContainerDB/ContainerDB';
 //import SeleccionAtributos from './views/attributeSelectionView'
 import { useState } from 'react';
 import { wait } from '@testing-library/user-event/dist/utils';
@@ -22,20 +23,16 @@ const atributos = [
 
 function App() {
   // Archivo .csv
-  const [isGraph, setIsGraph] = useState(false)
+  
   const [file, setFile] = useState(null)
   const [headersFile, setHeadersFile] = useState([])
-  const [datos, setDatos] = useState({anomalyList: [4325, 423, 4325,435, 5345], labels: ['Dato1', 'Dato2', 'Dato3', 'Dato4', 'Dato5']});
-
+  const [datos, setDatos] = useState({anomalyList: [3456, 423, 4325,435, 5345], labels: ['Dato1', 'Dato2', 'Dato3', 'Dato4', 'Dato5']});
+  const [indexGraph, setIndexGraph] = useState(0)
+  const [graphList, setGraphList] = useState([])
+  let graphList2
+  // console.log(graphList2)
   // Respuesta del post al backend
   const [backPostResp, setBackPostResp] = useState();
-
-  //Id de corrida
-  const [idCorrida, setIdCorrida] = useState();
-
-  // Atributos internos y externos
-  const [listaAttInternos, setListaAttInternos] = useState();
-  const [listaAttExternos, setListaAttExternos] = useState();
 
   // Funcion para lectura del archivo cuando se dropea
   const onFileDrop = (e) => {
@@ -47,8 +44,10 @@ function App() {
     }
   }
 
-  const backGet =  async ()  => {
-    setIsGraph(true)
+
+  const backGet =  (x)  => {
+    setIndexGraph(indexGraph+ 1)
+    setGraphList([...graphList, x])
     // const response = await fetch('http://127.0.0.1:8000/api/getBarGraph/6286eaf06130f0d515a178ca/EMPRESA_TRANSPORTISTA/0/')
     // if(!response.ok){
     //   throw new Error('Data coud not be fetched!')
@@ -94,41 +93,15 @@ function App() {
     reader.readAsText(csvFile);
   }
 
-  // Estado de click y chart para la lista de gráficos 
-  //(es declarada en app porque dependiendo a eso se mostraran otros componentes)
-  const [click, setClick] = useState(false);
-  const [chart, setChart] = useState('Grafico de Barras');
-  
-  // Estado booleano para mostrar el otro form de atributos (para el grafico burbuja)
-  const [showForm, setShowForm] = useState(false);
-
-  // Estado de atributo para desplegar los atributos en la grafica
-  const [atributo1, setAtributo1] = useState('EMPRESA_TRANSPORTISTA')
-
-  const [atributo2, setAtributo2] = useState('ID_TRANSPORTISTA')
-
-  // Funcion que guarda el atributo nuevo para visualizar en la grafica
-  const saveAtributo1 = (atributo) => {
-    setAtributo1(atributo)
+  function arrayRemove(arr, value){
+    return arr.filter(function(geeks){
+      return geeks!= value
+    })
   }
 
-  const saveAtributo2 = (atributo) => {
-    setAtributo2(atributo)
-  }
-
-  // Funciones que cambian el estado de los clicks para la lista de graficas
-  const clicked = () => {
-    setClick(!click)
-  }
-
-  const clickedLi = (e, data) => {
-    setChart(data)
-    if (data === 'Grafico de Burbuja'){
-      setShowForm(true)
-    } else {
-      setShowForm(false)
-    }
-    setClick(!click)
+  const deleteGraph = (index) =>{
+    console.log(graphList)
+    console.log(graphList[index])
   }
 
   return (
@@ -137,7 +110,7 @@ function App() {
         <Route path='/' element={<HomeScreenview/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} backPostResp={backPostResp} setBackPostResp={setBackPostResp}/>}/>
         <Route path='/Queue' element={<Queue backPostResp={backPostResp}/>}/>
-        <Route path='/Dashboard' element={<Dashboard backGet={backGet} isGraph={isGraph} atributo2={atributo2} showForm={showForm} click={click} chart={chart} clicked = {clicked} clickedLi = {clickedLi} datos={datos} atributos = {atributos} onSelect2={saveAtributo2} onSelect1={saveAtributo1} atributo1 = {atributo1}/>}/>
+        <Route path='/Dashboard' element={<Dashboard indexGraph={indexGraph} deleteGraph={deleteGraph} backGet={backGet} graphList={graphList} datos={datos} atributos = {atributos}/>}/>
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>
     </Router>
