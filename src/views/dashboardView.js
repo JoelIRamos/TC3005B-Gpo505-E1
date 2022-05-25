@@ -7,9 +7,9 @@ import GraphContainer from '../components/GraphContainer/GraphContainer.js';
 import ContainerDB from '../components/ContainerDB/ContainerDB.js';
 import { useState } from 'react';
 
-function dashboardView({datos, backGet, graphList, atributos, deleteGraph, indexGraph}) {
+function dashboardView({datos, createGraph, graphList, atributos, deleteGraph, indexGraph, setURL}) {
 
-  let GraphCont = {key: indexGraph, datos: datos, atributos: atributos, deleteGraph: deleteGraph}
+  let GraphCont = {key: indexGraph, datos:datos, atributos: atributos, deleteGraph: deleteGraph}
 
   //var GraphCont = < ContainerDB className='display-none' indexGraph={indexGraph} datos={datos} atributos={atributos} deleteGraph={deleteGraph} />
   
@@ -36,9 +36,9 @@ function dashboardView({datos, backGet, graphList, atributos, deleteGraph, index
             <ContenedorDatos datos='39%' label='Porcentaje de Anomalías' color='yellow'/>
       </div>
       {graphList.map((element, i) => (
-        < ContainerDB key={i} indexGraph={element.key} datos={element.datos} atributos={element.atributos} deleteGraph={element.deleteGraph} />
+        < ContainerDB key={i} indexGraph={element.key} datos={element.datos} atributos={element.atributos} deleteGraph={element.deleteGraph} setURL = {setURL} />
       ))}
-      <div className='container-button-add'><button onClick={(() => backGet(GraphCont))} className='button-add'>+</button></div>
+      <div className='container-button-add'><button onClick={(() => createGraph(GraphCont))} className='button-add'>+</button></div>
     </div>
   );
 }
