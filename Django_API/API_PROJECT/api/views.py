@@ -88,50 +88,6 @@ class searchHistoryView(View):
     def delete(self, request, historyID='0'):
         return JsonResponse(self.data)
 
-
-# // # View del endpoint de searchUserID
-# // class searchUserIDView(View):
-# //     @method_decorator(csrf_exempt)
-# //     def dispatch(self, request, *args, **kwargs): 
-# //         return super().dispatch(request, *args, **kwargs)
-# //   
-# //     data = {'message': 'endpoint not implemented'}
-# //   
-# //     # * Metodo HTTP (GET) del endpoint
-# //     def get(self, request, historyID):
-# //         return searchUserID(request, historyID)
-# //   
-# //     def post(self, request, userID='0', historyID='0'):
-# //         return JsonResponse(self.data)
-# //   
-# //     def put(self, request, userID='0', historyID='0'):
-# //         return JsonResponse(self.data)
-# //   
-# //     def delete(self, request, userID='0', historyID='0'):
-# //         return JsonResponse(self.data)
-
-# // # View del endpoint de deleteLastSession
-# // class deleteLastSessionView(View):
-# //     @method_decorator(csrf_exempt)
-# //     def dispatch(self, request, *args, **kwargs): 
-# //         return super().dispatch(request, *args, **kwargs)
-# //   
-# //     data = {'message': 'endpoint not implemented'}
-# //   
-# //     def get(self, request, userID='0'): 
-# //         return JsonResponse(self.data)
-# //   
-# //     def post(self, request, userID='0'):
-# //         return JsonResponse(self.data)
-# //   
-# //     def put(self, request, userID='0'):
-# //         return JsonResponse(self.data)
-# //   
-# //     # * Metodo HTTP (DELETE) del endpoint
-# //     def delete(self, request, userID):
-# //         return deleteLastSession(request, userID)
-    
-
 # View del endpoint de searchBarGraph
 class searchBarGraphView(View):
     @method_decorator(csrf_exempt)
@@ -187,13 +143,13 @@ class searchBubbleGraphView(View):
     def get(self, request, historyID, attribute1, attribute2, filter):
         return searchBubbleGraph2(request, historyID, attribute1, attribute2, filter)
     
-    def post(self, request, historyID='0', attribute='0'):
+    def post(self, request, historyID='0', attribute='0', attribute2='', filter=''):
         return JsonResponse(self.data)
     
-    def put(self, request, historyID='0', attribute='0'): 
+    def put(self, request, historyID='0', attribute='0', attribute2='', filter=''): 
         return JsonResponse(self.data)
     
-    def delete(self, request, historyID='0', attribute='0'):
+    def delete(self, request, historyID='0', attribute='0', attribute2='', filter=''):
         return JsonResponse(self.data)
 
 

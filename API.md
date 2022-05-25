@@ -57,11 +57,11 @@ N/A
 ```
 
 ----
-## **GET_LAST_SESSION**
-> Funcion: Obtener la información de las gráficas que estaba manejando el usuario
+## **GET_HISTORY**
+> Funcion: Obtener la información que estaba manejando el usuario
 
 ### URL: 
-    /api/getLastSession/<str:historyID>/
+    /api/getHistory/<str:historyID>/
 
 ### Parametros: 
 **historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
@@ -140,12 +140,14 @@ N/A
 > Funcion: Obtener los valores para crear una grafica de barras en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:historyID>/<str:attribute>/
+    /api/getBarGraph/<str:historyID>/<str:attribute>/<str:filter>/
 
 ### Parametros: 
 **historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
 
 **attribute:** La variable que quieren usar para sacar la gráfica.
+
+**filter** Filtro para separar anomalias de no anomalias
 
 ### Bodys
 ``` json
@@ -185,12 +187,14 @@ N/A
 > Funcion: Obtener los valores para crear una grafica de linea en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:historyID>/<str:attribute>/
+    /api/getBarGraph/<str:historyID>/<str:attribute>/<str:filter>/
 
 ### Parametros: 
 **historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
 
 **attribute:** La variable que quieren usar para sacar la gráfica.
+
+**filter** Filtro para separar anomalias de no anomalias
 
 ### Bodys
 ``` json
@@ -231,12 +235,16 @@ N/A
 > Funcion: Obtener los valores para crear una grafica de burbuja en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
 ### URL: 
-    /api/getBarGraph/<str:historyID>/<str:attribute>/
+    /api/getBarGraph/<str:historyID>/<str:attribute1>/<str:attribute2>/<str:filter>/
 
 ### Parametros: 
 **historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
 
-**attribute:** La variable que quieren usar para sacar la gráfica.
+**attribute1:** La variable que representa los actores internos.
+
+**attribute2:** La variable que representa los actores externos.
+
+**filter** Filtro para separar anomalias de no anomalias
 
 ### Bodys
 ``` json
@@ -283,14 +291,14 @@ N/A
 **Versión 1**
 ``` json
     {
-        "message": "Not Found"
+        "message": "Not found"
     }
 ```
 
 **Versión 2**
 ``` json
     {
-        "message": "graphID Not Found"
+        "message": "graphID not found"
     }
 ```
 ----
@@ -333,9 +341,17 @@ N/A
 ```
 
 ### Objeto Retorno Incorrecto
+**Versión 1**
 ``` json
     {
         "message": "Not found"
+    }
+```
+
+**Versión 2**
+``` json
+    {
+        "message": "graphID not found"
     }
 ```
 

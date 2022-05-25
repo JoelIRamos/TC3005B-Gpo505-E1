@@ -133,7 +133,7 @@ def searchHistory(request, historyID):
                 'date': date,
                 'internal_attributes': internal,
                 'external_attributes': external,
-                # 'informational_attributes': informational,
+                'informational_attributes': informational,
                 'graphs': graphs
             }
         }
@@ -353,6 +353,7 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
             data = {'message' : 'No anomalies less than filter: ' + str(filter)}
     else:
             data = { 'message': 'Not found' }
+
     return JsonResponse(data)
 
 
@@ -379,7 +380,7 @@ def deleteGraph(request, historyID, graphID):
             
             data = {'message': 'Success'}
     else:
-        data = {'message': 'Not Found'}
+        data = {'message': 'Not found'}
     return JsonResponse(data)
 
 def updateGraph(request, historyID, graphID):
@@ -405,7 +406,7 @@ def updateGraph(request, historyID, graphID):
             
             data = {'message': 'Success'}
     else:
-        data = {'message': 'Not Found'}
+        data = {'message': 'Not found'}
     return JsonResponse(data)
 
 
