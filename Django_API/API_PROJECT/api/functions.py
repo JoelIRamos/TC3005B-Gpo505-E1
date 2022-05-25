@@ -1,4 +1,5 @@
 # from typing_extensions import LiteralString
+from cProfile import label
 from typing import Collection
 from unicodedata import category
 from django.shortcuts import render
@@ -145,52 +146,54 @@ def searchHistory(request, historyID):
 # Barras, Linea helper
 def searchBarLineGraphHelper(request, historyID, variable, filter, type):
     filter = float(filter)
-
-    print("start")
     # Usar coleccion "FileData"
     colectionFD = db["FileData"]
-    print("coleccion")
     # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
     resultsFD = list(colectionFD.find({"_id": historyID}, {"data." + variable : 1, "data.anomaly_scores": 1}))
-    #print(resultsFD)
-    print("resultFD")
+    
     # Si existe el historial
     if len(resultsFD) > 0:
         # Crear data frame
-        df =  pd.DataFrame({'attribute' :resultsFD[0]['data'][variable], 'anomaly': resultsFD[0]['data']['anomaly_scores']})
-        print("dataframe1")
-        #print(df)
+        originalDf =  pd.DataFrame({'attribute' :resultsFD[0]['data'][variable], 'anomaly': resultsFD[0]['data']['anomaly_scores']})
+
         # Filtrar las anomalias
-        anomaly_result = df[df['anomaly'] <= filter] #  anomalias
+        anomaly_result = originalDf[originalDf['anomaly'] <= filter] 
         # Filtrar las no anomalias
-        no_anomaly_result = df[df['anomaly'] > filter] 
-        #print("anomaly_result")                      
+        no_anomaly_result = originalDf[originalDf['anomaly'] > filter] 
+
         # Contar el total de anomalias por atributo
-        anomalyTable = anomaly_result.groupby(['attribute'],sort=True)['attribute'].count().to_frame('total').reset_index()
-
+        anomalyTable = anomaly_result.groupby(['attribute'],sort=True)['attribute'].count().to_frame('total_anomaly').reset_index()
+        
         # Contar el total de no anomalias por atributo
-        no_anomalyTable = no_anomaly_result.groupby(['attribute'],sort=True)['attribute'].count().to_frame('total').reset_index()
-        print("groupby")
-        print("anomaly")
-        print(anomalyTable)
-        print("noAnomaly")
-        print(no_anomalyTable)
+        no_anomalyTable = no_anomaly_result.groupby(['attribute'],sort=True)['attribute'].count().to_frame('total_no_anomaly').reset_index()
 
-        # sort anomalyTable
-        anomalyTable.sort_values(by=['total'], inplace=True, ascending=False, kind='mergesort')
+        # Crear DF con los labels unicos
+        labelsNumpy = originalDf['attribute'].unique()
+        labelsDF = pd.DataFrame(labelsNumpy)
+        labelsDF.columns= ['attribute']
 
-        # ! Esta parte esta mal, estas considerando solamente las no_anomalies, debes de juntarlo con anomalies
-        no_anomalyTable.sort_values(by=['total'], inplace=True, ascending=False, kind='mergesort')
-        print("anomalyTable")
+        # join labels con anomaly
+        realData = labelsDF.join(anomalyTable.set_index('attribute'), on='attribute', how='left')
+
+        # join realData con no anomaly
+        realData = realData.join(no_anomalyTable.set_index('attribute'), on='attribute', how='left')
+        
+        # Llenar campos vacios con 0s
+        realData = realData.fillna(0)
+
+        # sort realData
+        realData.sort_values(by=['total_anomaly'], inplace=True, ascending=False, kind='mergesort')
+        realData = realData.reset_index(drop=True)
+
         data = {
             'type': type,
-            'labels': anomalyTable['attribute'].tolist(),
-            'anomalyList': anomalyTable['total'].tolist(),
-            'noAnomalyList' : no_anomalyTable['total'].tolist()
+            'labels': realData['attribute'].tolist(),
+            'anomalyList': realData['total_anomaly'].tolist(),
+            'noAnomalyList' : realData['total_no_anomaly'].tolist()
             #'normalList': df['normalLists'].tolist()
         }            
     else:
-            data = { 'message': 'No data' }
+            data = { 'message': 'Not found' }
     return JsonResponse(data)
 
 
@@ -204,10 +207,6 @@ def searchLineGraph(request, historyID, variable, filter):
 
 def searchBubbleGraph1(request, historyID, attribute1, attribute2, filter):
     filter = float(filter)
-    # !
-    # ToDO: Hacer dos arrays con atributos
-    # x y y seran coordenadas de los atributos
-    # !
     print("start")
     # Usar coleccion "FileData"
     colectionFD = db["FileData"]
@@ -269,15 +268,11 @@ def searchBubbleGraph1(request, historyID, attribute1, attribute2, filter):
             #'normalList': df['normalLists'].tolist()
         }            
     else:
-            data = { 'message': 'No data' }
+            data = { 'message': 'Not found' }
     return JsonResponse(data)
 
 def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
     filter = float(filter)
-    # !
-    # ToDO: Hacer dos arrays con atributos
-    # x y y seran coordenadas de los atributos
-    # !
     print("start")
     # Usar coleccion "FileData"
     colectionFD = db["FileData"]
@@ -291,55 +286,73 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
         # Crear data frame
         df =  pd.DataFrame({'attribute1' :resultsFD[0]['data'][attribute1],'attribute2' :resultsFD[0]['data'][attribute2], 
         'anomaly': resultsFD[0]['data']['anomaly_scores']})
+
         # Filtrar las anomalias
-        # ! Igual o menor que??
-        rslt_df = df[df['anomaly'] <= filter]
-        #print(rslt_df)
-        anomalyRelation = df.groupby(['attribute1', 'attribute2']).size().to_frame('size')
-        anomalyRelation.reset_index( inplace=True)
-        #print(anomalyRelation)
-        
-        anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
-        bubbleData = []
-        #print(anomalyRelation)
-        #df.shape[0]
-        #df.index
-        #print(len(anomalyRelation))
-        #print("value1")
-        #print(anomalyRelation.iloc[1,0])
-        #print("value2")
-        #print(anomalyRelation.iloc[0]['size'])
+         # En caso de que falle el filtrado
+        try:
+            anomalyFilterDf = df[df['anomaly'] <= filter]
+            print("anomalyFilterDf")
+            print(anomalyFilterDf)
 
-        #print(anomalyRelation)
-        #attribute1_numpy = anomalyRelation['attribute1'].values.tolist()
-        #attribute2_list =  anomalyRelation['attribute2'].values.tolist()
+            # Agrupar anomalias con ambos atributos
+            anomalyRelation = anomalyFilterDf.groupby(['attribute1', 'attribute2']).size().to_frame('size')
+            anomalyRelation.reset_index(inplace=True)
+            print("anomalyRelation")
+            print(anomalyRelation)
+            # Obtener el valor mas alto de anomaly
+                # nlargest retorna un dataframe... iloc retorna el valor
+            topAnomalyValue = anomalyRelation.nlargest(1, 'size').iloc[0]['size']
+            print("top")
 
-        #df["Courses"].values.tolist()
-        #print(attribute2_list)
-        for i in range(len(anomalyRelation)):
-            bubbleData.append(
-                {
-                    'x': str(anomalyRelation.iloc[i]['attribute1']), 
-                    'y': str(anomalyRelation.iloc[i]['attribute2']), 
-                    #'x': int(i), 
-                    #'y': int(i), 
-                    'r': int(anomalyRelation.iloc[i]['size'])
-                }
-            )
+            ratio = 25 / topAnomalyValue
 
-        #bubbleData = np.array(bubbleData)
+            anomalyRelation['size'] = anomalyRelation['size'].map(lambda x : x * ratio)
+            print("anomalymap")
 
-        
-        data = {
-            'type':'Bubble',
-            #'labels': anomalyTable['attribute'].tolist(),
-            'data' : bubbleData, #.tolist(),
-            #'attribute1': attribute1_numpy,
-            #'attribute2': attribute2_list
-            #'normalList': df['normalLists'].tolist()
-        }            
+            # ! se borra
+            anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
+            print(anomalyRelation)
+            
+            # lista de valores unicos de attribute1
+            attribute1List = anomalyRelation['attribute1'].unique().tolist()
+            # lista de valores unicos de attribute2
+            attribute2List = anomalyRelation['attribute2'].unique().tolist()
+
+            # Rangos para values en attribute1Dict
+            attribute1Range = list(range(0, len(attribute1List), 1))
+            # Rangos para values en attribute2Dict
+            attribute2Range = list(range(0, len(attribute2List), 1))
+
+            # Juntar attribute1List, attribute1Range para formar diccionario
+            # ! Preguntar como esta mejor? Int, Attr? Attr, int?
+            attribute1Dict = dict(zip(attribute1List, attribute1Range))
+            # Juntar attribute2List, attribute2Range para formar diccionario
+            attribute2Dict = dict(zip(attribute2List, attribute2Range))
+            print(attribute2Dict)
+
+            # Lista para los datos que graficar
+            bubbleDataList = []
+            # agrega los datos en bubbledata
+            for i in range(len(anomalyRelation)):
+                bubbleDataList.append(
+                    {
+                        'x': int(attribute1Dict[anomalyRelation.iloc[i]['attribute1']]),  # Valor que tiene atributo1 en attribute1Dict
+                        'y': int(attribute2Dict[anomalyRelation.iloc[i]['attribute2']]),  # Valor que tiene atributo2 en attribute2Dict
+                        'r': int(anomalyRelation.iloc[i]['size'])
+                    }
+                )
+
+            
+            data = {
+                'type':'Bubble',
+                'data' : bubbleDataList, #.tolist(),
+                'attribute1Dict' : attribute1List,
+                'attribute2Dict' : attribute2List
+            }            
+        except:
+            data = {'message' : 'No anomalies less than filter: ' + str(filter)}
     else:
-            data = { 'message': 'No data' }
+            data = { 'message': 'Not found' }
     return JsonResponse(data)
 
 

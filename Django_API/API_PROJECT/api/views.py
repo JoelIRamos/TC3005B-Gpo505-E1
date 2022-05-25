@@ -185,7 +185,7 @@ class searchBubbleGraphView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, historyID, attribute1, attribute2, filter):
-        return searchBubbleGraph1(request, historyID, attribute1, attribute2, filter)
+        return searchBubbleGraph2(request, historyID, attribute1, attribute2, filter)
     
     def post(self, request, historyID='0', attribute='0'):
         return JsonResponse(self.data)
