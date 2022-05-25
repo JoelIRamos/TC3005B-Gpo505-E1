@@ -11,7 +11,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar, Line, Bubble } from 'react-chartjs-2';
 
 
 
@@ -37,6 +37,9 @@ const Graph = ({datosGraph, chart}) => {
       Legend
     );
   }
+  else if(chart === 'Grafico de Burbuja'){
+    ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
+  }
   const labels = datosGraph.labels;
   if (chart === 'Grafico de Barras'){
     return (
@@ -46,16 +49,15 @@ const Graph = ({datosGraph, chart}) => {
             position: 'top',
           },
           title: {
-            display: true,
-            text: 'Chart.js Bar Chart',
+            display: false,
           },
         },}} data={{
           labels,
           datasets: [
             {
-              label: 'Dataset 1',
+              label: 'Número de Anomalías',
               data: datosGraph.anomalyList,
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+              backgroundColor: 'rgb(255,168,47)',
             },
           ],
         }} />
@@ -70,23 +72,41 @@ const Graph = ({datosGraph, chart}) => {
                 position: 'top',
               },
               title: {
-                display: true,
-                text: 'Chart.js Line Chart',
+                display: false,
               },
             },
           }} data={{
                 labels,
                 datasets: [
                   {
-                    label: 'Dataset 1',
+                    label: 'Número de Anomalías',
                     data: datosGraph.anomalyList,
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgb(255,168,47)',
+                    backgroundColor: 'rgb(255,168,47)',
                   },
                 ],
               }}
       />
     ) 
+  }
+  else if (chart === 'Grafico de Burbuja'){
+    console.log(datosGraph)
+    return (
+      <Bubble options = {{scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },}
+    } data = {{
+      datasets: [
+        {
+          label: 'Prueba',
+          data: datosGraph.data,
+          backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        }
+      ]
+    }} />
+    )
   }
 }
 

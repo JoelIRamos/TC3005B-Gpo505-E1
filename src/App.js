@@ -19,46 +19,26 @@ const atributos = [
   'N_PESO_TARA',
   'mediana'
 ]
-
-// Datos dummy
-
 function App() {
-  // Archivo .csv
-  
-  const [file, setFile] = useState(null)
-  const [headersFile, setHeadersFile] = useState([])
-  const [datos, setDatos] = useState({anomalyList: [1, 2, 3,4, 5], labels: ['Dato1', 'Dato2', 'Dato3', 'Dato4', 'Dato5']});
-  const [indexGraph, setIndexGraph] = useState(0)
-  const [graphList, setGraphList] = useState([])
-  const [apiURL, setApiURL] = useState('http://127.0.0.1:8000/api/getBarGraph/Analisis_Chatarra_Ene21-ene22_2022-05-23_18-48-13/ID_TRANSPORTISTA/0/')
-  // console.log(graphList2)
-  // Respuesta del post al backend
-  const [backPostResp, setBackPostResp] = useState();
-  const stateRef = useRef();
-  stateRef.current = graphList
 
+  const [file, setFile] = useState(null) // Estado archivo
+  const [headersFile, setHeadersFile] = useState([]) // Estado headers para archivo
+
+  const [indexGraph, setIndexGraph] = useState(0) // Indice de cada grafico 
+  const [graphList, setGraphList] = useState([]) // Lista de graficos
+
+  const [backPostResp, setBackPostResp] = useState(); // Respuesta backend
+
+  // Referencia para la lista de grafico
+  const graphListRef = useRef(); 
+
+  // Funcion para creacion de gráfico -- Dashboard
   const createGraph = async (x)  => {
     setIndexGraph(indexGraph+ 1)
     setGraphList([...graphList, x])
   }
 
-  useEffect(() => {
-    backGet()
-      .then((res) => {
-        setDatos(res)
-      })
-      .catch((e) => {
-        console.log(e.message)
-      })
-  }, [apiURL])
-
-  var graphListUp
-  useEffect(() =>{
-    graphListUp = graphList
-    //console.log(graphListUp)
-  }, [graphList])
-
-  // Funcion para lectura del archivo cuando se dropea
+  // Funcion para lectura del archivo cuando se dropea -- UploadFile
   const onFileDrop = (e) => {
     const newFile = e.target.files[0]
     if (newFile){
@@ -68,27 +48,12 @@ function App() {
     }
   }
 
-
-  const changeURL = (atributo) => {
-    setApiURL(`http://127.0.0.1:8000/api/getBarGraph/Analisis_Chatarra_Ene21-ene22_2022-05-23_18-48-13/${atributo}/0/`)
-    backGet()
-  }
-
-  const backGet = async () =>{
-    const response = await fetch(apiURL) 
-    if(!response.ok){
-      throw new Error('Data could not be fetched')
-    } else {
-      return response.json()
-    }
-  }
-
-  // Funcion que quita el archivo cargado
+  // Funcion que quita el archivo cargado -- UploadFile
   const fileRemove = () => {
     setFile(null)
   }
 
-  // Obtencion de headers desde el CSV y llamado a la función para POST
+  // Obtencion de headers desde el CSV y llamado a la función para POST -- UploadFile
   const processCSV = (str, delim=',') => {
     const headers = str.slice(0, str.indexOf('\n')).split(delim);
     headers[headers.length - 1] = headers[headers.length - 1].slice(0, headers[headers.length - 1].length - 1)
@@ -96,7 +61,7 @@ function App() {
     setHeadersFile(headers);
   }
 
-  // Lectura de archivo
+  // Lectura de archivo -- UploadFile
   const setCsvFile = () => {
     const csvFile = file;
     const reader = new FileReader();
@@ -110,17 +75,14 @@ function App() {
     reader.readAsText(csvFile);
   }
 
-  function arrayRemove(arr, value){
-    return arr.filter(function(geeks){
-      return geeks!= value
-    })
-  }
-
-  const deleteGraph = (index) =>{
-    const newArray = stateRef.current
-    newArray.splice(index, 1)
+  graphListRef.current = graphList
+  // Eliminar en gráfico -- Dashboard
+  const deleteGraph = (index) => {
+    console.log(index)
+    const newArray = graphListRef.current
     console.log(newArray)
-    //setGraphList([])
+    console.log(newArray[index])
+    setGraphList(newArray.filter((graph) => graph.id !== index))
     // Splice function here
   }
 
@@ -130,7 +92,7 @@ function App() {
         <Route path='/' element={<HomeScreenview/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} backPostResp={backPostResp} setBackPostResp={setBackPostResp}/>}/>
         <Route path='/Queue' element={<Queue backPostResp={backPostResp}/>}/>
-        <Route path='/Dashboard' element={<Dashboard setURL={changeURL} indexGraph={indexGraph} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} datos={datos} atributos = {atributos}/>}/>
+        <Route path='/Dashboard' element={<Dashboard indexGraph={indexGraph} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {atributos}/>}/>
         <Route path='/Historial' element={<Historial/>}/>
       </Routes>
     </Router>
