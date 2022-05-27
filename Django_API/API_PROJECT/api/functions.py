@@ -360,6 +360,16 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
     return JsonResponse(data)
 
 
+def searchHistoryIndicators(request, historyID, filter):
+    data = {
+        'message': 'Success', 
+        'result': [
+            
+        ]
+        }
+    return JsonResponse(data)
+
+
 def updateGraphs(request, historyID):
     # Usar la coleccion "RunHistory"
     collectionRH = db["RunHistory"]
