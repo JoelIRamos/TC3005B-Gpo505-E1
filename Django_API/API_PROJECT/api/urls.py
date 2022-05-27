@@ -22,7 +22,7 @@ urlpatterns = [
     path('getBubbleGraph/<str:historyID>/<str:attribute1>/<str:attribute2>/<str:filter>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
     
     # * Actualizar las graficas del historial
-    path('putGraphs/<str:historyID>/<int:graphID>/', views.updateGraphsView.as_view(), name='put_graphs'),
+    path('putGraphs/<str:historyID>/', views.updateGraphsView.as_view(), name='put_graphs'),
 
     # Rutas POSTs
     # * Subir un archivo

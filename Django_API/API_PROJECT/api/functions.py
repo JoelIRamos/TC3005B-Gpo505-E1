@@ -288,7 +288,7 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
         'anomaly': resultsFD[0]['data']['anomaly_scores']})
 
         # Filtrar las anomalias
-         # En caso de que falle el filtrado
+        # En caso de que falle el filtrado
         try:
             anomalyFilterDf = df[df['anomaly'] <= filter]
             print("anomalyFilterDf")
@@ -357,29 +357,21 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
     return JsonResponse(data)
 
 
-def updateGraphs(request, historyID, graphID):
+def updateGraphs(request, historyID):
     # Usar la coleccion "RunHistory"
     collectionRH = db["RunHistory"]
     # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
     resultsRH = list(collectionRH.find({"_id": historyID}))
     # Si existe el historial
     if len(resultsRH) > 0:
-        # Extraer la lista de graficas
-        graphs = resultsRH[0]["graphs"]
+        # Extraer Graficas del body
+        newgraphs = json.loads(request.body)
         
-        # Si el graphID esta fuera del alcance, mandar error
-        if (graphID < 0 or graphID > len(graphs)-1):
-            data = {'message': 'graphID Not Found'}
-        else: 
-            # Si no eliminar dicho elemento de la lista
-            newgraph = json.loads(request.body)
-            graphs[graphID] = newgraph
-            
-            # Actualizar el registro con la nueva lista
-            collectionRH.update_one({"_id": historyID}, {"$set": {"graphs": graphs}})
-            
-            data = {'message': 'Success'}
-    else:
+        # Actualizar el registro con la nueva lista
+        collectionRH.update_one({"_id": historyID}, {"$set": {"graphs": newgraphs}})
+        
+        data = {'message': 'Success'}
+    else: 
         data = {'message': 'Not found'}
     return JsonResponse(data)
 

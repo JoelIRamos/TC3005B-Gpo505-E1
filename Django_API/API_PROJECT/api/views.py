@@ -160,17 +160,17 @@ class updateGraphsView(View):
     
     data = {'message': 'endpoint not implemented'}
     
-    def get(self, request, historyID='0', graphID='0'): 
+    def get(self, request, historyID='0'): 
         return JsonResponse(self.data)
     
-    def post(self, request, historyID='0', graphID='0'):
+    def post(self, request, historyID='0'):
         return JsonResponse(self.data)
     
     # * Metodo HTTP (PUT) del endpoint
-    def put(self, request, historyID='0', graphID='0'):
-        return updateGraphs(request, historyID, graphID)
+    def put(self, request, historyID):
+        return updateGraphs(request, historyID)
     
-    def delete(self, request, historyID, graphID):
+    def delete(self, request='0', historyID='0'):
         return JsonResponse(self.data)
 
 
