@@ -273,14 +273,14 @@ def searchBubbleGraph1(request, historyID, attribute1, attribute2, filter):
 
 def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
     filter = float(filter)
-    print("start")
+    #//print("start")
     # Usar coleccion "FileData"
     colectionFD = db["FileData"]
-    print("coleccion")
+    #//print("coleccion")
     # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
     resultsFD = list(colectionFD.find({"_id": historyID}, {"data." + attribute1 : 1, "data." + attribute2 : 1, "data.anomaly_scores": 1}))
-    #print(resultsFD)
-    print("resultFD")
+    #//print(resultsFD)
+    #//print("resultFD")
     # Si existe el historial
     if len(resultsFD) > 0:
         # Crear data frame
@@ -291,27 +291,27 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
         # En caso de que falle el filtrado
         try:
             anomalyFilterDf = df[df['anomaly'] <= filter]
-            print("anomalyFilterDf")
-            print(anomalyFilterDf)
+            #//print("anomalyFilterDf")
+            #//print(anomalyFilterDf)
 
             # Agrupar anomalias con ambos atributos
             anomalyRelation = anomalyFilterDf.groupby(['attribute1', 'attribute2']).size().to_frame('size')
             anomalyRelation.reset_index(inplace=True)
-            print("anomalyRelation")
-            print(anomalyRelation)
+            #//print("anomalyRelation")
+            #//print(anomalyRelation)
             # Obtener el valor mas alto de anomaly
                 # nlargest retorna un dataframe... iloc retorna el valor
             topAnomalyValue = anomalyRelation.nlargest(1, 'size').iloc[0]['size']
-            print("top")
+            #//print("top")
 
             ratio = 25 / topAnomalyValue
 
             anomalyRelation['size'] = anomalyRelation['size'].map(lambda x : x * ratio)
-            print("anomalymap")
+            #//print("anomalymap")
 
             # ! se borra
-            anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
-            print(anomalyRelation)
+            #//anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
+            #//print(anomalyRelation)
             
             # lista de valores unicos de attribute1
             attribute1List = anomalyRelation['attribute1'].unique().tolist()
@@ -324,11 +324,10 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
             attribute2Range = list(range(0, len(attribute2List), 1))
 
             # Juntar attribute1List, attribute1Range para formar diccionario
-            # ! Preguntar como esta mejor? Int, Attr? Attr, int?
             attribute1Dict = dict(zip(attribute1List, attribute1Range))
             # Juntar attribute2List, attribute2Range para formar diccionario
             attribute2Dict = dict(zip(attribute2List, attribute2Range))
-            print(attribute2Dict)
+            #//print(attribute2Dict)
 
             # Lista para los datos que graficar
             bubbleDataList = []
@@ -342,12 +341,16 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
                     }
                 )
 
-            
+             # Juntar attribute1Range, attribute1List  para formar diccionario
+            attribute1DictBubble = dict(zip(attribute1Range, attribute1List))
+            # Juntar attribute2Range, attribute2List  para formar diccionario
+            attribute2DictBubble = dict(zip(attribute2Range, attribute2List))
+
             data = {
                 'type':'Bubble',
                 'data' : bubbleDataList, #.tolist(),
-                'attribute1Dict' : attribute1List,
-                'attribute2Dict' : attribute2List
+                'attribute1Dict' : attribute1DictBubble,
+                'attribute2Dict' : attribute2DictBubble
             }            
         except:
             data = {'message' : 'No anomalies less than filter: ' + str(filter)}
