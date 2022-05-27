@@ -73,27 +73,22 @@ def searchHistoryDetail(request, historyID):
         # Buscar el registro de la coleccion "History" que tiene el historyID correspondiente
         ExtIntResults = db["RunHistory"].find_one({"_id": historyID})
         
-        # Extraer los agentes externos, internos y la fecha
-        external = ExtIntResults["external_attributes"]
-        internal = ExtIntResults["internal_attributes"]
-        date = ExtIntResults["date"]
-        name = ExtIntResults["base_file_name"]
-        informational = ExtIntResults["informational_attributes"]
-        
+        # Extraer las graficas      
         try:
             graphs = ExtIntResults["graphs"]
         except:
             graphs = []
+        
         # Formato de los Datos
         data = {
             'message':'found',
             'result': {
                 'historyID': historyID,
-                'base_file_name': name,
-                'date': date,
-                'internal_attributes': internal,
-                'external_attributes': external,
-                'informational_attributes': informational,
+                'base_file_name': ExtIntResults["base_file_name"],
+                'date': ExtIntResults["date"],
+                'internal_attributes': ExtIntResults["internal_attributes"],
+                'external_attributes': ExtIntResults["external_attributes"],
+                'informational_attributes': ExtIntResults["informational_attributes"],
                 'graphs': graphs,
                 'data': file
             }
@@ -113,13 +108,7 @@ def searchHistory(request, historyID):
         # Extraer el primer/unico registro
         ExtIntResult = ExtIntResults[0]
         
-        # Extraer los agentes externos, internos y la fecha
-        external = ExtIntResult["external_attributes"]
-        internal = ExtIntResult["internal_attributes"]
-        date = ExtIntResult["date"]
-        name = ExtIntResult["base_file_name"]
-        informational = ExtIntResult["informational_attributes"]
-        
+        # Extraer las graficas
         try:
             graphs = ExtIntResult["graphs"]
         except:
@@ -129,11 +118,11 @@ def searchHistory(request, historyID):
             'message':'found',
             'result': {
                 'historyID': historyID,
-                'base_file_name': name,
-                'date': date,
-                'internal_attributes': internal,
-                'external_attributes': external,
-                'informational_attributes': informational,
+                'base_file_name': ExtIntResult["base_file_name"],
+                'date': ExtIntResult["date"],
+                'internal_attributes': ExtIntResult["internal_attributes"],
+                'external_attributes': ExtIntResult["external_attributes"],
+                'informational_attributes': ExtIntResult["informational_attributes"],
                 'graphs': graphs
             }
         }
@@ -341,7 +330,7 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
                     }
                 )
 
-             # Juntar attribute1Range, attribute1List  para formar diccionario
+            # Juntar attribute1Range, attribute1List  para formar diccionario
             attribute1DictBubble = dict(zip(attribute1Range, attribute1List))
             # Juntar attribute2Range, attribute2List  para formar diccionario
             attribute2DictBubble = dict(zip(attribute2Range, attribute2List))
@@ -360,13 +349,15 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
     return JsonResponse(data)
 
 
-def searchHistoryIndicators(request, historyID, filter):
+def searchHistoryStatistics(request, historyID, filter):
     data = {
         'message': 'Success', 
-        'result': [
-            
-        ]
+        'result': {
+            'TotalAnomalys': '*',
+            'AnomatyPercentage': '*',
+            'AnomalyRelations': '*'
         }
+    }
     return JsonResponse(data)
 
 

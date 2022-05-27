@@ -153,8 +153,7 @@ class searchBubbleGraphView(View):
         return JsonResponse(self.data)
 
 
-# View del endpoint de searchHistoryIndicators
-class searchHistoryIndicatorsView(View):
+# View del endpoint de searchHistoryStatistics
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
@@ -163,7 +162,7 @@ class searchHistoryIndicatorsView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, historyID, filter):
-        return searchHistoryIndicators(request, historyID, filter)
+        return searchHistoryStatistics(request, historyID, filter)
     
     def post(self, request, historyID='0', filter=''):
         return JsonResponse(self.data)
