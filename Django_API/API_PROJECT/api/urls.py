@@ -21,11 +21,8 @@ urlpatterns = [
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Burbuja
     path('getBubbleGraph/<str:historyID>/<str:attribute1>/<str:attribute2>/<str:filter>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
     
-    # * Eliminar una grafica del historial
-    path('deleteGraph/<str:historyID>/<int:graphID>/', views.deleteGraphView.as_view(), name='delete_graph'),
-    
-    # * Actualizar una grafica del historial
-    path('putGraph/<str:historyID>/<int:graphID>/', views.updateGraphView.as_view(), name='put_graph'),
+    # * Actualizar las graficas del historial
+    path('putGraphs/<str:historyID>/<int:graphID>/', views.updateGraphsView.as_view(), name='put_graphs'),
 
     # Rutas POSTs
     # * Subir un archivo
