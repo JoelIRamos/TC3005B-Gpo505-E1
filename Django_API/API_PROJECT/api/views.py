@@ -152,31 +152,8 @@ class searchBubbleGraphView(View):
     def delete(self, request, historyID='0', attribute='0', attribute2='', filter=''):
         return JsonResponse(self.data)
 
-
-# View del endpoint de deleteGraph
-class deleteGraphView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
-    
-    data = {'message': 'endpoint not implemented'}
-    
-    def get(self, request, historyID='0', graphID='0'): 
-        return JsonResponse(self.data)
-    
-    def post(self, request, historyID='0', graphID='0'):
-        return JsonResponse(self.data)
-    
-    def put(self, request, historyID='0', graphID='0'):
-        return JsonResponse(self.data)
-    
-    # * Metodo HTTP (DELETE) del endpoint
-    def delete(self, request, historyID, graphID):
-        return deleteGraph(request, historyID, graphID)
-
-    
 # View del endpoint de updateGraph
-class updateGraphView(View):
+class updateGraphsView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
@@ -189,9 +166,9 @@ class updateGraphView(View):
     def post(self, request, historyID='0', graphID='0'):
         return JsonResponse(self.data)
     
-    # * Metodo HTTP (UPDATE) del endpoint
+    # * Metodo HTTP (PUT) del endpoint
     def put(self, request, historyID='0', graphID='0'):
-        return updateGraph(request, historyID, graphID)
+        return updateGraphs(request, historyID, graphID)
     
     def delete(self, request, historyID, graphID):
         return JsonResponse(self.data)
