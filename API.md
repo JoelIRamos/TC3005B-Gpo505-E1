@@ -264,46 +264,8 @@ N/A
 ```
 
 ----
-## **DELETE_GRAPH**
-> Funcion: Eliminar una grafica de acuerdo a su indice de posición
-
-### URL: 
-    /api/deleteGraph/<str:historyID>/<int:graphID>/
-
-### Parametros: 
-**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
-
-**graphID** El id de la grafica (el cual fue generado cuando se hizo alguna de las peticiones para obtener una gráfica)
-
-### Bodys
-``` json
-N/A
-```
-
-### Objeto Retorno Correcto
-``` json
-    {
-        "message": "Success"
-    }
-```
-
-### Objeto Retorno Incorrecto
-**Versión 1**
-``` json
-    {
-        "message": "Not found"
-    }
-```
-
-**Versión 2**
-``` json
-    {
-        "message": "graphID not found"
-    }
-```
-----
-## **PUT_GRAPH**
-> Funcion: Actualizar la gráfica que estaba haciendo el usuario
+## **PUT_GRAPHS**
+> Funcion: Actualizar las gráficas que estaba haciendo el usuario
 
 ### URL: 
     /api/putGraphs/<str:historyID>/<int:graphID>/
@@ -378,7 +340,7 @@ N/A
 ### Objeto Retorno Incorrecto
 ``` json
 
-```  -->
+```  
 
 ----
 ----
@@ -461,61 +423,11 @@ N/A
     {
         "message": "Not found"
     }
-```
+``` -->
 
 ----
-## **PUT_GRAPHS**
-> Funcion: Actualizar las gráficas que estaba haciendo el usuario
-
-### URL: 
-    /api/putGraph/<str:historyID>/
-
-### Parametros: 
-**historyID:** El id del una version de un archivo
-
-### Bodys
-``` json
-    {
-        "type": "Line",
-        "labels": [
-            "ABASTECEDORA RIVELL SA DE CV",
-            "ABC METALES SIDERURGICOS S.A. DE C.",
-            "ACEREMEX S. A. DE C. V.",
-            "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
-            "ADN ENERGIA S DE RL DE CV"
-        ],
-        "anomalyList": [
-            85,
-            125,
-            80,
-            6,
-            1
-        ],
-        "normalList": [
-            0,
-            0,
-            0,
-            0,
-            0
-        ]
-    }
-```
-
-### Objeto Retorno Correcto
-``` json
-    {
-        "message": "Success"
-    }
-```
-
-### Objeto Retorno Incorrecto
-``` json
-    {
-        "message": "Not found"
-    }
-```
-
 ----
+
 # Revisión de Endpoints
 ### GET_HISTORY_LIST
 
@@ -529,7 +441,7 @@ N/A
 
 **Revision hecha por:** Joel Ramos
 
-### GET_USER_ID
+### GET_HISTORY
 
 **Hay algún problema?** No
 
@@ -538,30 +450,6 @@ N/A
 **Hay algún pendiente?** No
 
 **Descripción del pendiente:** N/A
-
-**Revision hecha por:** Joel Ramos
-
-### GET_LAST_SESSION
-
-**Hay algún problema?** No
-
-**Descripción del problema:** N/A 
-
-**Hay algún pendiente?** No
-
-**Descripción del pendiente:** N/A
-
-**Revision hecha por:** Joel Ramos
-
-### DELETE_LAST_SESSION
-
-**Hay algún problema?** No
-
-**Descripción del problema:** N/A
-
-**Hay algún pendiente?** Si
-
-**Descripción del pendiente:** Crear el trigger en MongoDB 
 
 **Revision hecha por:** Joel Ramos
 
@@ -600,9 +488,7 @@ N/A
 
 **Revision hecha por:** Joel Ramos
 
-
-
-### DELETE_GRAPH
+### PUT_GRAPHS
 
 **Hay algún problema?** No
 
@@ -615,18 +501,6 @@ N/A
 **Revision hecha por:** Joel Ramos
 
 ### GET_HISTORY_DETAIL
-
-**Hay algún problema?** No
-
-**Descripción del problema:** N/A 
-
-**Hay algún pendiente?** No
-
-**Descripción del pendiente:** N/A
-
-**Revision hecha por:** Joel Ramos
-
-### PUT_GRAPHS
 
 **Hay algún problema?** No
 

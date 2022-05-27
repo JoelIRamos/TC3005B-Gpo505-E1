@@ -436,13 +436,13 @@ def updateGraphs(request, historyID, graphID):
 # * Pendientes: Documentacion y burbuja
 '''
 Terminar y Actualizar:
-    Documento de Funcionalidades (Avanzado)
-	Especificación de Requerimientos (Nuevos Requerimientos)
-	Historias de Usuario (Nuevas Historias)
-	Plan de Calidad (Pruebas)
+    Documento de Funcionalidades: Actualizar Backend y agregar Frontend
+	Especificación de Requerimientos Actualizar a los Requerimientos Finales
+	Historias de Usuario: Actualizar a las Historias Finales
+	Plan de Calidad: Actualizar a las Pruebas Finales
+    Bitacora de Pruebas: Hacer corridas y agregar Frontend
 
 Crear: 
-	Bitacora de Pruebas (Nuevo)
 	Manual de Usuario (Nuevo)
 	Manual de Despliegue (Nuevo)
     Modelo de datos (Nuevo)
