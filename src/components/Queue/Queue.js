@@ -11,13 +11,13 @@ function Queue(backPostResp) {
         <div className="queue-container">
             <div className="queue-box">
               {console.log(backPostResp["backPostResp"])}
-              {backPostResp["backPostResp"]["backPostResp"] === undefined 
+              {backPostResp["backPostResp"] === undefined 
                 ? <h2 className="title">Enviando Archivo...</h2>
                 : 
                 <>
                   <h2 className="title">Archivo Enviado</h2>
                   <div className="queue">
-                    {backPostResp["backPostResp"]["backPostResp"].queue.map((q) => {
+                    {backPostResp["backPostResp"].queue.map((q) => {
                       return (
                         <div>
                           {q}

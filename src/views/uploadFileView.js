@@ -10,6 +10,7 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, setB
   
   // HTTP request a backend (aun en prueba)
   const backPost = (listaAtt) => {
+    setListaAtributos(listaAtt);
     const intAttJSON = JSON.stringify(listaAtt["Atributo Interno"].items);
     const extAttJSON = JSON.stringify(listaAtt["Atributo Externo"].items);
     const infoAttJSON = JSON.stringify(listaAtt["Atributo Informativo"].items);
@@ -26,7 +27,6 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, setB
       .then(response => response.json())
       .then(success => {
         setBackPostResp(success);
-        setListaAtributos(listaAtt);
       })
       .catch(error => console.log(error))
   }

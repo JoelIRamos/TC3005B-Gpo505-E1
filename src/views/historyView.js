@@ -2,7 +2,7 @@ import Navbar from '../components/Navbar/Navbar.js';
 import Tabla from '../components/Tabla/Tabla';
 import '../App.css';
 
-function historyView(listaAtributos, runId) {
+function historyView({listaAtributos, runId}) {
 
   console.log(listaAtributos);
   console.log(runId);
@@ -15,7 +15,6 @@ function historyView(listaAtributos, runId) {
             <Tabla/>
           </div>
       </div>
-      
     </div>
   );
 }
