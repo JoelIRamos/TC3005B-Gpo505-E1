@@ -116,15 +116,6 @@ input, select, button{
   overflow-y: scroll;
 }
 
-.tarjeta-historial {
-  height: 10%;
-  width: 90%;
-  margin-top: 3%;
-  margin-left: 6%;
-  border: 1px solid rgb(83,83,83);
-  border-radius: 5px;
-}
-
 .display-none{
   display: none;
 }

@@ -1,0 +1,39 @@
+.att-select-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    width: 80%;
+    border-radius: 5px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 1vw;
+}
+
+.att-select-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5vw;
+}
+
+.tarjeta-att {
+    height: 10%;
+    width: 95%;
+    padding: 1vw;
+    margin-top: .4vw;
+    margin-bottom: .4vw;
+    border: 1px solid rgb(83,83,83);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.3vw;
+}
+
+.att-name {
+    padding-right: 8vw;
+    width: 40%;
+    text-align: left;
+    margin-top: auto;
+    margin-bottom: auto;
+}

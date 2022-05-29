@@ -5,7 +5,8 @@ import UpLoadFileview from './views/uploadFileView';
 import Dashboard from './views/dashboardView';
 import Historial from './views/historyView';
 import Queue from './views/fileQueueView'
-//import SeleccionAtributos from './views/attributeSelectionView'
+import ContainerDB from './components/ContainerDB/ContainerDB';
+import SeleccionAtributos from './components/SelectorAtributos/SelectorAtributos'
 import { useState } from 'react';
 import { useRef } from 'react';
 import dashboardView from './views/dashboardView';

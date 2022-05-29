@@ -4,51 +4,23 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import DropFile from '../components/DropFile/DropFile.js';
 import DnDTable from '../components/DragAndDrop/DragAndDropTable.js'
 import Button from '../components/Button/GenericButton.js';
-import { useState } from 'react';
+import SeleccionAtributos from '../components/SelectorAtributos/SelectorAtributos.js';
+import { useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 
-const onDragEnd = (result, seleccionDeListas) => {
-  if(!result.destination)
-  {
-    return;
-  }
-  const {source, destination} = result;
-
-  //Si se dropea un objeto en un recuadro diferente se actualizan ambas listas
-  if(source.droppableId !== destination.droppableId)
-  {
-    const sourceCol = seleccionDeListas[source.droppableId];
-    const destCol = seleccionDeListas[destination.droppableId];
-    const sourceItems = sourceCol.items;
-    const destItems = destCol.items;
-    const [removed] = sourceItems.splice(source.index, 1);
-    destItems.splice(destItems.index, 0, removed);
-    seleccionDeListas[source.droppableId].items = sourceItems;
-    seleccionDeListas[destination.droppableId].items = destItems;
-    console.log(seleccionDeListas[destination.droppableId].items)
-  }
-  //Si se droppea un objeto en el mismo recuadro, la lista solo se reordenara
-  else
-  {
-    const column = seleccionDeListas[source.droppableId];
-    const copiedItems = column.items;
-    const [removed] = copiedItems.splice(source.index, 1);
-    copiedItems.splice(destination.index, 0, removed);
-    seleccionDeListas[source.droppableId].items = copiedItems
-    console.log(seleccionDeListas[source.droppableId].items)
-  }
-};
 
 function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, backPostResp, setBackPostResp}) {
   
   // HTTP request a backend (aun en prueba)
-  const backPost = (internalAtt, externalAtt) => {
-    const intAttJSON = JSON.stringify(internalAtt);
-    const extAttJSON = JSON.stringify(externalAtt);
+  const backPost = (listaAtt) => {
+    const intAttJSON = JSON.stringify(listaAtt["Atributo Interno"].items);
+    const extAttJSON = JSON.stringify(listaAtt["Atributo Externo"].items);
+    const infoAttJSON = JSON.stringify(listaAtt["Atributo Informativo"].items);
     var formData = new FormData();
     console.log("Posting to backend...")
     formData.append('internal_attributes', intAttJSON); // Array tipo JSON de los atributos internos del archivo
     formData.append('external_attributes', extAttJSON); // Array tipo JSON de los atributos externos del archivo
+    formData.append('informational_attributes', infoAttJSON)
     formData.append('file', file); // Archivo completo
     fetch('http://localhost:8000/api/upload_file/', {
       method: 'POST',
@@ -61,24 +33,31 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, back
       .catch(error => console.log(error))
   }
 
-  const seleccionDeListas = 
-  {
-    "attE":{
+  const listasAtt = 
+  { 
+    "Atributo Interno":
+    {
+      name: "Atributos Internos",
+      items: []
+    },
+    "Atributo Externo":{
       name: "Atributos Externos",
       items: []
     },
-    "attL":{
-      name: "Lista Atributos",
-      items: headers
-    },
-    "attI":
-    {
-      name: "Atributos Internos",
+    "Atributo Informativo":{
+      name: "Atributos Informativos",
       items: []
     }
   };
 
   const [upLoadView, setUpLoadView] = useState(true);
+  //Change to list
+
+  //console.log();
+
+  const [listAttributes, setListAttributes] = useState(listasAtt);
+
+  const listAttRef = useRef(listasAtt);
 
   const viewUpdate = () => {
     setUpLoadView(!upLoadView);
@@ -95,20 +74,10 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, back
         <>
           <div className="att-options-container">
             <Link to='/Queue'>
-              
-                <button className='button-gen' onClick={() => backPost(seleccionDeListas["attI"].items, seleccionDeListas["attE"].items)}>Siguiente</button>
-              
+                <button className='button-gen' onClick={() => backPost(listasAtt)}>Siguiente</button>
             </Link>
           </div>
-          <div className="atrribute-container">
-            <DragDropContext onDragEnd={result => onDragEnd(result, seleccionDeListas)}>
-              {Object.entries(seleccionDeListas).map(([id, data]) => {
-                return(
-                  <DnDTable titulo={data.name} dropID={id} headers={data.items}/>
-                )
-              })}
-            </DragDropContext>
-          </div>
+          <SeleccionAtributos headers={headers} listasAtt={listAttRef.current}/>
         </>
       }
     </div>
