@@ -1,4 +1,4 @@
-import '../../App.css';
+import './TarjetaHistorial.css';
 
 function barraBusqueda() {
     return (

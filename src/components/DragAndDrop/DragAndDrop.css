@@ -1,39 +1,19 @@
-.dnd-table{
+.dropdown {
+    width: 30%;
+    margin: auto;
     display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    color: rgb(255, 255, 255);
-    height: 705%;
-    width: 28%;
-    text-align: center;
-    margin-top: 3%;
-    margin-bottom: 1%;
-    margin-right: 2%;
-    margin-left: 2%;
-    background-color: rgb(255, 198, 175);
 }
 
-.dnd-table-title{
-    height: 1%;
-    margin-top: 3%;
-    margin-bottom: 0%;
-    right: 50%;
-    color: rgb(0, 0, 0);
-}
-
-.dnd-table-attribute{
-    background-color: rgb(255, 255, 255);
-    border:rgb(0, 0, 0) solid;
-    color: rgb(0, 0, 0);
-    border-radius: 5px;
+.dropdown-btn {
     padding: 1vw;
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 1%;
-    margin-bottom: 1%;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.dnd-droppableArea{
-    height: 95%;
+.dropdown-content {
+    position: absolute;
+    top: 110%;
+    
 }
