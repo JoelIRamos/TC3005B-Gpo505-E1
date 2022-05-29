@@ -33,6 +33,9 @@ function App() {
   // Referencia para la lista de grafico
   const graphListRef = useRef(); 
 
+  const [listaAtributos, setListaAtributos] = useState();
+  const [runId, setRunId] = useState();
+
   // Funcion para creacion de gráfico -- Dashboard
   const createGraph = async (x)  => {
     setIndexGraph(indexGraph+ 1)
@@ -91,10 +94,10 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<HomeScreenview/>}/>
-        <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} backPostResp={backPostResp} setBackPostResp={setBackPostResp}/>}/>
-        <Route path='/Queue' element={<Queue backPostResp={backPostResp}/>}/>
+        <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setBackPostResp={setBackPostResp} setListaAtributos={setListaAtributos}/>}/>
+        <Route path='/Queue' element={<Queue backPostResp={backPostResp} setRunId={setRunId}/>}/>
         <Route path='/Dashboard' element={<Dashboard indexGraph={indexGraph} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {atributos}/>}/>
-        <Route path='/Historial' element={<Historial/>}/>
+        <Route path='/Historial' element={<Historial listaAtributos={listaAtributos} runId={runId}/>}/>
       </Routes>
     </Router>
   );

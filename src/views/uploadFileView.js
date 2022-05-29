@@ -6,7 +6,7 @@ import { useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 
 
-function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, setBackPostResp}) {
+function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, setBackPostResp, setListaAtributos}) {
   
   // HTTP request a backend (aun en prueba)
   const backPost = (listaAtt) => {
@@ -26,6 +26,7 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, setB
       .then(response => response.json())
       .then(success => {
         setBackPostResp(success);
+        setListaAtributos(listaAtt);
       })
       .catch(error => console.log(error))
   }

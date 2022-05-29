@@ -2,7 +2,11 @@ import Navbar from '../components/Navbar/Navbar.js';
 import Tabla from '../components/Tabla/Tabla';
 import '../App.css';
 
-function historyView() {
+function historyView(listaAtributos, runId) {
+
+  console.log(listaAtributos);
+  console.log(runId);
+
   return (
     <div className="App">
       <Navbar selected='history' />
