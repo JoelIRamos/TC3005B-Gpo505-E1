@@ -264,6 +264,38 @@ N/A
 ```
 
 ----
+## **GET_STATISTICS**
+> Funcion: Dar estadisticas importantes al usuario
+
+### URL: 
+    /api/getStatistics/<str:historyID>/<str:filter>/
+
+### Parametros: 
+**historyID:** El id del una version de un archivo
+**filter:** Filtro de las anomalias
+
+### Bodys
+``` json
+N/A
+```
+
+### Objeto Retorno Correcto
+``` json
+    {
+        "TotalAnomalys": "#",
+        "AnomatyPercentage": "#",
+        "AnomalyRelations": "#"
+    }
+```
+
+### Objeto Retorno Incorrecto
+``` json
+    {
+        "message": "Not found"
+    }
+```
+
+----
 ## **PUT_GRAPHS**
 > Funcion: Actualizar las gráficas que estaba haciendo el usuario
 
