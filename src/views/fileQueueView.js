@@ -7,13 +7,14 @@ function FileQueueView({backPostResp, setRunId}){
     const didMount = useRef(false);
     useEffect(() => {
         if(!didMount.current) {
-            didMount.current = true;
-            setTimeout(() => {
-                setRunId(backPostResp.run_id)
-            }, 1000);
+            if (backPostResp !== undefined){
+                setRunId(backPostResp.run_id);
+                didMount.current = true;
+            }
             return;
         }
-    });
+    }), [backPostResp];
+    
     return (
         <div className="App">
             <Navbar selected='upload'/>
