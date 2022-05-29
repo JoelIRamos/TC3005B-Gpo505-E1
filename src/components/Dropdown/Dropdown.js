@@ -1,7 +1,5 @@
-//import React from 'react'
-import './Dropdown.css';
 import React, { useState, useRef, useEffect } from 'react'
-
+import './Dropdown.css';
 
 const add = (header, listasAtt, selected) => {
     listasAtt[selected].items.splice(0, 0, header);

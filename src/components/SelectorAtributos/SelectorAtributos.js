@@ -1,10 +1,8 @@
 import React from 'react'
 import './SelectorAtributos.css'
 import Dropdown from '../Dropdown/Dropdown'
-import { useState } from 'react'
 
 function SeleccionAtributos({headers, listasAtt}) {
-    
     return(
         <div className="att-select-container">
             <div className="att-select-box">

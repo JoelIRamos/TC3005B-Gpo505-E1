@@ -1,15 +1,12 @@
 import Navbar from '../components/Navbar/Navbar.js';
 import '../App.css';
-import { DragDropContext } from 'react-beautiful-dnd';
 import DropFile from '../components/DropFile/DropFile.js';
-import DnDTable from '../components/DragAndDrop/DragAndDropTable.js'
-import Button from '../components/Button/GenericButton.js';
 import SeleccionAtributos from '../components/SelectorAtributos/SelectorAtributos.js';
 import { useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 
 
-function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, backPostResp, setBackPostResp}) {
+function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, setBackPostResp}) {
   
   // HTTP request a backend (aun en prueba)
   const backPost = (listaAtt) => {
@@ -51,11 +48,6 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, back
   };
 
   const [upLoadView, setUpLoadView] = useState(true);
-  //Change to list
-
-  //console.log();
-
-  const [listAttributes, setListAttributes] = useState(listasAtt);
 
   const listAttRef = useRef(listasAtt);
 
@@ -74,14 +66,13 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, back
         <>
           <div className="att-options-container">
             <Link to='/Queue'>
-                <button className='button-gen' onClick={() => backPost(listasAtt)}>Siguiente</button>
+                <button className='button-gen' onClick={() => backPost(listAttRef.current)}>Siguiente</button>
             </Link>
           </div>
           <SeleccionAtributos headers={headers} listasAtt={listAttRef.current}/>
         </>
       }
     </div>
-    
   );
 }
 
