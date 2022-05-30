@@ -367,13 +367,8 @@ def searchStatistics(request, historyID, filter):
         
         # Nombres de los labels
         labelsList = (list(resultsFD[0]['data'].keys()))
-        # for i in resultsFD[0]['data']:
-        #     labelsList.append(i)
-
-        print(type(resultsFD[0]['data']))
-        print(list(resultsFD[0]['data'].keys()))
-
-        print(labelsList)
+        # // for i in resultsFD[0]['data']:
+        # //     labelsList.append(i)
 
         # Creacion del data frame
         df = pd.DataFrame({labelsList[0] : resultsFD[0]['data'][str(labelsList[0])]})
