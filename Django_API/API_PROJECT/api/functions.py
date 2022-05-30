@@ -402,7 +402,7 @@ def searchStatistics(request, historyID, filter):
             # Total de relaciones repetidas
             totalAnomalyRNotUnique =  len(dfGroupAnomalyR[dfGroupAnomalyR["total"] > 1])
 
-            # Relaciones unicas
+            # Total de Relaciones
             totalAnomalyR = len(dfGroupAnomalyR)
 
             # Porcentaje de relaciones repetidas
@@ -415,7 +415,8 @@ def searchStatistics(request, historyID, filter):
                 'result': {
                     'TotalAnomalys': anomalyLength,
                     'AnomatyPercentage': anomalyPercentage,
-                    'AnomalyRelations': anomalyRelationsPercentage
+                    'AnomalyRelations': totalAnomalyRNotUnique,
+                    'AnomalyRelationsPercentage' : anomalyRelationsPercentage
                 }
             }
         except:
