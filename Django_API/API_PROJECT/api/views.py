@@ -269,13 +269,17 @@ class FileUploadView(View):
             # Get the file from the request
             file = request.FILES['file']
             
-            internal_attributes = ['ID_TRANSPORTISTA','weightDifference','D_UBICACION','USUARIO_EGRESO','N_PESO_TARA','mediana']
-            external_attributes = ['C_ID_ORDEN_CABECERA','C_POSICION_ORDEN','Q_CANTIDAD','N_PESO_BRUTO','TIPO_TRANSPORTE']
-            informational_attributes = ['C_SOCIEDAD','D_PATENTE']
+            # internal_attributes = ['ID_TRANSPORTISTA','weightDifference','D_UBICACION','USUARIO_EGRESO','N_PESO_TARA','mediana']
+            # external_attributes = ['C_ID_ORDEN_CABECERA','C_POSICION_ORDEN','Q_CANTIDAD','N_PESO_BRUTO','TIPO_TRANSPORTE']
+            # informational_attributes = ['C_SOCIEDAD','D_PATENTE']
             # Gets internal and external attributes from request
-            # internal_attributes = json.loads(request.POST['internal_attributes'])
-            # external_attributes = json.loads(request.POST['external_attributes'])
-            # informational_attributes = json.loads(request.POST['information_attributes'])
+            internal_attributes = json.loads(request.POST['internal_attributes'])
+            external_attributes = json.loads(request.POST['external_attributes'])
+            informational_attributes = json.loads(request.POST['informational_attributes'])
+            
+            # print('internal_attributes: ' , internal_attributes, 'type: ', type(internal_attributes))
+            # print('external_attributes: ', external_attributes, 'type: ', type(external_attributes))
+            # print('informational_attributes: ', informational_attributes, 'type: ', type(informational_attributes))
             
             # Saves the file to the storage and gets the file name, file id, base name and date
             file_name, run_id, base_file_name, date = self.save_file_to_storage(file)
