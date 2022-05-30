@@ -1,18 +1,19 @@
 import React from 'react'
 import GraphContainer from '../GraphContainer/GraphContainer'
-import FormAtributos from '../FormAtributos/FormAtributos'
+import FormAtributoInt from '../FormAtributoInt/FormAtributoInt'
 import './ContainerDB.css'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import {useRef} from 'react';
+import FormAtributoExt from '../FormAtributoInt/FormAtributoExt';
 
-const ContainerDB = ({atributos, deleteGraph, indexGraph}) => {
+const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
 
   // Obejto de datos para graficas
   const [datos, setDatos] = useState({anomalyList: [1, 2, 3,4, 5], labels: ['Dato1', 'Dato2', 'Dato3', 'Dato4', 'Dato5']});
 
   // URL para GET Req
-  const [apiURL, setApiURL] = useState('http://127.0.0.1:8000/api/getBarGraph/Analisis_Chatarra_Ene21-ene22_2022-05-23_18-48-13/ID_TRANSPORTISTA/0/')
+  const [apiURL, setApiURL] = useState(`http://127.0.0.1:8000/api/getBarGraph/${runId}/ID_TRANSPORTISTA/0/`)
 
   // Estado de click booleano para despliegue de elementos
   const [click, setClick] = useState(false);
@@ -30,9 +31,9 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph}) => {
   // Effect para GET
   useEffect(() => {
     if(chart === 'Grafico de Burbuja'){
-      setApiURL(`http://127.0.0.1:8000/api/getBubbleGraph/Analisis_Chatarra_Ene21-ene22_2022-05-23_18-48-13/${atributo1}/${atributo2}/0/`)
+      setApiURL(`http://127.0.0.1:8000/api/getBubbleGraph/${runId}/${atributo1}/${atributo2}/0/`)
     } else{
-      setApiURL(`http://127.0.0.1:8000/api/getBarGraph/Analisis_Chatarra_Ene21-ene22_2022-05-23_18-48-13/${atributo1}/0/`)
+      setApiURL(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/0/`)
     }
     backGet()
       .then((res) => {
@@ -83,8 +84,8 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph}) => {
         <div className='container-db'>
             <GraphContainer indexGraph={indexGraph} deleteGraph={deleteGraph} showForm={showForm} atributo2={atributo2} click={click} chart={chart} data = {datos} atributo1={atributo1} clicked={clicked} clickedLi={clickedLi} />
             <div className='container-form-a'>
-                < FormAtributos idForm={1} atributos={atributos} onSelect={saveAtributo1} showForm = {true} />
-                < FormAtributos idForm={2} atributos={atributos} onSelect={saveAtributo2} showForm = {showForm} />
+                < FormAtributoInt idForm={1} atributos={atributos} onSelect={saveAtributo1} showForm = {true} />
+                < FormAtributoExt idForm={2} atributos={atributos} onSelect={saveAtributo2} showForm = {showForm} />
             </div>
         </div>
       </div>

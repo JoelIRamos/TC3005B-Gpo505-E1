@@ -15,7 +15,3 @@ test("Prueba 2", () => {
 
     expect(root.querySelector("p").textContent).toBe("Total de Anomalías Detectadas");
 })
-test("Prueba 4", () => {
-    const root = document.createElement("div")
-    ReactDOM.render(<ContenedorDatos color/>)
-})

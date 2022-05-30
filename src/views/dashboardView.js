@@ -2,12 +2,10 @@ import Navbar from '../components/Navbar/Navbar.js';
 import Titulo from '../components/Titulo/Titulo';
 import '../App.css';
 import ContenedorDatos from '../components/ContenedorDatos/ContenedorDatos.js';
-import FormAtributos from '../components/FormAtributos/FormAtributos.js';
-import GraphContainer from '../components/GraphContainer/GraphContainer.js';
 import ContainerDB from '../components/ContainerDB/ContainerDB.js';
 import { useState } from 'react';
 
-function dashboardView({createGraph, graphList, atributos, deleteGraph, indexGraph, setURL}) {
+function dashboardView({createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId}) {
 
   let GraphCont = {id: indexGraph, atributos: atributos, deleteGraph: deleteGraph}
 
@@ -36,7 +34,7 @@ function dashboardView({createGraph, graphList, atributos, deleteGraph, indexGra
             <ContenedorDatos datos='39%' label='Porcentaje de Anomalías' color='yellow'/>
       </div>
       {graphList.map((element, i) => (
-        < ContainerDB key={element.id} indexGraph={element.id} atributos={element.atributos} deleteGraph={element.deleteGraph} setURL = {setURL} />
+        < ContainerDB runId={runId} key={element.id} indexGraph={element.id} atributos={element.atributos} deleteGraph={element.deleteGraph} setURL = {setURL} />
       ))}
       <div className='container-button-add'><button onClick={(() => createGraph(GraphCont))} className='button-add'>+</button></div>
     </div>

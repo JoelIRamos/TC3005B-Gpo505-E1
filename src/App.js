@@ -96,7 +96,7 @@ function App() {
         <Route path='/' element={<HomeScreenview/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setBackPostResp={setBackPostResp} setListaAtributos={setListaAtributos}/>}/>
         <Route path='/Queue' element={<Queue backPostResp={backPostResp} setRunId={setRunId}/>}/>
-        <Route path='/Dashboard' element={<Dashboard indexGraph={indexGraph} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {atributos}/>}/>
+        <Route path='/Dashboard' element={<Dashboard indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos}/>}/>
         <Route path='/Historial' element={<Historial listaAtributos={listaAtributos} runId={runId}/>}/>
       </Routes>
     </Router>
