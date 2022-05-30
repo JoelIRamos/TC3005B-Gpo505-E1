@@ -170,15 +170,18 @@ def searchBarLineGraphHelper(request, historyID, variable, filter, type):
         # Llenar campos vacios con 0s
         realData = realData.fillna(0)
 
-        # sort realData
-        realData.sort_values(by=['total_anomaly'], inplace=True, ascending=False, kind='mergesort')
-        realData = realData.reset_index(drop=True)
+        # ! Borrar.. No es necesario por el top 25sort realData
+        #//realData.sort_values(by=['total_anomaly'], inplace=True, ascending=False, kind='mergesort')
+        #//realData = realData.reset_index(drop=True)
+        #//print(realData)
+        # obtiene las 25 filas con mas anomalias
+        realDataTop25 = realData.nlargest(25, 'total_anomaly')
 
         data = {
             'type': type,
-            'labels': realData['attribute'].tolist(),
-            'anomalyList': realData['total_anomaly'].tolist(),
-            'noAnomalyList' : realData['total_no_anomaly'].tolist()
+            'labels': realDataTop25['attribute'].tolist(),
+            'anomalyList': realDataTop25['total_anomaly'].tolist(),
+            'noAnomalyList' : realDataTop25['total_no_anomaly'].tolist()
             #'normalList': df['normalLists'].tolist()
         }            
     else:
@@ -287,7 +290,7 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
             anomalyRelation = anomalyFilterDf.groupby(['attribute1', 'attribute2']).size().to_frame('size')
             anomalyRelation.reset_index(inplace=True)
             #//print("anomalyRelation")
-            #//print(anomalyRelation)
+    
             # Obtener el valor mas alto de anomaly
                 # nlargest retorna un dataframe... iloc retorna el valor
             topAnomalyValue = anomalyRelation.nlargest(1, 'size').iloc[0]['size']
@@ -296,16 +299,17 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
             ratio = 25 / topAnomalyValue
 
             anomalyRelation['size'] = anomalyRelation['size'].map(lambda x : x * ratio)
-            #//print("anomalymap")
 
-            # ! se borra
-            #//anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
-            #//print(anomalyRelation)
+            # ! borrar No es necesario puesto a que final se obtiene los top 25
+            # //anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
+            # //print(anomalyRelation)
+
+            anomalyRelationTop25 = anomalyRelation.nlargest(25, 'size')
             
             # lista de valores unicos de attribute1
-            attribute1List = anomalyRelation['attribute1'].unique().tolist()
+            attribute1List = anomalyRelationTop25['attribute1'].unique().tolist()
             # lista de valores unicos de attribute2
-            attribute2List = anomalyRelation['attribute2'].unique().tolist()
+            attribute2List = anomalyRelationTop25['attribute2'].unique().tolist()
 
             # Rangos para values en attribute1Dict
             attribute1Range = list(range(0, len(attribute1List), 1))
@@ -321,12 +325,12 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
             # Lista para los datos que graficar
             bubbleDataList = []
             # agrega los datos en bubbledata
-            for i in range(len(anomalyRelation)):
+            for i in range(len(anomalyRelationTop25)):
                 bubbleDataList.append(
                     {
-                        'x': int(attribute1Dict[anomalyRelation.iloc[i]['attribute1']]),  # Valor que tiene atributo1 en attribute1Dict
-                        'y': int(attribute2Dict[anomalyRelation.iloc[i]['attribute2']]),  # Valor que tiene atributo2 en attribute2Dict
-                        'r': int(anomalyRelation.iloc[i]['size'])
+                        'x': int(attribute1Dict[anomalyRelationTop25.iloc[i]['attribute1']]),  # Valor que tiene atributo1 en attribute1Dict
+                        'y': int(attribute2Dict[anomalyRelationTop25.iloc[i]['attribute2']]),  # Valor que tiene atributo2 en attribute2Dict
+                        'r': int(anomalyRelationTop25.iloc[i]['size'])
                     }
                 )
 
@@ -348,7 +352,7 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
 
     return JsonResponse(data)
 
-
+# ! Falta: Relaciones anomalas y su porcentaje
 def searchStatistics(request, historyID, filter):
     filter = float(filter)
     
