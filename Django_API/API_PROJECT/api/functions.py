@@ -365,25 +365,67 @@ def searchStatistics(request, historyID, filter):
     # Si existe el historial
     if len(resultsFD) > 0:
         
-        # Crear data frame
-        df =  pd.DataFrame({'anomalys' :resultsFD[0]['data']['anomaly_scores']})
-        
+        # Nombres de los labels
+        labelsList = (list(resultsFD[0]['data'].keys()))
+        # for i in resultsFD[0]['data']:
+        #     labelsList.append(i)
+
+        print(type(resultsFD[0]['data']))
+        print(list(resultsFD[0]['data'].keys()))
+
+        print(labelsList)
+
+        # Creacion del data frame
+        df = pd.DataFrame({labelsList[0] : resultsFD[0]['data'][str(labelsList[0])]})
+        for i in range(1, len(labelsList)):
+            df.insert(i, labelsList[i], resultsFD[0]['data'][str(labelsList[i])])  # assign(TutorsAssigned=resultsFD[0]['data'][labelsList[i]])
+
+        # //Crear data frame
+        # //df =  pd.DataFrame({'anomalys' :resultsFD[0]['data']['anomaly_scores']})
 
         # Filtrar las anomalias
         # En caso de que falle el filtrado
         try:
-            anomalyFilterDf = df[df['anomalys'] <= filter]
+            anomalyFilterDf = df[df['anomaly_scores'] <= filter]
+
             totalLength = len(df)
             anomalyLength = len(anomalyFilterDf)
             anomalyPercentage = float('%.2f'%((anomalyLength / totalLength) * 100))
 
+            # // Filtrado de relaciones anomalas
+            # // anomalyFilterDf = dfAnomalyRelation[dfAnomalyRelation['anomaly_scores'] <= filter]
+            
+            # ! 
+            # ! Cambiar el nombre de anomalyFilterDf
+            # !
+
+            # No aceptar int float
+            for i in labelsList:
+                if(anomalyFilterDf[i].dtypes != "object"): # deteccion de int float
+                    del anomalyFilterDf[i] # eliminacion de columna
+                    # ? Cuidado con la columna total ya que es int64
+
+            # Agrupar anomalias con ambos atributos
+            dfGroupAnomalyR = anomalyFilterDf.groupby(list(anomalyFilterDf.columns)).size().to_frame('total')
+            dfGroupAnomalyR.reset_index(inplace=True)
+            
+            # Total de relaciones repetidas
+            totalAnomalyRNotUnique =  len(dfGroupAnomalyR[dfGroupAnomalyR["total"] > 1])
+
+            # Relaciones unicas
+            totalAnomalyR = len(dfGroupAnomalyR)
+
+            # Porcentaje de relaciones repetidas
+            anomalyRelationsPercentage = float('%.2f'%((totalAnomalyRNotUnique / totalAnomalyR) * 100))
+
+            # ? Cantidad de anomalias unicas
             # Datos de las estadisticas
             data = {
                 'message': 'Success', 
                 'result': {
                     'TotalAnomalys': anomalyLength,
                     'AnomatyPercentage': anomalyPercentage,
-                    'AnomalyRelations': '#'
+                    'AnomalyRelations': anomalyRelationsPercentage
                 }
             }
         except:
