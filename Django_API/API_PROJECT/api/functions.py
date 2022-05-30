@@ -352,7 +352,7 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
 
     return JsonResponse(data)
 
-# ! Falta: Relaciones anomalas y su porcentaje
+
 def searchStatistics(request, historyID, filter):
     filter = float(filter)
     
@@ -364,19 +364,16 @@ def searchStatistics(request, historyID, filter):
     
     # Si existe el historial
     if len(resultsFD) > 0:
-        
-        # Nombres de los labels
-        labelsList = (list(resultsFD[0]['data'].keys()))
-        # // for i in resultsFD[0]['data']:
-        # //     labelsList.append(i)
 
+        # ! BRUH
+        #// Creacion del data frame
+        #// df = pd.DataFrame({labelsList[0] : resultsFD[0]['data'][str(labelsList[0])]})
+        #// for i in range(1, len(labelsList)):
+        #//     df.insert(i, labelsList[i], resultsFD[0]['data'][str(labelsList[i])])  # assign(TutorsAssigned=resultsFD[0]['data'][labelsList[i]])
+
+        # ? yes
         # Creacion del data frame
-        df = pd.DataFrame({labelsList[0] : resultsFD[0]['data'][str(labelsList[0])]})
-        for i in range(1, len(labelsList)):
-            df.insert(i, labelsList[i], resultsFD[0]['data'][str(labelsList[i])])  # assign(TutorsAssigned=resultsFD[0]['data'][labelsList[i]])
-
-        # //Crear data frame
-        # //df =  pd.DataFrame({'anomalys' :resultsFD[0]['data']['anomaly_scores']})
+        df = pd.DataFrame( resultsFD[0]['data'])
 
         # Filtrar las anomalias
         # En caso de que falle el filtrado
@@ -390,10 +387,8 @@ def searchStatistics(request, historyID, filter):
             # // Filtrado de relaciones anomalas
             # // anomalyFilterDf = dfAnomalyRelation[dfAnomalyRelation['anomaly_scores'] <= filter]
             
-            # ! 
-            # ! Cambiar el nombre de anomalyFilterDf
-            # !
-
+            # Nombres de los labels
+            labelsList = (list(resultsFD[0]['data'].keys()))
             # No aceptar int float
             for i in labelsList:
                 if(anomalyFilterDf[i].dtypes != "object"): # deteccion de int float
