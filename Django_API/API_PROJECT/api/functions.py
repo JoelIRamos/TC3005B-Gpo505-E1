@@ -426,6 +426,10 @@ def searchStatistics(request, historyID, filter):
         
     return JsonResponse(data)
 
+def searchStatus(request, historyID):
+    print("llenando")
+    return JsonResponse({'message': 'Success'})
+
 
 def updateGraphs(request, historyID):
     # Usar la coleccion "RunHistory"
@@ -448,17 +452,22 @@ def updateGraphs(request, historyID):
 
 # * Pendientes: Documentacion y burbuja
 '''
+getStatus
+Comment putGraph
 Terminar y Actualizar:
+    Prioridad:
     Documento de Funcionalidades: Actualizar Backend y agregar Frontend
-	Especificación de Requerimientos Actualizar a los Requerimientos Finales
-	Historias de Usuario: Actualizar a las Historias Finales
-	Plan de Calidad: Actualizar a las Pruebas Finales
-    Bitacora de Pruebas: Hacer corridas y agregar Frontend
-
-Crear: 
-	Manual de Usuario (Nuevo)
+    Bitacora de Pruebas: Agregar Frontend
+    Manual de Usuario (Nuevo)
 	Manual de Despliegue (Nuevo)
-    Modelo de datos (Nuevo)
+    Actualizar Modelo de BD
+    Y MarkDown
+
+    Later:
+    Especificación de Requerimientos Revisar Pequeños Detalles
+	Historias de Usuario: Revisar Pequeños Detalles
+    Plan de Calidad: Actualizar a las Pruebas Finales
+
 
 Terminados:
     Modelo de Calidad
