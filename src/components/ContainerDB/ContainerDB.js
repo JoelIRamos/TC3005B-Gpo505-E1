@@ -13,7 +13,7 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
   const [datos, setDatos] = useState({anomalyList: [1, 2, 3,4, 5], labels: ['Dato1', 'Dato2', 'Dato3', 'Dato4', 'Dato5']});
 
   // URL para GET Req
-  const [apiURL, setApiURL] = useState(`http://127.0.0.1:8000/api/getBarGraph/${runId}/ID_TRANSPORTISTA/0/`)
+  const [apiURL, setApiURL] = useState(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/0/`)
 
   // Estado de click booleano para despliegue de elementos
   const [click, setClick] = useState(false);
