@@ -3,7 +3,7 @@ import GraphContainer from '../GraphContainer/GraphContainer'
 import FormAtributoInt from '../FormAtributoInt/FormAtributoInt'
 import './ContainerDB.css'
 import { useState } from 'react';
-import { useEffect } from 'react';
+import { useLayoutEffect, useEffect } from 'react';
 import {useRef} from 'react';
 import FormAtributoExt from '../FormAtributoInt/FormAtributoExt';
 
@@ -12,8 +12,7 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
   // Obejto de datos para graficas
   const [datos, setDatos] = useState({anomalyList: [1, 2, 3,4, 5], labels: ['Dato1', 'Dato2', 'Dato3', 'Dato4', 'Dato5']});
 
-  // URL para GET Req
-  const [apiURL, setApiURL] = useState(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/0/`)
+  
 
   // Estado de click booleano para despliegue de elementos
   const [click, setClick] = useState(false);
@@ -25,33 +24,59 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
   const [showForm, setShowForm] = useState(false);
 
   // Atributos para graficas
-  const [atributo1, setAtributo1] = useState('ID_TRANSPORTISTA')
-  const [atributo2, setAtributo2] = useState('TIPO_TRANSPORTE')
+  const [atributo1, setAtributo1] = useState(atributos["Atributo Interno"]["items"][0])
+  const [atributo2, setAtributo2] = useState(atributos["Atributo Externo"]["items"][0])
 
-  // Effect para GET
-  useEffect(() => {
-    if(chart === 'Grafico de Burbuja'){
+  // URL para GET Req
+  const [apiURL, setApiURL] = useState(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/0/`)
+
+  // Lista de datos para acceder cuando se cambian las pestañas
+  const [listaDatos, setListaDatos] = useState([])
+  const chartRef = useRef()
+  chartRef.current = chart
+  // Referencia a URL para cargue de datos
+  
+  // Effect para agregar datos a Lista de Datos
+  // useEffect(() => {
+  //   setListaDatos([urlRef.current, chartRef.current])
+  //   console.log(listaDatos)
+  // }, [apiURL, chart])
+
+  // Effect para cambio de URL
+  useLayoutEffect(() => {
+    if(chartRef.current === 'Grafico de Burbuja'){
       setApiURL(`http://127.0.0.1:8000/api/getBubbleGraph/${runId}/${atributo1}/${atributo2}/0/`)
     } else{
       setApiURL(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/0/`)
     }
+    
+  }, [chart, atributo1, atributo2])
+
+  // Effect para GET
+  useLayoutEffect(() => {
     backGet()
       .then((res) => {
         setDatos(res)
+        console.log(apiURL)
+        console.log(chart)
+        console.log(indexGraph)
       })
       .catch((e) => {
         console.log(e.message)
       })
-  }, [apiURL, chart, atributo1, atributo2])
+  }, [apiURL])
 
   // Modificador booleano de click
   const clicked = () => {
     setClick(!click)
   }
 
-  // GET req
+  const urlRef = useRef()
+  urlRef.current = apiURL
+  // console.log(urlRef.current)
+  // // GET req
   const backGet = async () =>{
-    const response = await fetch(apiURL) 
+    const response = await fetch(urlRef.current) 
     if(!response.ok){
       throw new Error('Data could not be fetched')
     } else {
@@ -63,7 +88,6 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
   const clickedLi = (e, data) => {
     setChart(data)
     if (data === 'Grafico de Burbuja'){
-      console.log(apiURL)
       setShowForm(true)
     } else {
       setShowForm(false)
@@ -82,11 +106,13 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
   return (
       <div className='container-db-general'>
         <div className='container-db'>
+        <React.StrictMode>
             <GraphContainer indexGraph={indexGraph} deleteGraph={deleteGraph} showForm={showForm} atributo2={atributo2} click={click} chart={chart} data = {datos} atributo1={atributo1} clicked={clicked} clickedLi={clickedLi} />
             <div className='container-form-a'>
                 < FormAtributoInt idForm={1} atributos={atributos} onSelect={saveAtributo1} showForm = {true} />
                 < FormAtributoExt idForm={2} atributos={atributos} onSelect={saveAtributo2} showForm = {showForm} />
             </div>
+        </React.StrictMode>
         </div>
       </div>
   )

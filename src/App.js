@@ -22,6 +22,7 @@ const atributos = [
 ]
 function App() {
 
+
   const [file, setFile] = useState(null) // Estado archivo
   const [headersFile, setHeadersFile] = useState([]) // Estado headers para archivo
 
@@ -29,6 +30,8 @@ function App() {
   const [graphList, setGraphList] = useState([]) // Lista de graficos
 
   const [backPostResp, setBackPostResp] = useState(); // Respuesta backend
+
+  const [listaDatos, setListaDatos] = useState([]); // Lista que guarda datos de graficas YA cargadas
 
   // Referencia para la lista de grafico
   const graphListRef = useRef(); 
@@ -40,6 +43,11 @@ function App() {
   const createGraph = async (x)  => {
     setIndexGraph(indexGraph+ 1)
     setGraphList([...graphList, x])
+  }
+
+  // Funcion para actualizar datos de listaDatos
+  const updateList = (chart, url) =>{
+    
   }
 
   // Funcion para lectura del archivo cuando se dropea -- UploadFile

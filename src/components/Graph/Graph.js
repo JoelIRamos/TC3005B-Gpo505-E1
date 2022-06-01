@@ -90,7 +90,6 @@ const Graph = ({datosGraph, chart}) => {
     ) 
   }
   else if (chart === 'Grafico de Burbuja'){
-    console.log(datosGraph)
     return (
       <Bubble options = {{scales: {
         y: {
