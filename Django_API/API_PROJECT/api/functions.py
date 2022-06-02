@@ -426,6 +426,27 @@ def searchStatistics(request, historyID, filter):
         
     return JsonResponse(data)
 
+def searchStatus(request, historyID):
+    # Usar coleccion "RunHistory"
+    colectionFD = db["RunHistory"]
+    
+    # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
+    resultsFD = list(colectionFD.find({"_id": historyID}))
+    
+    if len(resultsFD) > 0:
+        data = {'message' : 'Success',
+                'result': {
+                    'Code': resultsFD[0]['code']["number"],
+                    'Description' : resultsFD[0]['code']['description']
+                } 
+                }
+
+    else:
+        data = { 'message': 'Not found' }
+
+    
+
+    return JsonResponse(data)
 
 def updateGraphs(request, historyID):
     # Usar la coleccion "RunHistory"
