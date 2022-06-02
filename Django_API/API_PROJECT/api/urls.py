@@ -6,10 +6,10 @@ urlpatterns = [
     # * Consultar la lista de historiales
     path('getHistoryList/', views.searchHistoryListView.as_view(), name='get_history_list'),
     
-    # * Consultar los detalles de un historial
+    # ! Consultar los detalles de un historial (endpoint para testeo)
     path('getHistoryDetail/<str:historyID>/', views.searchHistoryDetailView.as_view(), name='get_history_detail'),
     
-    # * Consultar los detalles de la ultima sesion de un usuario
+    # * Consultar los detalles de la corrida de un archivo
     path('getHistory/<str:historyID>/', views.searchHistoryView.as_view(), name='get_history'),
     
     # * Mandar a pedir la informacion de una sesion en formato para una grafica de Barras

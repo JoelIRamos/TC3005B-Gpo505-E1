@@ -45,7 +45,7 @@ class searchHistoryListView(View):
     def delete(self, request):
         return JsonResponse(self.data)
 
-# View del endpoint de searchHistoryDetail
+# ! View del endpoint de searchHistoryDetail (endpoint para testeo)
 class searchHistoryDetailView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 

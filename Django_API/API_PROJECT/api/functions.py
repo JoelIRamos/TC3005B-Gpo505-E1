@@ -67,6 +67,7 @@ def searchHistoryList(request):
         return JsonResponse({'message': 'Error'})
 
 
+# ! Funcion de testeo
 def searchHistoryDetail(request, historyID):
     try: 
         # Buscar los registros de la coleccion "File" con el id_history e ignorar las columnas _id y id_history 
