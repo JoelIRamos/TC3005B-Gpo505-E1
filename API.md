@@ -17,42 +17,47 @@ N/A
 
 ### Objeto Retorno Correcto
 ``` json
-    {
-        "message": "found",
+    { 
+        "message": "Found",
         "result": [
             {
-                "base_file_name": "Analisis_Chatarra_Ene21-ene22",
+                "base_file_name": "Nombre1",
                 "versions": [
                     {
-                    "_id": "Analisis_Chatarra_Ene21-ene22_2022-05-16_19-25-55",
-                    "date": "2022-05-16_19-25-55"
+                        "_id": "Nombre1+Fecha1",
+                        "date": "Fecha1"				
                     },
                     {
-                    "_id": "Analisis_Chatarra_Ene21-ene22_2022-05-16_19-53-41",
-                    "date": "2022-05-16_19-53-41"
-                    },
+                        "_id": "Nombre1+Fecha2",
+                        "date": "Fecha2"				
+                    }
+                ]
+            },
+            {
+                "base_file_name": "Nombre2",
+                "versions": [
                     {
-                    "_id": "Analisis_Chatarra_Ene21-ene22_2022-05-20_20-13-57",
-                    "date": "2022-05-20_20-13-57"
-                    },
-                    {
-                    "_id": "Analisis_Chatarra_Ene21-ene22_2022-05-20_20-18-18",
-                    "date": "2022-05-20_20-18-18"
-                    },
-                    {
-                    "_id": "Analisis_Chatarra_Ene21-ene22_2022-05-20_20-24-20",
-                    "date": "2022-05-20_20-24-20"
+                        "_id": "Nombre2+Fecha3",
+                        "date": "Fecha3"				
                     }
                 ]
             }
-        ]
+        ] 
     }
 ```
 
 ### Objeto Retorno Incorrecto
+**Version 1**
 ``` json
     {
         "message": "Not found"
+    }
+```
+
+**Version 2**
+``` json
+    {
+        "message": "Error"
     }
 ```
 
@@ -64,7 +69,7 @@ N/A
     /api/getHistory/<str:historyID>/
 
 ### Parametros: 
-**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
+**historyID:** El id de una corrida del archivo
 
 ### Bodys
 ``` json
@@ -87,42 +92,7 @@ N/A
                 "UsuarioPesadaEntrada_num",
                 "UsuarioDescarga_num"
             ],
-            "graphs": [
-                {
-                    "type": "Bar",
-                    "labels": [
-                        "ABASTECEDORA RIVELL SA DE CV",
-                        "ABC METALES SIDERURGICOS S.A. DE C.",
-                        "ACEREMEX S. A. DE C. V.",
-                        "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
-                        "ADN ENERGIA S DE RL DE CV",
-                    ],
-                    "anomalyList": [
-                        85,
-                        125,
-                        80,
-                        6,
-                        1,
-                    ]
-                },
-                {
-                    "type": "Line",
-                    "labels": [
-                        "ABASTECEDORA RIVELL SA DE CV",
-                        "ABC METALES SIDERURGICOS S.A. DE C.",
-                        "ACEREMEX S. A. DE C. V.",
-                        "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
-                        "ADN ENERGIA S DE RL DE CV",
-                    ],
-                    "anomalyList": [
-                        85,
-                        125,
-                        80,
-                        6,
-                        1,
-                    ]
-                },
-            ]
+            "graphs": []
         }
     }
 ```
@@ -135,15 +105,22 @@ N/A
     }
 ```
 
+**Version 2**
+``` json
+    {
+        "message": "Error"
+    }
+```
+
 ----
 ## **GET_BAR_GRAPH**
-> Funcion: Obtener los valores para crear una grafica de barras en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
+> Funcion: Obtener los valores para crear una grafica de barras en el frontend
 
 ### URL: 
     /api/getBarGraph/<str:historyID>/<str:attribute>/<str:filter>/
 
 ### Parametros: 
-**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
+**historyID:** El id de una corrida del archivo
 
 **attribute:** La variable que quieren usar para sacar la gráfica.
 
@@ -171,14 +148,36 @@ N/A
             80,
             6,
             1
+        ],
+        "noAnomalyList": [
+            35,
+            1,
+            12,
+            8,
+            6
         ]
     }
 ```
 
 ### Objeto Retorno Incorrecto
+**Version 1**
 ``` json
     {
         "message": "Not found"
+    }
+```
+
+**Version 2**
+``` json
+    {
+        "message": "Error"
+    }
+```
+
+**Version 3**
+``` json
+    {
+        "message": "No anomalies less than filter: -1"
     }
 ```
 
@@ -190,7 +189,7 @@ N/A
     /api/getBarGraph/<str:historyID>/<str:attribute>/<str:filter>/
 
 ### Parametros: 
-**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
+**historyID:** El id de una corrida del archivo
 
 **attribute:** La variable que quieren usar para sacar la gráfica.
 
@@ -218,19 +217,40 @@ N/A
             80,
             6,
             1
+        ],
+        "noAnomalyList": [
+            35,
+            1,
+            12,
+            8,
+            6
         ]
     }
 ```
 
 ### Objeto Retorno Incorrecto
+**Version 1**
 ``` json
     {
         "message": "Not found"
     }
 ```
 
+**Version 2**
+``` json
+    {
+        "message": "Error"
+    }
+```
+
+**Version 3**
+``` json
+    {
+        "message": "No anomalies less than filter: -1"
+    }
+```
+
 ----
-> Falta Definir
 ## **GET_BUBBLE_GRAPH**
 > Funcion: Obtener los valores para crear una grafica de burbuja en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
 
@@ -238,7 +258,7 @@ N/A
     /api/getBarGraph/<str:historyID>/<str:attribute1>/<str:attribute2>/<str:filter>/
 
 ### Parametros: 
-**historyID:** El id del historial (el cual fue enviado cuando se hizo la peticion getHistoryList)
+**historyID:** El id de una corrida del archivo
 
 **attribute1:** La variable que representa los actores internos.
 
@@ -253,13 +273,31 @@ N/A
 
 ### Objeto Retorno Correcto
 ``` json
-
+    "type": "Bubble",
+    "data": [],
+    "attribute1": [],
+    "attribute2": []
 ```
 
 ### Objeto Retorno Incorrecto
+**Vesion 1**
 ``` json
     {
         "message": "Not found"
+    }
+```
+
+**Version 2**
+``` json
+    {
+        "message": "Error"
+    }
+```
+
+**Version 3**
+``` json
+    {
+        "message": "No anomalies less than filter: -1"
     }
 ```
 
@@ -271,8 +309,9 @@ N/A
     /api/getStatistics/<str:historyID>/<str:filter>/
 
 ### Parametros: 
-**historyID:** El id del una version de un archivo
-**filter:** Filtro de las anomalias
+**historyID:** El id de una corrida del archivo
+
+**filter** Filtro para separar anomalias de no anomalias
 
 ### Bodys
 ``` json
@@ -282,16 +321,68 @@ N/A
 ### Objeto Retorno Correcto
 ``` json
     {
-        "TotalAnomalys": "#",
-        "AnomatyPercentage": "#",
-        "AnomalyRelations": "#"
+        "TotalAnomalys": "",
+        "AnomatyPercentage": "",
+        "AnomalyRelations": ""
     }
 ```
 
 ### Objeto Retorno Incorrecto
+**Version 1**
 ``` json
     {
         "message": "Not found"
+    }
+```
+
+**Version 2**
+``` json
+    {
+        "message": "Error"
+    }
+```
+
+**Version 3**
+``` json
+    {
+        "message": "No anomalies less than filter: -1"
+    }
+```
+
+----
+## **GET_STATATUS**
+> Funcion: Dar el estatus de una corrida
+
+### URL: 
+    /api/getStatus/<str:historyID>/
+
+### Parametros: 
+**historyID:** El id de una corrida del archivo
+
+### Bodys
+``` json
+N/A
+```
+
+### Objeto Retorno Correcto
+``` json
+    {
+        
+    }
+```
+
+### Objeto Retorno Incorrecto
+**Version 1**
+``` json
+    {
+        "message": "Not found"
+    }
+```
+
+**Version 2**
+``` json
+    {
+        "message": "Error"
     }
 ```
 
@@ -300,31 +391,63 @@ N/A
 > Funcion: Actualizar las gráficas que estaba haciendo el usuario
 
 ### URL: 
-    /api/putGraphs/<str:historyID>/<int:graphID>/
+    /api/putGraphs/<str:historyID>/
 
 ### Parametros: 
-**historyID:** El id del una version de un archivo
-**graphID:** El id del una grafica
+**historyID:** El id de una corrida del archivo
 
 ### Bodys
 ``` json
-    {
-        "type": "Line",
-        "labels": [
-            "ABASTECEDORA RIVELL SA DE CV",
-            "ABC METALES SIDERURGICOS S.A. DE C.",
-            "ACEREMEX S. A. DE C. V.",
-            "ACEROS Y TRANSPORTES ELLA S.A DE C.V",
-            "ADN ENERGIA S DE RL DE CV"
-        ],
-        "anomalyList": [
-            85,
-            125,
-            80,
-            6,
-            1
-        ]
-    }
+    [
+        {
+            "type": "Line",
+            "labels": [
+                "Largos Puebla",
+                "Gue. Privada Famosa",
+                "L. Apo. Av. Acero",
+                "Gue. Av. República Mexicana",
+                "L. Apo. Av. Camino Mezquital"
+            ],
+            "anomalyList": [
+                4485,
+                1244,
+                258,
+                1,
+                1
+            ],
+            "noAnomalyList": [
+                4958,
+                20637,
+                14603,
+                15,
+                30
+            ]
+        },
+        {
+            "type": "Bar",
+            "labels": [
+                "Largos Puebla",
+                "Gue. Privada Famosa",
+                "L. Apo. Av. Acero",
+                "L. Apo. Av. Camino Mezquital",
+                "Gue. Av. República Mexicana"
+            ],
+            "anomalyList": [
+                8606,
+                4853,
+                2779,
+                9,
+                4
+            ],
+            "noAnomalyList": [
+                837,
+                17028,
+                12082,
+                22,
+                12
+            ]
+        }
+    ]
 ```
 
 ### Objeto Retorno Correcto
@@ -342,10 +465,10 @@ N/A
     }
 ```
 
-**Versión 2**
+**Version 2**
 ``` json
     {
-        "message": "graphID not found"
+        "message": "Error"
     }
 ```
 
@@ -461,7 +584,6 @@ N/A
 ----
 
 # Revisión de Endpoints
-### GET_HISTORY_LIST
 
 **Hay algún problema?** No
 
@@ -473,73 +595,3 @@ N/A
 
 **Revision hecha por:** Joel Ramos
 
-### GET_HISTORY
-
-**Hay algún problema?** No
-
-**Descripción del problema:** N/A 
-
-**Hay algún pendiente?** No
-
-**Descripción del pendiente:** N/A
-
-**Revision hecha por:** Joel Ramos
-
-### GET_BAR_GRAPH
-
-**Hay algún problema?** No
-
-**Descripción del problema:** N/A 
-
-**Hay algún pendiente?** Si
-
-**Descripción del pendiente:** Ordenar Datos
-**Revision hecha por:** Joel Ramos
-
-### GET_LINE_GRAPH
-
-**Hay algún problema?** No
-
-**Descripción del problema:** N/A 
-
-**Hay algún pendiente?** Si
-
-**Descripción del pendiente:** Ordenar Datos
-
-**Revision hecha por:** Joel Ramos
-
-### GET_BUBBLE_GRAPH
-
-**Hay algún problema?** Si
-
-**Descripción del problema:** Falta hacer la función
-
-**Hay algún pendiente?** Si
-
-**Descripción del pendiente:** Entender como generar los datos para aplicar la grafica
-
-**Revision hecha por:** Joel Ramos
-
-### PUT_GRAPHS
-
-**Hay algún problema?** No
-
-**Descripción del problema:** N/A 
-
-**Hay algún pendiente?** No
-
-**Descripción del pendiente:** N/A
-
-**Revision hecha por:** Joel Ramos
-
-### GET_HISTORY_DETAIL
-
-**Hay algún problema?** No
-
-**Descripción del problema:** N/A 
-
-**Hay algún pendiente?** No
-
-**Descripción del pendiente:** N/A
-
-**Revision hecha por:** Joel Ramos

@@ -27,6 +27,9 @@ urlpatterns = [
     # * Mandar a pedir el estatus de file
     path('getStatus/<str:historyID>/', views.searchStatusView.as_view(), name='get_status'),
     
+    # * Mandar a pedir el estatus de una corrida por si existe errores
+    path('getStatus/<str:historyID>/', views.searchStatusView.as_view(), name='get_status'),
+    
     # * Actualizar las graficas del historial
     path('putGraphs/<str:historyID>/', views.updateGraphsView.as_view(), name='put_graphs'),
 
