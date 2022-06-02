@@ -23,9 +23,6 @@ urlpatterns = [
     
     # * Mandar a pedir varias estadisticas de una sesion
     path('getStatistics/<str:historyID>/<str:filter>/', views.searchStatisticsView.as_view(), name='get_statistics'),
-
-    # * Mandar a pedir el estatus de file
-    path('getStatus/<str:historyID>/', views.searchStatusView.as_view(), name='get_status'),
     
     # * Mandar a pedir el estatus de una corrida por si existe errores
     path('getStatus/<str:historyID>/', views.searchStatusView.as_view(), name='get_status'),

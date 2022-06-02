@@ -449,46 +449,26 @@ def searchStatistics(request, historyID, filter):
 
 def searchStatus(request, historyID):
     try:
-        # Usar coleccion "FileData"
-        colectionFD = db["FileData"]
-
+        # ? Usar coleccion "RunHistory" o "FileData"
+        colectionFD = db["RunHistory"]
+        
         # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
         resultsFD = list(colectionFD.find({"_id": historyID}))
-
+        
         # Si existe el historial
         if len(resultsFD) > 0:
-            
-            result = "Correcto"
-            
-            
-            data = {'message': 'Success', 'result': result}
+            data = {'message' : 'Success',
+                    'result': {
+                        'Code': resultsFD[0]['code']["number"],
+                        'Description' : resultsFD[0]['code']['description']
+                    } 
+                    }
         else:
             data = { 'message': 'Not found' }
         return JsonResponse(data)
     except: # Si ocurre cualquier error insesperado regresar mensaje de error
         return JsonResponse({'message': 'Error'})
 
-def searchStatus(request, historyID):
-    # Usar coleccion "RunHistory"
-    colectionFD = db["RunHistory"]
-    
-    # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
-    resultsFD = list(colectionFD.find({"_id": historyID}))
-    
-    if len(resultsFD) > 0:
-        data = {'message' : 'Success',
-                'result': {
-                    'Code': resultsFD[0]['code']["number"],
-                    'Description' : resultsFD[0]['code']['description']
-                } 
-                }
-
-    else:
-        data = { 'message': 'Not found' }
-
-    
-
-    return JsonResponse(data)
 
 def updateGraphs(request, historyID):
     try: 
