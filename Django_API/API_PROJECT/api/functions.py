@@ -154,7 +154,8 @@ def searchBarLineGraphHelper(request, historyID, variable, filter, type):
         if len(resultsFD) > 0:
             # Crear data frame
             originalDf =  pd.DataFrame({'attribute' :resultsFD[0]['data'][variable], 'anomaly': resultsFD[0]['data']['anomaly_scores']})
-
+            
+             
             # Filtrar las anomalias
             anomaly_result = originalDf[originalDf['anomaly'] <= filter] 
             # Filtrar las no anomalias
@@ -162,7 +163,7 @@ def searchBarLineGraphHelper(request, historyID, variable, filter, type):
 
             # Contar el total de anomalias por atributo
             anomalyTable = anomaly_result.groupby(['attribute'],sort=True)['attribute'].count().to_frame('total_anomaly').reset_index()
-        
+
             # Contar el total de no anomalias por atributo
             no_anomalyTable = no_anomaly_result.groupby(['attribute'],sort=True)['attribute'].count().to_frame('total_no_anomaly').reset_index()
 
@@ -176,7 +177,7 @@ def searchBarLineGraphHelper(request, historyID, variable, filter, type):
 
             # join realData con no anomaly
             realData = realData.join(no_anomalyTable.set_index('attribute'), on='attribute', how='left')
-        
+
             # Llenar campos vacios con 0s
             realData = realData.fillna(0)
 
@@ -193,7 +194,8 @@ def searchBarLineGraphHelper(request, historyID, variable, filter, type):
                 'anomalyList': realDataTop25['total_anomaly'].tolist(),
                 'noAnomalyList' : realDataTop25['total_no_anomaly'].tolist()
                 #'normalList': df['normalLists'].tolist()
-            }            
+            } 
+
         else:
             data = { 'message': 'Not found' }
         return JsonResponse(data)
@@ -455,8 +457,11 @@ def searchStatus(request, historyID):
 
         # Si existe el historial
         if len(resultsFD) > 0:
-            print("Correcto")
-            data = {'message': 'Success'}
+            
+            result = "Correcto"
+            
+            
+            data = {'message': 'Success', 'result': result}
         else:
             data = { 'message': 'Not found' }
         return JsonResponse(data)
@@ -488,21 +493,19 @@ def updateGraphs(request, historyID):
 
 # * Pendientes: Documentacion y burbuja
 '''
-getStatus
-Comment putGraph
-Terminar y Actualizar:
-    Prioridad:
-    Documento de Funcionalidades: Actualizar Backend y agregar Frontend
-    Bitacora de Pruebas: Agregar Frontend
-    Manual de Usuario (Nuevo)
-	Manual de Despliegue (Nuevo)
-    Actualizar Modelo de BD
-    Y MarkDown
 
-    Later:
-    Especificación de Requerimientos Revisar Pequeños Detalles
-	Historias de Usuario: Revisar Pequeños Detalles
-    Plan de Calidad: Actualizar a las Pruebas Finales
+Terminar:
+    Para Antes de la presentación:
+        Documento de Funcionalidades (Frontend y Backend)
+        Bitacora de Pruebas (Frontend y Backend)
+        Manual de Usuario (Frontend)
+        Manual de Despliegue (Frontend y Backend)
+
+    Despues de la Presentación:
+        Especificación de Requerimientos (Casi Terminado)
+        Historias de Usuario (Casi Terminado)
+        Plan de Calidad
+        Actualizar Modelo de BD
 
 
 Terminados:

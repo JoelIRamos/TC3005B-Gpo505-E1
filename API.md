@@ -174,6 +174,13 @@ N/A
     }
 ```
 
+**Version 3**
+``` json
+    {
+        "message": "No anomalies less than filter: -1"
+    }
+```
+
 ----
 ## **GET_LINE_GRAPH**
 > Funcion: Obtener los valores para crear una grafica de linea en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
@@ -236,6 +243,13 @@ N/A
     }
 ```
 
+**Version 3**
+``` json
+    {
+        "message": "No anomalies less than filter: -1"
+    }
+```
+
 ----
 ## **GET_BUBBLE_GRAPH**
 > Funcion: Obtener los valores para crear una grafica de burbuja en el frontend de acuerdo a la sesion del usuario y las variables que quiera usar
@@ -280,6 +294,13 @@ N/A
     }
 ```
 
+**Version 3**
+``` json
+    {
+        "message": "No anomalies less than filter: -1"
+    }
+```
+
 ----
 ## **GET_STATISTICS**
 > Funcion: Dar estadisticas importantes al usuario
@@ -318,6 +339,13 @@ N/A
 ``` json
     {
         "message": "Error"
+    }
+```
+
+**Version 3**
+``` json
+    {
+        "message": "No anomalies less than filter: -1"
     }
 ```
 
@@ -370,7 +398,56 @@ N/A
 
 ### Bodys
 ``` json
-    
+    [
+        {
+            "type": "Line",
+            "labels": [
+                "Largos Puebla",
+                "Gue. Privada Famosa",
+                "L. Apo. Av. Acero",
+                "Gue. Av. República Mexicana",
+                "L. Apo. Av. Camino Mezquital"
+            ],
+            "anomalyList": [
+                4485,
+                1244,
+                258,
+                1,
+                1
+            ],
+            "noAnomalyList": [
+                4958,
+                20637,
+                14603,
+                15,
+                30
+            ]
+        },
+        {
+            "type": "Bar",
+            "labels": [
+                "Largos Puebla",
+                "Gue. Privada Famosa",
+                "L. Apo. Av. Acero",
+                "L. Apo. Av. Camino Mezquital",
+                "Gue. Av. República Mexicana"
+            ],
+            "anomalyList": [
+                8606,
+                4853,
+                2779,
+                9,
+                4
+            ],
+            "noAnomalyList": [
+                837,
+                17028,
+                12082,
+                22,
+                12
+            ]
+        }
+    ]
 ```
 
 ### Objeto Retorno Correcto
