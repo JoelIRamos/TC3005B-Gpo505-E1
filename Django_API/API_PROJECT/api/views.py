@@ -174,7 +174,7 @@ class searchStatisticsView(View):
     def delete(self, request, historyID='0', filter='0'):
         return JsonResponse(self.data)
 
-
+# View del endpoint de getStatus
 class searchStatusView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
@@ -185,7 +185,7 @@ class searchStatusView(View):
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, historyID):
         return searchStatus(request, historyID)
-    
+
     def post(self, request, historyID='0'):
         return JsonResponse(self.data)
     
