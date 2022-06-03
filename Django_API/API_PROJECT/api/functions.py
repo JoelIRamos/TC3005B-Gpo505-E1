@@ -455,15 +455,17 @@ def searchStatus(request, historyID):
         
         # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
         resultsFD = list(colectionFD.find({"_id": historyID}))
-        
         # Si existe el historial
         if len(resultsFD) > 0:
-            data = {'message' : 'Success',
-                    'result': {
-                        'Code': resultsFD[0]['code']["number"],
-                        'Description' : resultsFD[0]['code']['description']
-                    } 
-                    }
+            print("llegue")
+            data = {
+                'message' : 'Success',
+                'result': {
+                    'Code': resultsFD[0]['code']["number"],
+                    'Description' : resultsFD[0]['code']['description']
+                } 
+            }
+            print("llegue2")
         else:
             data = { 'message': 'Not found' }
         return JsonResponse(data)
