@@ -19,7 +19,7 @@ import numpy as np
 def searchHistoryList(request): 
     try:
         # Buscar todos los registros de la coleccion "History" quitando las columnas "internos", "externos" y "graphs"
-        runs = list(db["RunHistory"].find({}, {"internal_attributes": 0, "external__attributes": 0, "graphs": 0}))
+        runs = list(db["RunHistory"].find({}, {"id": 1, "base_file_name": 1, "date": 1, "status": 1}))
 
         # Si hay registros regresarlos
         if len(runs)>0:
@@ -47,6 +47,7 @@ def searchHistoryList(request):
                 for run in runs:
                     # Si el nombre del archivo es el mismo
                     if run["base_file_name"] == name:
+                        print(run)
                         # Objeto con el id y la fecha de la version
                         version = {
                             "_id": run["_id"],
@@ -84,7 +85,7 @@ def searchHistoryDetail(request, historyID):
                 graphs = ExtIntResults["graphs"]
             except:
                 graphs = []
-
+                
             # Formato de los Datos
             data = {
                 'message':'found',
@@ -421,22 +422,18 @@ def searchStatistics(request, historyID, filter):
 
 def searchStatus(request, historyID):
     try:
-        # ? Usar coleccion "RunHistory" o "FileData"
         colectionFD = db["RunHistory"]
-        
         # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
         resultsFD = list(colectionFD.find({"_id": historyID}))
         # Si existe el historial
         if len(resultsFD) > 0:
-            print("llegue")
             data = {
                 'message' : 'Success',
                 'result': {
-                    'Code': resultsFD[0]['code']["number"],
-                    'Description' : resultsFD[0]['code']['description']
-                } 
+                    'code': resultsFD[0]['status']["code"],
+                    'message' : resultsFD[0]['status']['message']
+                }
             }
-            print("llegue2")
         else:
             data = { 'message': 'Not found' }
         return JsonResponse(data)
@@ -455,10 +452,13 @@ def updateGraphs(request, historyID):
             # Extraer Graficas del body
             newgraphs = json.loads(request.body)
             
-            # Actualizar el registro con la nueva lista
-            collectionRH.update_one({"_id": historyID}, {"$set": {"graphs": newgraphs}})
+            if(resultsRH[0]['status']['code'] != 0):
+                data = {'message': 'Not found'}
+            else:
+                # Actualizar el registro con la nueva lista
+                collectionRH.update_one({"_id": historyID}, {"$set": {"graphs": newgraphs}})
             
-            data = {'message': 'Success'}
+                data = {'message': 'Success'}
         else: 
             data = {'message': 'Not found'}
         return JsonResponse(data)
