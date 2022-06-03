@@ -51,6 +51,7 @@ def searchHistoryList(request):
                         version = {
                             "_id": run["_id"],
                             "date": run["date"],
+                            "staus": run["status"]
                         }
                         # Agregar la version
                         file["versions"].append(version)
@@ -131,6 +132,7 @@ def searchHistory(request, historyID):
                     'internal_attributes': ExtIntResult["internal_attributes"],
                     'external_attributes': ExtIntResult["external_attributes"],
                     'informational_attributes': ExtIntResult["informational_attributes"],
+                    'status': ExtIntResult["status"],
                     'graphs': graphs
                 }
             }
@@ -156,7 +158,7 @@ def searchBarLineGraphHelper(request, historyID, variable, filter, type):
             # Crear data frame
             originalDf =  pd.DataFrame({'attribute' :resultsFD[0]['data'][variable], 'anomaly': resultsFD[0]['data']['anomaly_scores']})
             
-             
+            
             # Filtrar las anomalias
             anomaly_result = originalDf[originalDf['anomaly'] <= filter] 
             # Filtrar las no anomalias
@@ -182,10 +184,6 @@ def searchBarLineGraphHelper(request, historyID, variable, filter, type):
             # Llenar campos vacios con 0s
             realData = realData.fillna(0)
 
-            # ! Borrar.. No es necesario por el top 25sort realData
-            #//realData.sort_values(by=['total_anomaly'], inplace=True, ascending=False, kind='mergesort')
-            #//realData = realData.reset_index(drop=True)
-            #//print(realData)
             # obtiene las 25 filas con mas anomalias
             realDataTop25 = realData.nlargest(25, 'total_anomaly')
 
@@ -194,7 +192,6 @@ def searchBarLineGraphHelper(request, historyID, variable, filter, type):
                 'labels': realDataTop25['attribute'].tolist(),
                 'anomalyList': realDataTop25['total_anomaly'].tolist(),
                 'noAnomalyList' : realDataTop25['total_no_anomaly'].tolist()
-                #'normalList': df['normalLists'].tolist()
             } 
 
         else:
@@ -221,7 +218,7 @@ def searchBubbleGraph1(request, historyID, attribute1, attribute2, filter):
         print("coleccion")
         # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
         resultsFD = list(colectionFD.find({"_id": historyID}, {"data." + attribute1 : 1, "data." + attribute2 : 1, "data.   anomaly_scores": 1}))
-        #print(resultsFD)
+        
         print("resultFD")
         # Si existe el historial
         if len(resultsFD) > 0:
@@ -231,28 +228,17 @@ def searchBubbleGraph1(request, historyID, attribute1, attribute2, filter):
             # Filtrar las anomalias
             # ! Igual o menor que??
             rslt_df = df[df['anomaly'] <= filter]
-            #print(rslt_df)
+            
             anomalyRelation = df.groupby(['attribute1', 'attribute2']).size().to_frame('size')
             anomalyRelation.reset_index( inplace=True)
-            #print(anomalyRelation)
+            
 
             anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
             bubbleData = []
-            #print(anomalyRelation)
-            #df.shape[0]
-            #df.index
-            #print(len(anomalyRelation))
-            #print("value1")
-            #print(anomalyRelation.iloc[1,0])
-            #print("value2")
-            #print(anomalyRelation.iloc[0]['size'])
 
-            #print(anomalyRelation)
             attribute1_list = anomalyRelation['attribute1'].values.tolist()
             attribute2_list =  anomalyRelation['attribute2'].values.tolist()
 
-            #df["Courses"].values.tolist()
-            #print(attribute2_list)
             for i in range(len(anomalyRelation)):
                 bubbleData.append(
                     {
@@ -264,16 +250,12 @@ def searchBubbleGraph1(request, historyID, attribute1, attribute2, filter):
                     }
                 )
 
-            #bubbleData = np.array(bubbleData)
-
-
             data = {
                 'type':'Bubble',
                 #'labels': anomalyTable['attribute'].tolist(),
                 'data' : bubbleData, #.tolist(),
                 'attribute1': attribute1_list,
                 'attribute2': attribute2_list
-                #'normalList': df['normalLists'].tolist()
             }            
         else:
             data = { 'message': 'Not found' }
@@ -284,35 +266,28 @@ def searchBubbleGraph1(request, historyID, attribute1, attribute2, filter):
 def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
     try:
         filter = float(filter)
-        #//print("start")
+        
         # Usar coleccion "FileData"
         colectionFD = db["FileData"]
-        #//print("coleccion")
+        
         # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
         resultsFD = list(colectionFD.find({"_id": historyID}, {"data." + attribute1 : 1, "data." + attribute2 : 1, "data." + "anomaly_scores": 1}))
-        # print(resultsFD[0]['data']['anomaly_scores'])
-        #//print("resultFD")
+        
         # Si existe el historial
         if len(resultsFD) > 0:
-            # print("df")
             # Crear data frame
             df =  pd.DataFrame({'attribute1' : resultsFD[0]['data'][attribute1], 'attribute2' : resultsFD[0]['data'][attribute2], 'anomaly' : resultsFD[0]['data']['anomaly_scores']})
             # Filtrar las anomalias
             # En caso de que falle el filtrado
             try:
                 anomalyFilterDf = df[df['anomaly'] <= filter]
-                #//print("anomalyFilterDf")
-                #//print(anomalyFilterDf)
-
                 # Agrupar anomalias con ambos atributos
                 anomalyRelation = anomalyFilterDf.groupby(['attribute1', 'attribute2']).size().to_frame('size')
                 anomalyRelation.reset_index(inplace=True)
-                #//print("anomalyRelation")
 
                 # Obtener el valor mas alto de anomaly
                     # nlargest retorna un dataframe... iloc retorna el valor
                 topAnomalyValue = anomalyRelation.nlargest(1, 'size').iloc[0]['size']
-                #//print("top")
 
                 ratio = 25 / topAnomalyValue
 
@@ -338,7 +313,6 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
                 attribute1Dict = dict(zip(attribute1List, attribute1Range))
                 # Juntar attribute2List, attribute2Range para formar diccionario
                 attribute2Dict = dict(zip(attribute2List, attribute2Range))
-                #//print(attribute2Dict)
 
                 # Lista para los datos que graficar
                 bubbleDataList = []
@@ -403,9 +377,6 @@ def searchStatistics(request, historyID, filter):
                 totalLength = len(df)
                 anomalyLength = len(anomalyFilterDf)
                 anomalyPercentage = float('%.2f'%((anomalyLength / totalLength) * 100))
-
-                # // Filtrado de relaciones anomalas
-                # // anomalyFilterDf = dfAnomalyRelation[dfAnomalyRelation['anomaly_scores'] <= filter]
 
                 # Nombres de los labels
                 labelsList = (list(resultsFD[0]['data'].keys()))
