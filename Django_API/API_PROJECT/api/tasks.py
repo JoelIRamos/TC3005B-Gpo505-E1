@@ -1,6 +1,10 @@
+import code
+import json
+from operator import attrgetter
 from API_PROJECT.celery import app
 from celery import shared_task
 from api.db import db 
+from .classes import RunIdInfo, Attributes
 
 from django.core.files.storage import default_storage
 
@@ -24,7 +28,7 @@ def clean_df(df: pd.DataFrame):
         if df[column].isna().sum() > 0:
             df[column] = df[column].fillna('NA')
 
-def load_file_to_df(file_name: str, columns_model: list, columns_informational: list) -> pd.DataFrame:
+def load_file_to_df(file_name: str, attributes: Attributes) -> pd.DataFrame:
     """loads a csv file to a dataframe
 
     Args:
@@ -44,13 +48,13 @@ def load_file_to_df(file_name: str, columns_model: list, columns_informational: 
     file = default_storage.open(file_name)
     #encoding='ISO-8859-1'
     # Reads the file in chunks of 10000 lines at a time and stores the data in the dataframe
-    for chunk in pd.read_csv(file, chunksize=10000, low_memory=False, usecols=(columns_model + columns_informational), delimiter=','):
+    for chunk in pd.read_csv(file, chunksize=10000, low_memory=False, usecols=attributes.all_attributes, delimiter=','):
         # Cleans the dataframe from null or NaN values
         clean_df(chunk)
         # Appends the cleaned chunk to the dataframe to store the data
         df_whole = pd.concat([df_whole, chunk])
 
-    df_model = df_whole.loc[:, columns_model]
+    df_model = df_whole.loc[:, attributes.model_attributes]
     # Closes the file
     file.close()
     # Deletes the file variable
@@ -121,8 +125,28 @@ def apply_model(df_model: pd.DataFrame, model: IsolationForest, df_whole: pd.Dat
     # Applies the model to the dataframe and adds the result to the dataframe
     df_whole['anomaly_scores'] = model.decision_function(df_model)  
 
-def upload_to_db(df: pd.DataFrame, run_id: str, base_file_name: str, date: str, internal_attributes: list, external_attributes: list, informational_attributes: list):
-    """Uploads the dataframe to a database
+def update_data_entry(file_data_collection, ref, new_column_name, new_column):
+    #file_data_collection.find_one_and_update({'_id': ref}, {'$push': {'data': { new_column_name : new_column}}})
+    file_data_collection.find_one_and_update({'_id': ref}, {'$set': {'data.' + new_column_name: new_column}})
+    #coll.update({'ref': ref}, {'$push': {'data': new_column}})
+
+def upload_to_db_error(run_id_info: RunIdInfo, attributes: Attributes, error_code: str ,error_message: str):
+    history_collection = db['RunHistory']
+    history_collection.insert_one({
+        "_id" : run_id_info.run_id,
+        "base_file_name" : run_id_info.base_file_name,
+        "date" : run_id_info.date,
+        "internal_attributes" : attributes.internal_attributes,
+        "external_attributes" : attributes.external_attributes,
+        "informational_attributes" : attributes.informational_attributes,
+        "status" : {
+            "code": error_code,
+            "message": error_message
+        }
+    })
+
+def upload_to_db_success(df: pd.DataFrame, run_id_info: RunIdInfo, attributes: Attributes):
+    """Uploads the data to the database if the run was successful
 
     Args:
         df (DataFrame): Dataframe to upload
@@ -139,19 +163,28 @@ def upload_to_db(df: pd.DataFrame, run_id: str, base_file_name: str, date: str, 
     
     # Creates a new document in the history collection with the data of the run
     history_collection.insert_one({
-        "_id" : run_id,
-        "base_file_name" : base_file_name,
-        "date" : date,
-        "internal_attributes" : internal_attributes,
-        "external_attributes" : external_attributes,
-        "informational_attributes" : informational_attributes
+        "_id" : run_id_info.run_id,
+        "base_file_name" : run_id_info.base_file_name,
+        "date" : run_id_info.date,
+        "internal_attributes" : attributes.internal_attributes,
+        "external_attributes" : attributes.external_attributes,
+        "informational_attributes" : attributes.informational_attributes,
+        "status" : {
+            "code": 0,
+            "message": ""
+        }
     })
     
     # Creates a new document in the file data collection with the data of the processed file
     file_data_collection.insert_one({
-        "_id" : run_id,
-        "data" : df.to_dict(orient='list')
+        "_id" : run_id_info.run_id
+        # "data" : df.to_dict(orient='list')
     })
+
+    # Iterates over the columns of the dataframe and uploads them to the database
+    for column in df:
+        # Uploads the column to the database
+        update_data_entry(file_data_collection, run_id_info.run_id, df[column].name ,df[column].to_list())
 
 def remove_from_queue(file_name: str):
     """Removes a file from the queue
@@ -175,7 +208,7 @@ def remove_from_queue(file_name: str):
     
 
 @shared_task
-def process_file(file_name: str, base_file_name: str, run_id: str, date: str, internal_attributes: list, external_attributes: list, informational_attributes: list):
+def process_file(run_id_info_dict: dict, attributes_dict: dict):
     """Reads a csv file, cleans it applies an Isolation Forest algorithm and uploads the data to a database 
 
     Args:
@@ -187,33 +220,52 @@ def process_file(file_name: str, base_file_name: str, run_id: str, date: str, in
         external_attributes (list): List of external attributes to keep
         informational_attributes (list): List of informational attributes to keep
     """    
-    
+    run_id_info = RunIdInfo(**run_id_info_dict)
+    attributes = Attributes(**attributes_dict)
     # Combines internal and external attributes to be used in the model
-    columns_model = internal_attributes + external_attributes
-    columns_informational = informational_attributes
+
     # Creates model
     model = IsolationForest()
     
     #loads the csv file to a dataframe
-    df_whole, df_model = load_file_to_df(file_name, columns_model, columns_informational)
-
+    try:
+        df_whole, df_model = load_file_to_df(run_id_info.file_name, attributes)
+    except:
+        upload_to_db_error(run_id_info, attributes, 'E001', 'Hubo un error leyendo el archivo')
+        return
+    
     # Encodes labels
-    les = encode_labels(df_model)
-
-    # Trains model and applies it to the dataframe
-    train_model(df_model, model)
-    apply_model(df_model, model, df_whole)
+    try:
+        les = encode_labels(df_model)
+    except:
+        upload_to_db_error(run_id_info, attributes, 'E002', 'Hubo un error codificando las etiquetas')
+        return
+    
+    # Trains the model
+    try:
+        train_model(df_model, model)
+    except:
+        upload_to_db_error(run_id_info, attributes, 'E003', 'Hubo un error entrenando el modelo')
+        return
+        
+    # Applies the model to the dataframe 
+    try:
+        apply_model(df_model, model, df_whole)
+    except:
+        upload_to_db_error(run_id_info, attributes, 'E004', 'Hubo un error aplicando el modelo')
+        return
 
     # Decodes labels
     #decode_labels(df_model, les)
 
     # Uploads results to database
-    upload_to_db(df_whole, run_id, base_file_name, date, internal_attributes, external_attributes, informational_attributes)
+    try:
+        upload_to_db_success(df_whole, run_id_info, attributes)
+    except:
+        upload_to_db_error(run_id_info, attributes, 'E005', 'Hubo un error subiendo los datos a la base de datos')
+        return
     
     # Removes the file from the queue of files to process
-    remove_from_queue(run_id)
+    remove_from_queue(run_id_info.run_id)
             
     #df_whole.to_csv(file_name.replace('.csv','')+'_processed.csv', index=False)
-    
-    # Sleeps for a while to avoid overloading the server
-    time.sleep(2)
