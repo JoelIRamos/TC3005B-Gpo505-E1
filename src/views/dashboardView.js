@@ -3,9 +3,14 @@ import Titulo from '../components/Titulo/Titulo';
 import '../App.css';
 import ContenedorDatos from '../components/ContenedorDatos/ContenedorDatos.js';
 import ContainerDB from '../components/ContainerDB/ContainerDB.js';
+import {Navigate} from 'react-router-dom';
 
 
 function dashboardView({createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId, infoGeneral}) {
+  
+  if (runId === null || runId === undefined) {
+    return <Navigate to='/' />
+  }
 
   let GraphCont = {id: indexGraph, atributos: atributos, deleteGraph: deleteGraph}
 

@@ -7,13 +7,13 @@ function FileQueueView({backPostResp, setRunId}){
     const didMount = useRef(false);
     useEffect(() => {
         if(!didMount.current) {
-            if (backPostResp !== undefined){
-                setRunId(backPostResp.run_id);
-                didMount.current = true;
-            }
+            didMount.current = true;
             return;
         }
-    }), [backPostResp];
+        if (backPostResp !== undefined){
+            setRunId(backPostResp.run_id);
+        }
+    }, [backPostResp]);
     
     return (
         <div className="App">

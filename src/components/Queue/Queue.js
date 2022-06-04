@@ -10,7 +10,7 @@ function Queue(backPostResp) {
     <div className="view-container">
         <div className="queue-container">
             <div className="queue-box">
-              {console.log(backPostResp["backPostResp"])}
+              {/* {console.log(backPostResp["backPostResp"])} */}
               {backPostResp["backPostResp"] === undefined 
                 ? <h2 className="title">Enviando Archivo...</h2>
                 : 
