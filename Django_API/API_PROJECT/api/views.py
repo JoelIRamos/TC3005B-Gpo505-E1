@@ -305,7 +305,7 @@ class FileUploadView(View):
         
         attributes = Attributes(json.loads(request.POST['internal_attributes']), json.loads(request.POST['external_attributes']), json.loads(request.POST['informational_attributes']))
         
-        attributes = Attributes(internal_attributes, external_attributes, informational_attributes)
+        # attributes = Attributes(internal_attributes, external_attributes, informational_attributes)
         
         # Saves the file to the storage and gets the file name, file id, base name and date
         run_id_info = self.save_file_to_storage(file)
