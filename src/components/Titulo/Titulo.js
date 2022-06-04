@@ -1,11 +1,11 @@
 import React from 'react'
 import './Titulo.css'
 
-const Titulo = () => {
+const Titulo = ({runId}) => {
   return (
     <div className='container-titulo'>
         <h1>
-            Análisis de archivo NombreArchivo_Ejemplo
+            {runId}
         </h1>
     </div>
   )

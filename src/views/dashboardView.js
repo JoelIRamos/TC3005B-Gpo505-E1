@@ -3,14 +3,12 @@ import Titulo from '../components/Titulo/Titulo';
 import '../App.css';
 import ContenedorDatos from '../components/ContenedorDatos/ContenedorDatos.js';
 import ContainerDB from '../components/ContainerDB/ContainerDB.js';
-import { useState } from 'react';
 
-function dashboardView({createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId}) {
+
+function dashboardView({createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId, infoGeneral}) {
 
   let GraphCont = {id: indexGraph, atributos: atributos, deleteGraph: deleteGraph}
 
-  //var GraphCont = < ContainerDB className='display-none' indexGraph={indexGraph} datos={datos} atributos={atributos} deleteGraph={deleteGraph} />
-  
   // Props: 
   //   datos = datos dummy
   //   atributos = lista de atributos
@@ -26,12 +24,12 @@ function dashboardView({createGraph, graphList, atributos, deleteGraph, indexGra
   return (
     <div className="App">
       <Navbar selected='dashboard' />
-      < Titulo />
+      < Titulo runId={runId} />
       <div className="row">
-            <ContenedorDatos datos={11216} label='Total de Anomalías Detectadas' color='red'/>
-            <ContenedorDatos datos='52%' label='Porcentaje de Anomalías' color='red'/>
-            <ContenedorDatos datos={4536} label='Anomalías Detectadas' color='yellow'/>
-            <ContenedorDatos datos='39%' label='Porcentaje de Anomalías' color='yellow'/>
+            <ContenedorDatos datos={infoGeneral["result"]["AnomalyRelations"]} label='Relaciones Anómalas' color='red'/>
+            <ContenedorDatos datos={`${infoGeneral["result"]["AnomalyRelationsPercentage"]}%`} label='Porcentaje de Relaciones Anómalas' color='red'/>
+            <ContenedorDatos datos={`${infoGeneral["result"]["AnomatyPercentage"]}%`} label='Porcentaje de Anomalías' color='yellow'/>
+            <ContenedorDatos datos={infoGeneral["result"]["TotalAnomalys"]} label='Total de Anomalías' color='yellow'/>
       </div>
       {graphList.map((element, i) => (
         < ContainerDB runId={runId} key={element.id} indexGraph={element.id} atributos={element.atributos} deleteGraph={element.deleteGraph} setURL = {setURL} />

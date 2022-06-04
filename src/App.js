@@ -31,6 +31,8 @@ function App() {
 
   const [backPostResp, setBackPostResp] = useState(); // Respuesta backend
 
+  const [infoGeneral, setInfoGeneral] = useState(null);
+
   const [listaDatos, setListaDatos] = useState([]); // Lista que guarda datos de graficas YA cargadas
 
   // Referencia para la lista de grafico
@@ -48,6 +50,26 @@ function App() {
   // Funcion para actualizar datos de listaDatos
   const updateList = (chart, url) =>{
     
+  }
+  useEffect(() => {
+    backGet()
+      .then((res) => {
+        console.log(res)
+        setInfoGeneral(res)
+      })
+      .catch((e) => {
+        console.log(e.message)
+      })
+  }, [])
+
+
+  const backGet = async () =>{
+    const response = await fetch(`http://127.0.0.1:8000/api/getStatistics/${runId}/0/`) 
+    if(!response.ok){
+      throw new Error('Data could not be fetched')
+    } else {
+      return response.json()
+    }
   }
 
   // Funcion para lectura del archivo cuando se dropea -- UploadFile
@@ -104,7 +126,7 @@ function App() {
         <Route path='/' element={<HomeScreenview/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setBackPostResp={setBackPostResp} setListaAtributos={setListaAtributos}/>}/>
         <Route path='/Queue' element={<Queue backPostResp={backPostResp} setRunId={setRunId}/>}/>
-        <Route path='/Dashboard' element={<Dashboard indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos}/>}/>
+        <Route path='/Dashboard' element={<Dashboard infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos}/>}/>
         <Route path='/Historial' element={<Historial listaAtributos={listaAtributos} runId={runId}/>}/>
       </Routes>
     </Router>
