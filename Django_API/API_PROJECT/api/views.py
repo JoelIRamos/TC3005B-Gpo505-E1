@@ -222,10 +222,11 @@ class updateGraphsView(View):
 class FileUploadView(View):
     """File upload view that manages file uploads and proccesing
     """
-
     @method_decorator(csrf_exempt)    
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
+    
+    data = {'message': 'endpoint not implemented'}
     
     def save_file_to_storage(self, file):
         """Saves the file to the storage
@@ -323,14 +324,30 @@ class FileUploadView(View):
         
     
     
-    def get(self, request) -> UploadFileForm:
-        """Get method for the file upload
+    def get(self, request):
+        return JsonResponse(self.data)
+
+    def put(self, request):
+        return JsonResponse(self.data)
+    
+    def delete(self, request):
+        return JsonResponse(self.data)
+
+class getQueue(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    data = {'message': 'endpoint not implemented'}
+    
+    def get(self, request): 
+        """Get method for the queue
 
         Args:
             request (request): The request object
 
         Returns:
-            render: Renders the file upload page
+            JsonResponse: The response object with the queue
         """
         if not exists('../API_PROJECT/queue.npy'):
             queue = np.array([])
@@ -338,8 +355,13 @@ class FileUploadView(View):
             queue = np.load('queue.npy')
 
         return JsonResponse({"queue": queue.tolist()})
-        return render(request, 'upload_file.html', {'form': UploadFileForm()})
-
-
     
+    def post(self, request):
+        return JsonResponse(self.data)
+    
+    def put(self, request):
+        return JsonResponse(self.data)
+    
+    def delete(self, request):
+        return JsonResponse(self.data)
 

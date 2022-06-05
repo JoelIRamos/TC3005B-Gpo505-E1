@@ -29,6 +29,9 @@ urlpatterns = [
     
     # * Actualizar las graficas del historial
     path('putGraphs/<str:historyID>/', views.updateGraphsView.as_view(), name='put_graphs'),
+    
+    # * Mandar a pedir el queue de archivos por procesar
+    path('getQueue/', views.getQueue.as_view(), name='get_queue'),
 
     # Rutas POSTs
     # * Subir un archivo
