@@ -21,7 +21,7 @@ from datetime import datetime
 from os.path import exists
 
 from .forms import UploadFileForm
-from .tasks import process_file
+from .tasks import process_file, remove_from_queue
 
 # Create your views here.
 
@@ -287,38 +287,39 @@ class FileUploadView(View):
         Returns:
             JsonResponse: The response object
         """
-        #try:
-        # Get the file from the request
-        file = request.FILES['file']
-        
-        # internal_attributes = ['ID_TRANSPORTISTA','weightDifference','D_UBICACION','USUARIO_EGRESO','N_PESO_TARA','mediana']
-        # external_attributes = ['C_ID_ORDEN_CABECERA','C_POSICION_ORDEN','Q_CANTIDAD','N_PESO_BRUTO','TIPO_TRANSPORTE']
-        # informational_attributes = ['C_SOCIEDAD','D_PATENTE']
-        # Gets internal and external attributes from request
-        # internal_attributes = json.loads(request.POST['internal_attributes'])
-        # external_attributes = json.loads(request.POST['external_attributes'])
-        # informational_attributes = json.loads(request.POST['informational_attributes'])
-        
-        # print('internal_attributes: ' , internal_attributes, 'type: ', type(internal_attributes))
-        # print('external_attributes: ', external_attributes, 'type: ', type(external_attributes))
-        # print('informational_attributes: ', informational_attributes, 'type: ', type(informational_attributes))
-        
-        attributes = Attributes(json.loads(request.POST['internal_attributes']), json.loads(request.POST['external_attributes']), json.loads(request.POST['informational_attributes']))
-        
-        # attributes = Attributes(internal_attributes, external_attributes, informational_attributes)
-        
-        # Saves the file to the storage and gets the file name, file id, base name and date
-        run_id_info = self.save_file_to_storage(file)
-        print(run_id_info)
-        # Sends the file to the processing function
-        process_file.delay(run_id_info.__dict__,  attributes.__dict__)
-        
-        # Adds the file to the queue
-        queue = self.add_to_queue(run_id_info.run_id)
-        
-        return JsonResponse({"message": 1, "run_id": run_id_info.run_id, "queue": queue.tolist()})
-        #except:
-        #    return JsonResponse({"message": 0})
+        try:
+            # Get the file from the request
+            file = request.FILES['file']
+            
+            # internal_attributes = ['ID_TRANSPORTISTA','weightDifference','D_UBICACION','USUARIO_EGRESO','N_PESO_TARA','mediana']
+            # external_attributes = ['C_ID_ORDEN_CABECERA','C_POSICION_ORDEN','Q_CANTIDAD','N_PESO_BRUTO','TIPO_TRANSPORTE']
+            # informational_attributes = ['C_SOCIEDAD','D_PATENTE']
+            # Gets internal and external attributes from request
+            # internal_attributes = json.loads(request.POST['internal_attributes'])
+            # external_attributes = json.loads(request.POST['external_attributes'])
+            # informational_attributes = json.loads(request.POST['informational_attributes'])
+            
+            # print('internal_attributes: ' , internal_attributes, 'type: ', type(internal_attributes))
+            # print('external_attributes: ', external_attributes, 'type: ', type(external_attributes))
+            # print('informational_attributes: ', informational_attributes, 'type: ', type(informational_attributes))
+            
+            attributes = Attributes(json.loads(request.POST['internal_attributes']), json.loads(request.POST['external_attributes']), json.loads(request.POST['informational_attributes']))
+            
+            # attributes = Attributes(internal_attributes, external_attributes, informational_attributes)
+            
+            # Saves the file to the storage and gets the file name, file id, base name and date
+            run_id_info = self.save_file_to_storage(file)
+            print(run_id_info)
+            # Sends the file to the processing function
+            process_file.delay(run_id_info.__dict__,  attributes.__dict__)
+            
+            # Adds the file to the queue
+            queue = self.add_to_queue(run_id_info.run_id)
+            
+            return JsonResponse({"message": "Upload successful", "run_id": run_id_info.run_id, "queue": queue.tolist()})
+        except:
+            remove_from_queue(run_id_info.run_id)
+            return JsonResponse({"message": "Upload failed"})
         
     
     

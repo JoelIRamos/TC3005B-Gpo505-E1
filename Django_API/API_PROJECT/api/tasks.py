@@ -161,6 +161,18 @@ def upload_to_db_success(df: pd.DataFrame, run_id_info: RunIdInfo, attributes: A
     history_collection = db['RunHistory']
     file_data_collection = db['FileData']
     
+    
+    # Creates a new document in the file data collection with the data of the processed file
+    file_data_collection.insert_one({
+        "_id" : run_id_info.run_id
+        # "data" : df.to_dict(orient='list')
+    })
+
+    # Iterates over the columns of the dataframe and uploads them to the database
+    for column in df:
+        # Uploads the column to the database
+        update_data_entry(file_data_collection, run_id_info.run_id, df[column].name ,df[column].to_list())
+
     # Creates a new document in the history collection with the data of the run
     history_collection.insert_one({
         "_id" : run_id_info.run_id,
@@ -174,17 +186,6 @@ def upload_to_db_success(df: pd.DataFrame, run_id_info: RunIdInfo, attributes: A
             "message": ""
         }
     })
-    
-    # Creates a new document in the file data collection with the data of the processed file
-    file_data_collection.insert_one({
-        "_id" : run_id_info.run_id
-        # "data" : df.to_dict(orient='list')
-    })
-
-    # Iterates over the columns of the dataframe and uploads them to the database
-    for column in df:
-        # Uploads the column to the database
-        update_data_entry(file_data_collection, run_id_info.run_id, df[column].name ,df[column].to_list())
 
 def remove_from_queue(file_name: str):
     """Removes a file from the queue
