@@ -3,13 +3,51 @@ import Titulo from '../components/Titulo/Titulo';
 import '../App.css';
 import ContenedorDatos from '../components/ContenedorDatos/ContenedorDatos.js';
 import ContainerDB from '../components/ContainerDB/ContainerDB.js';
-import {Navigate} from 'react-router-dom';
+import {Navigate, Link} from 'react-router-dom';
+import Button from '../components/Button/GenericButton';  
+import Message from '../components/Message/Message.js';
 
 
-function dashboardView({createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId, infoGeneral}) {
+function dashboardView({createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId, infoGeneral, dashboardEnabled, runStatus}) {
   
-  if (runId === null || runId === undefined) {
-    return <Navigate to='/' />
+  if (!dashboardEnabled) {
+    var message = "Seleccione un reporte del historial o cargue un archivo para poder utilizar el Dashboard"
+    var titulo = ""
+
+    if (runStatus !== undefined && runStatus !== null) {
+      if (runStatus['message'] === "Not found"){
+        message = "El archivo se esta procesando..."
+      }
+
+      if (runStatus['message'] === "Error"){
+        message = "Hubo un error al procesar el archivo, por favor intente de nuevo"
+      }
+    }
+
+    if (runId !== undefined && runId !== null){
+      titulo = runId
+    }
+    return <div className="App">
+      <Navbar selected="dashboard"/>
+      <Titulo runId={titulo}/>
+      <Message title = {titulo} message={message} showButton={true}/>
+
+      {/* <div className='message-view-container'>
+          <div className='message-container'>
+            <div className='message-box'>
+              <h2 className='title'>{message}</h2>
+            </div>
+          </div>
+          <Link to='/'>
+            <div className="button">
+                <Button text={"Pagino de inicio"}/>
+            </div>
+          </Link> 
+      </div> */}
+      
+        
+      </div>
+    //<Navigate to='/' />
   }
 
   let GraphCont = {id: indexGraph, atributos: atributos, deleteGraph: deleteGraph}
@@ -28,7 +66,7 @@ function dashboardView({createGraph, graphList, atributos, deleteGraph, indexGra
 
   return (
     <div className="App">
-      <Navbar selected='dashboard' />
+      <Navbar selected="dashboard" />
       < Titulo runId={runId} />
       <div className="row">
             <ContenedorDatos datos={infoGeneral["result"]["AnomalyRelations"]} label='Relaciones Anómalas' color='red'/>

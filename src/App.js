@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomeScreenview from './views/homeScreen';
 import UpLoadFileview from './views/uploadFileView';
-import Dashboard from './views/dashboardView';
-import Historial from './views/historyView';
-import Queue from './views/fileQueueView'
+import DashboardView from './views/dashboardView';
+import HistorialView from './views/historyView';
+import UploadFileRespView from './views/uploadFileRespView'
 import ContainerDB from './components/ContainerDB/ContainerDB';
 import SeleccionAtributos from './components/SelectorAtributos/SelectorAtributos'
 import dashboardView from './views/dashboardView';
@@ -40,6 +40,7 @@ function App() {
   const [listaAtributos, setListaAtributos] = useState();
   const [runId, setRunId] = useState();
   const [runStatus, setRunStatus] = useState();
+  const [dashboardEnabled, setDashboardEnabled] = useState(false);
   const intervalRef = useRef();
 
   // Funcion para creacion de gráfico -- Dashboard
@@ -60,8 +61,10 @@ function App() {
     }
     console.log('useEffect runId');
     setGraphList([]);
+    setListaDatos([]);
     setRunStatus(null);
     setInfoGeneral(null);
+    setDashboardEnabled(false);
     intervalRef.current = null
 
     if(runId === null || runId === undefined){
@@ -103,6 +106,7 @@ function App() {
         // console.log(res)
         console.log('infoGeneral updated')
         setInfoGeneral(res)
+        setDashboardEnabled(true);
       })
       .catch((e) => {
         console.log(e.message)
@@ -184,9 +188,9 @@ function App() {
       <Routes>
         <Route path='/' element={<HomeScreenview/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setBackPostResp={setBackPostResp} setListaAtributos={setListaAtributos}/>}/>
-        <Route path='/Queue' element={<Queue backPostResp={backPostResp} setRunId={setRunId}/>}/>
-        <Route path='/Dashboard' element={<Dashboard infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos}/>}/>
-        <Route path='/Historial' element={<Historial listaAtributos={listaAtributos} runId={runId}/>}/>
+        <Route path='/FileUploadResp' element={<UploadFileRespView backPostResp={backPostResp} setRunId={setRunId}/>}/>
+        <Route path='/Dashboard' element={<DashboardView infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos} dashboardEnabled = {dashboardEnabled} runStatus = {runStatus}/>}/>
+        <Route path='/Historial' element={<HistorialView listaAtributos={listaAtributos} runId={runId}/>}/>
       </Routes>
     </Router>
   );
