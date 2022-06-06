@@ -85,7 +85,10 @@ const DashboardView = ({createGraph, graphList, atributos, deleteGraph, indexGra
   return (
     <div className="App">
       <Navbar selected="dashboard" />
-      < Titulo runId={runId} />
+      <div className="tittle-button-cont">
+        < Titulo runId={runId} />
+        <button className='button-down' type='button' onClick={handleDownloadPdf}>Descarga como PDF</button>
+      </div>
       <div ref={printRef}>
         <div className="row">
               <ContenedorDatos datos={infoGeneral["result"]["AnomalyRelations"]} label='Relaciones Anómalas' color='red'/>
@@ -98,7 +101,7 @@ const DashboardView = ({createGraph, graphList, atributos, deleteGraph, indexGra
         ))}
       </div>
       <div className='container-button-add'><button onClick={(() => createGraph(GraphCont))} className='button-add'>+</button></div>
-      <button type='button' onClick={handleDownloadPdf}>Download as PDF</button>
+      
     </div>
   );
 }

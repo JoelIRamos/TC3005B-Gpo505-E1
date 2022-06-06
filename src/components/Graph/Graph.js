@@ -99,7 +99,7 @@ const Graph = ({datosGraph, chart}) => {
     } data = {{
       datasets: [
         {
-          label: 'Prueba',
+          label: '',
           data: datosGraph.data,
           backgroundColor: 'rgba(53, 162, 235, 0.5)',
         }
