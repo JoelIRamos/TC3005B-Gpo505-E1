@@ -2,25 +2,35 @@ from django.urls import path
 from api import views
 
 urlpatterns = [
-    
-    # Asyncronos
+    # Rutas GETs
+    # * Consultar la lista de historiales
     path('getHistoryList/', views.searchHistoryListView.as_view(), name='get_history_list'),
-    path('getHistoryDetail/<int:historyID>/', views.searchHistoryDetailView.as_view(), name='get_history_detail'),
-    path('getLastSession/<int:userID>/', views.searchLastSessionView.as_view(), name='get_last_session'),
-    path('deleteLastSession/<int:userID>/', views.deleteLastSessionView.as_view(), name='delete_last_session'),
-    path('putLastSession/<int:userID>/', views.updateLastSessionView.as_view(), name='put_last_session'),
-    path('postHistory/<int:userID>/', views.insertToHistoryView.as_view(), name='post_history'),
     
+    # ! Consultar los detalles de un historial (endpoint para testeo)
+    # path('getHistoryDetail/<str:historyID>/', views.searchHistoryDetailView.as_view(), name='get_history_detail'),
     
-    # Rutas de la tabla de LastSession
-    path('last_session/', views.LastSessionView.as_view(), name='last_session_list'),
-    path('last_session/<int:id>/', views.LastSessionView.as_view(), name='last_session_detail'),
+    # * Consultar los detalles de la corrida de un archivo
+    path('getHistory/<str:historyID>/', views.searchHistoryView.as_view(), name='get_history'),
     
-    # Rutas de la tabla de History
-    path('history/', views.HistoryView.as_view(), name='history_list'),
-    path('history/<int:id>/', views.HistoryView.as_view(), name='history_detail'),
-    # str
-    # Rutas de la tabla de File
-    path('file/', views.FileView.as_view(), name='file_list'),
-    path('file/<int:id>/', views.FileView.as_view(), name='file_detail'),
+    # * Mandar a pedir la informacion de una sesion en formato para una grafica de Barras
+    path('getBarGraph/<str:historyID>/<str:attribute>/<str:filter>/', views.searchBarGraphView.as_view(), name='get_bar_graph'),
+    
+    # * Mandar a pedir la informacion de una sesion en formato para una grafica de Lineas
+    path('getLineGraph/<str:historyID>/<str:attribute>/<str:filter>/', views.searchLineGraphView.as_view(), name='get_line_graph'),
+    
+    # * Mandar a pedir la informacion de una sesion en formato para una grafica de Burbuja
+    path('getBubbleGraph/<str:historyID>/<str:attribute1>/<str:attribute2>/<str:filter>/', views.searchBubbleGraphView.as_view(), name='get_bubble_graph'),
+    
+    # * Mandar a pedir varias estadisticas de una sesion
+    path('getStatistics/<str:historyID>/<str:filter>/', views.searchStatisticsView.as_view(), name='get_statistics'),
+    
+    # * Mandar a pedir el estatus de una corrida por si existe errores
+    path('getStatus/<str:historyID>/', views.searchStatusView.as_view(), name='get_status'),
+    
+    # * Mandar a pedir el queue de archivos por procesar
+    path('getQueue/', views.getQueue.as_view(), name='get_queue'),
+
+    # Rutas POSTs
+    # * Subir un archivo
+    path('upload_file/', views.FileUploadView.as_view(), name='upload_file')
 ]

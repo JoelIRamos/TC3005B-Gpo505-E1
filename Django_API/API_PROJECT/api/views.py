@@ -1,188 +1,29 @@
+from email.mime import base
+import queue
+import django
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser #creo que no se usa
-from django.http.response import JsonResponse
-
 from django.utils.decorators import method_decorator
+from django.http.response import JsonResponse
 from django.views import View
-import json
+from django.core.files.storage import default_storage
+from django.http import HttpResponse
 
 from api.db import db 
-from bson.json_util import dumps
+from api.functions import *
+from api.classes import Attributes, RunIdInfo
+
+# from bson.json_util import dumps
+
+# import pandas as pd
+import numpy as np
+from datetime import datetime
+from os.path import exists
+
+from .forms import UploadFileForm
+from .tasks import process_file, remove_from_queue
 
 # Create your views here.
-
-class HistoryView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
-    
-    def get(self, request,id=0):
-        collection = db["History"]
-        if id>0:
-            results = list(collection.find({"_id":id}))
-            # print(results)
-            if len(results)>0:
-                data = {'message':'found', 'result': results}
-                # data = {'message':'found', 'result': "a"}
-            else:
-                data = {'message': 'Not found'}
-
-        else:
-            results = json.loads(dumps(list(collection.find())))
-            # print(results)
-            if len(results) > 0:
-                data = {'message': 'Success', 'result': results}
-            else:
-                data = {'message': 'Empty'}
-            
-        return JsonResponse(data)
-    
-    def post(self, request):
-        collection = db["History"]
-        jd=json.loads(request.body)
-        # print(jd)
-        collection.insert_many(jd)
-        data = {'message': 'Success'}
-        return JsonResponse(data)
-    
-    def put(self, request, id):
-        collection = db["History"]
-        jd = json.loads(request.body)
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            # collection.update_one({"_id":id}, {"$set":{'name':jd['name']}})
-            collection.update_one({"_id":id}, {"$set":jd})
-            datos = {'message': 'Success'}
-        else:
-            datos = {'message': 'Not found'}
-        return JsonResponse(datos)
-    
-    def delete(self, request, id):
-        collection = db["History"]
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            collection.delete_one({"_id":id})
-            data = {'message': 'Success'}
-        else:
-            data = {'message': 'Not found'}
-        return JsonResponse(data)
-
-
-class LastSessionView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
-    
-    def get(self, request,id=0):
-        collection = db["LastSession"]
-        if id>0:
-            results = list(collection.find({"_id":id}))
-            # print(results)
-            if len(results)>0:
-                data = {'message':'found', 'result': results}
-                # data = {'message':'found', 'result': "a"}
-            else:
-                data = {'message': 'Not found'}
-
-        else:
-            results = json.loads(dumps(list(collection.find())))
-            # print(results)
-            if len(results) > 0:
-                data = {'message': 'Success', 'result': results}
-            else:
-                data = {'message': 'Empty'}
-            
-        return JsonResponse(data)
-    
-    def post(self, request):
-        collection = db["LastSession"]
-        jd=json.loads(request.body)
-        # print(jd)
-        collection.insert_many(jd)
-        data = {'message': 'Success'}
-        return JsonResponse(data)
-    
-    def put(self, request, id):
-        collection = db["LastSession"]
-        jd = json.loads(request.body)
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            # collection.update_one({"_id":id}, {"$set":{'name':jd['name']}})
-            collection.update_one({"_id":id}, {"$set":jd})
-            datos = {'message': 'Success'}
-        else:
-            datos = {'message': 'Not found'}
-        return JsonResponse(datos)
-    
-    def delete(self, request, id):
-        collection = db["LastSession"]
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            collection.delete_one({"_id":id})
-            data = {'message': 'Success'}
-        else:
-            data = {'message': 'Not found'}
-        return JsonResponse(data)
-
-class FileView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
-    
-    def get(self, request,id=0):
-        collection = db["File"]
-        if id>0:
-            results = list(collection.find({"_id":id}))
-            # print(results)
-            if len(results)>0:
-                data = {'message':'found', 'result': results}
-                # data = {'message':'found', 'result': "a"}
-            else:
-                data = {'message': 'Not found'}
-
-        else:
-            results = json.loads(dumps(list(collection.find())))
-            # print(results)
-            if len(results) > 0:
-                data = {'message': 'Success', 'result': results}
-            else:
-                data = {'message': 'Empty'}
-            
-        return JsonResponse(data)
-    
-    def post(self, request):
-        collection = db["File"]
-        jd=json.loads(request.body)
-        # print(jd)
-        collection.insert_many(jd)
-        data = {'message': 'Success'}
-        return JsonResponse(data)
-    
-    def put(self, request, id):
-        collection = db["File"]
-        jd = json.loads(request.body)
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            # collection.update_one({"_id":id}, {"$set":{'name':jd['name']}})
-            collection.update_one({"_id":id}, {"$set":jd})
-            datos = {'message': 'Success'}
-        else:
-            datos = {'message': 'Not found'}
-        return JsonResponse(datos)
-    
-    def delete(self, request, id):
-        collection = db["File"]
-        result = list(collection.find({"_id":id}))
-        if len(result)>0:
-            collection.delete_one({"_id":id})
-            data = {'message': 'Success'}
-        else:
-            data = {'message': 'Not found'}
-        return JsonResponse(data)
-
-
-from django.http import HttpResponse
 
 # View del endpoint de searchHistoryList
 class searchHistoryListView(View):
@@ -190,185 +31,314 @@ class searchHistoryListView(View):
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
     
+    data = {'message': 'endpoint not implemented'}
+    
     # * Metodo HTTP (GET) del endpoint
     def get(self, request):
-        # ToDo: Implementar el metodo GET
-        pass
+        return searchHistoryList(request)
     
     def post(self, request):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+        return JsonResponse(self.data)
     
     def put(self, request):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+        return JsonResponse(self.data)
     
     def delete(self, request):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+        return JsonResponse(self.data)
 
-# View del endpoint de searchHistoryDetail
+# ! View del endpoint de searchHistoryDetail (endpoint para testeo)
 class searchHistoryDetailView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
     
+    data = {'message': 'endpoint not implemented'}
+    
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, historyID):
-        return HttpResponse("<html><h1>Hello World</h1></html>")
-        # ToDo: Implementar el metodo GET
-        pass
+        return searchHistoryDetail(request, historyID)
     
-    def post(self, request, historyID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    def post(self, request, historyID='0'):
+        return JsonResponse(self.data)
     
-    def put(self, request, historyID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    def put(self, request, historyID='0'):
+        return JsonResponse(self.data)
     
-    def delete(self, request, historyID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    def delete(self, request, historyID='0'):
+        return JsonResponse(self.data)
 
 
 # View del endpoint de searchLastSession
-class searchLastSessionView(View):
+class searchHistoryView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
+    
+    data = {'message': 'endpoint not implemented'}
     
     # * Metodo HTTP (GET) del endpoint
-    def get(self, request, userID):
-        # ToDo: Implementar el metodo GET
-        pass
+    def get(self, request, historyID):
+        return searchHistory(request, historyID)
     
-    def post(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    def post(self, request, historyID='0'):
+        return JsonResponse(self.data)
     
-    def put(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    def put(self, request, historyID='0'):
+        return JsonResponse(self.data)
     
-    def delete(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    def delete(self, request, historyID='0'):
+        return JsonResponse(self.data)
 
-
-# View del endpoint de deleteLastSession
-class deleteLastSessionView(View):
+# View del endpoint de searchBarGraph
+class searchBarGraphView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
     
-    def get(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    data = {'message': 'endpoint not implemented'}
     
-    def post(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, historyID, attribute, filter):
+        return searchBarGraph(request, historyID, attribute, filter)
     
-    def put(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    def post(self, request, historyID='0', attribute='0', filter='0'):
+        return JsonResponse(self.data)
     
-    # * Metodo HTTP (DELETE) del endpoint
-    def delete(self, request, userID):
-        # ToDo: Implementar el metodo DELETE
-        pass
+    def put(self, request, historyID='0', attribute='0', filter='0'): 
+        return JsonResponse(self.data)
+    
+    def delete(self, request, historyID='0', attribute='0', filter='0'):
+        return JsonResponse(self.data)
 
-
-# View del endpoint de updateLastSession
-class updateLastSessionView(View):
+# View del endpoint de searchLineGraph
+class searchLineGraphView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
     
-    def get(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    data = {'message': 'endpoint not implemented'}
     
-    def post(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, historyID, attribute, filter):
+        return searchLineGraph(request, historyID, attribute, filter)
     
-    # * Metodo HTTP (PUT) del endpoint
-    def put(self, request, userID):
-        # ToDo: Implementar el metodo PUT
-        pass
+    def post(self, request, historyID='0', attribute='0', filter='0'):
+        return JsonResponse(self.data)
     
-    def delete(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    def put(self, request, historyID='0', attribute='0', filter='0'): 
+        return JsonResponse(self.data)
+    
+    def delete(self, request, historyID='0', attribute='0', filter='0'):
+        return JsonResponse(self.data)
 
 
-# View del endpoint de insertToHistory
-class insertToHistoryView(View):
+# View del endpoint de searchBubbleGraph
+class searchBubbleGraphView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
     
-    def get(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    data = {'message': 'endpoint not implemented'}
     
-    # * Metodo HTTP (POST) del endpoint
-    def post(self, request, userID):
-        # ToDo: Implementar el metodo POST
-        pass
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, historyID, attribute1, attribute2, filter):
+        return searchBubbleGraph2(request, historyID, attribute1, attribute2, filter)
     
-    def put(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    def post(self, request, historyID='0', attribute='0', attribute2='0', filter='0'):
+        return JsonResponse(self.data)
     
-    def delete(self, request, userID=0):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+    def put(self, request, historyID='0', attribute='0', attribute2='0', filter='0'): 
+        return JsonResponse(self.data)
+    
+    def delete(self, request, historyID='0', attribute='0', attribute2='0', filter='0'):
+        return JsonResponse(self.data)
 
-class View(View):
+
+# View del endpoint de searchHistoryStatistics
+class searchStatisticsView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs): 
         return super().dispatch(request, *args, **kwargs)
+    
+    data = {'message': 'endpoint not implemented'}
+    
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, historyID, filter):
+        return searchStatistics(request, historyID, filter)
+    
+    def post(self, request, historyID='0', filter='0'):
+        return JsonResponse(self.data)
+    
+    def put(self, request, historyID='0', filter='0'): 
+        return JsonResponse(self.data)
+    
+    def delete(self, request, historyID='0', filter='0'):
+        return JsonResponse(self.data)
+
+# View del endpoint de getStatus
+class searchStatusView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    data = {'message': 'endpoint not implemented'}
+    
+    # * Metodo HTTP (GET) del endpoint
+    def get(self, request, historyID):
+        return searchStatus(request, historyID)
+
+    def post(self, request, historyID='0'):
+        return JsonResponse(self.data)
+    
+    def put(self, request, historyID='0'): 
+        return JsonResponse(self.data)
+    
+    def delete(self, request, historyID='0'):
+        return JsonResponse(self.data)
+
+class FileUploadView(View):
+    """File upload view that manages file uploads and proccesing
+    """
+    @method_decorator(csrf_exempt)    
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
+    
+    data = {'message': 'endpoint not implemented'}
+    
+    def save_file_to_storage(self, file):
+        """Saves the file to the storage
+
+        Args:
+            file (file): file to be processed
+
+        Returns:
+            tuple: (file name, file id, base name, date)
+        """        
+        # Get current time
+        date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        
+        # Get the file name without extension
+        base_file_name = file.name.replace(' ', '_').replace('.csv','')
+        
+        # Create the file id
+        run_id = base_file_name + '_' + date
+        
+        # Saves the file in the default storage
+        file_name = default_storage.save(run_id+'.csv', file)
+        
+        return RunIdInfo(file_name, run_id, base_file_name, date)
+
+    def add_to_queue(self, file_id: str) -> np.array:
+        """Adds the file to the queue
+
+        Args:
+            file_id (str): id of the file to be added to the queue
+            
+        Returns:
+            queue: queue with the file id
+        """        
+        # creates a new queue if it doesn't exist
+        queue = np.array([])
+        if not exists('../API_PROJECT/queue.npy'):
+            queue = np.append(queue, file_id)
+        else:
+            queue = np.load('queue.npy')
+            queue = np.append(queue, file_id)
+        
+        # Saves the queue
+        saved = False
+        while (not saved):
+            try:
+                np.save('queue.npy', queue)
+                saved = True
+            except:
+                print('Error saving queue, trying again...')
+                
+        return queue
+    
+    def post(self, request) -> JsonResponse:
+        """Post method for the file upload
+
+        Args:
+            request (WSGIRequest): request object
+
+        Returns:
+            JsonResponse: The response object
+        """
+        try:
+            # Get the file from the request
+            file = request.FILES['file']
+            
+            # internal_attributes = ['ID_TRANSPORTISTA','weightDifference','D_UBICACION','USUARIO_EGRESO','N_PESO_TARA','mediana']
+            # external_attributes = ['C_ID_ORDEN_CABECERA','C_POSICION_ORDEN','Q_CANTIDAD','N_PESO_BRUTO','TIPO_TRANSPORTE']
+            # informational_attributes = ['C_SOCIEDAD','D_PATENTE']
+            # Gets internal and external attributes from request
+            # internal_attributes = json.loads(request.POST['internal_attributes'])
+            # external_attributes = json.loads(request.POST['external_attributes'])
+            # informational_attributes = json.loads(request.POST['informational_attributes'])
+            
+            # print('internal_attributes: ' , internal_attributes, 'type: ', type(internal_attributes))
+            # print('external_attributes: ', external_attributes, 'type: ', type(external_attributes))
+            # print('informational_attributes: ', informational_attributes, 'type: ', type(informational_attributes))
+            
+            attributes = Attributes(json.loads(request.POST['internal_attributes']), json.loads(request.POST['external_attributes']), json.loads(request.POST['informational_attributes']))
+            
+            # attributes = Attributes(internal_attributes, external_attributes, informational_attributes)
+            
+            # Saves the file to the storage and gets the file name, file id, base name and date
+            run_id_info = self.save_file_to_storage(file)
+            print(run_id_info)
+            # Sends the file to the processing function
+            process_file.delay(run_id_info.__dict__,  attributes.__dict__)
+            
+            # Adds the file to the queue
+            queue = self.add_to_queue(run_id_info.run_id)
+            
+            return JsonResponse({"message": "Upload successful", "run_id": run_id_info.run_id, "queue": queue.tolist()})
+        except:
+            remove_from_queue(run_id_info.run_id)
+            return JsonResponse({"message": "Upload failed"})
+        
+    
     
     def get(self, request):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
-    
-    def post(self, request):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
-    
+        return JsonResponse(self.data)
+
     def put(self, request):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+        return JsonResponse(self.data)
     
     def delete(self, request):
-        data = {'message': 'endpoint not implemented'}
-        return JsonResponse(data)
+        return JsonResponse(self.data)
+
+class getQueue(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs): 
+        return super().dispatch(request, *args, **kwargs)
     
+    data = {'message': 'endpoint not implemented'}
     
+    def get(self, request): 
+        """Get method for the queue
 
-# from django.http import HttpResponse
+        Args:
+            request (request): The request object
 
-# async def searchHistoryList(request):
-#     return HttpResponse("<html><h1>searchHistoryList</h1></html>")
+        Returns:
+            JsonResponse: The response object with the queue
+        """
+        if not exists('../API_PROJECT/queue.npy'):
+            queue = np.array([])
+        else:
+            queue = np.load('queue.npy')
 
-# async def searchHistoryDetail(request, historyID):
-#     return HttpResponse("searchHistoryDetail: " + str(historyID))
+        return JsonResponse({"queue": queue.tolist()})
+    
+    def post(self, request):
+        return JsonResponse(self.data)
+    
+    def put(self, request):
+        return JsonResponse(self.data)
+    
+    def delete(self, request):
+        return JsonResponse(self.data)
 
-# async def searchLastSession(request, userID):
-#     return HttpResponse("searchLastSession: " + str(userID))
-
-# async def deleteLastSession(request, userID):
-#     return HttpResponse("deleteLastSession: " + str(userID))
-
-# async def updateLastSession(request, userID):
-#     return HttpResponse("updateLastSession: " + str(userID))
-
-# async def insertToHistory(request, userID):
-#     if request.method == "POST":
-#         return HttpResponse("insertToHistory: " + str(userID))
-#     else: 
-#         return HttpResponse("NO insertToHistory")
