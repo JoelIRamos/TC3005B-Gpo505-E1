@@ -1,11 +1,11 @@
 import React from 'react'
 import GraphContainer from '../GraphContainer/GraphContainer'
-import FormAtributoInt from '../FormAtributoInt/FormAtributoInt'
 import './ContainerDB.css'
 import { useState } from 'react';
 import { useLayoutEffect, useEffect } from 'react';
 import {useRef} from 'react';
-import FormAtributoExt from '../FormAtributoInt/FormAtributoExt';
+import ContainerAtributos from '../ContainerAtributos/ContainerAtributos';
+import ContainerAtributosExt from '../ContainerAtributos/ContainerAtributosExt'
 
 const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
 
@@ -97,6 +97,7 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
   
   // Cambio de atributo para graficas
   const saveAtributo1 = (atributo) => {
+    console.log(atributo)
     setAtributo1(atributo)
   }
   const saveAtributo2 = (atributo) => {
@@ -109,8 +110,8 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
         <React.StrictMode>
             <GraphContainer indexGraph={indexGraph} deleteGraph={deleteGraph} showForm={showForm} atributo2={atributo2} click={click} chart={chart} data = {datos} atributo1={atributo1} clicked={clicked} clickedLi={clickedLi} />
             <div className='container-form-a'>
-                < FormAtributoInt idForm={1} atributos={atributos} onSelect={saveAtributo1} showForm = {true} />
-                < FormAtributoExt idForm={2} atributos={atributos} onSelect={saveAtributo2} showForm = {showForm} />
+              < ContainerAtributos atributo1={atributo1} atributos={atributos} onClick={saveAtributo1} />
+              {chart === 'Grafico de Burbuja' && < ContainerAtributosExt atributo2={atributo2} atributos={atributos} onClick={saveAtributo2}/>}
             </div>
         </React.StrictMode>
         </div>
