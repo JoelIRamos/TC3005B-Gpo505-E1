@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { Link } from "react-router-dom";
 import { FaRegTimesCircle, FaRegCheckCircle } from 'react-icons/fa'
 import './Acordion.css'
 // Agregar espacio para boton de VER corridaa
@@ -44,9 +45,11 @@ function Acordion({file, index, setRunId}) {
                         </div>
                         }
                         <div className="tarjeta-content-view-button">
-                            <div className="view-button" onClick={setRunId(fileVersion._id)}>
-                                Ver en Dashboard
-                            </div>
+                            <Link className="view-button"  to={'/Dashboard'}>
+                                <div onClick={() => {setRunId(fileVersion._id)}}>
+                                    Ver en Dashboard
+                                </div>
+                            </Link>
                         </div>
                     </div>
                 )}

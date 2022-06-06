@@ -106,6 +106,7 @@ function App() {
         // console.log(res)
         console.log('infoGeneral updated')
         setInfoGeneral(res)
+        //TODO: Get historyDetail
         setDashboardEnabled(true);
       })
       .catch((e) => {
@@ -188,7 +189,7 @@ function App() {
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setBackPostResp={setBackPostResp} setListaAtributos={setListaAtributos}/>}/>
         <Route path='/FileUploadResp' element={<UploadFileRespView backPostResp={backPostResp} setRunId={setRunId}/>}/>
         <Route path='/Dashboard' element={<DashboardView infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos} dashboardEnabled = {dashboardEnabled} runStatus = {runStatus}/>}/>
-        <Route path='/Historial' element={<Historial setRunId={setRunId}/>}/>
+        <Route path='/Historial' element={<HistorialView setRunId={setRunId}/>}/>
       </Routes>
     </Router>
   );
