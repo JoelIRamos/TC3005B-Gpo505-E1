@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomeScreenview from './views/homeScreen';
 import UpLoadFileview from './views/uploadFileView';
-import Dashboard from './views/dashboardView';
-import Historial from './views/historyView';
-import Queue from './views/fileQueueView'
+import DashboardView from './views/dashboardView';
+import HistorialView from './views/historyView';
+import UploadFileRespView from './views/uploadFileRespView'
 import ContainerDB from './components/ContainerDB/ContainerDB';
 import SeleccionAtributos from './components/SelectorAtributos/SelectorAtributos'
-import { useState } from 'react';
-import { useRef } from 'react';
 import dashboardView from './views/dashboardView';
 
 // Atributos dummy
@@ -22,6 +20,7 @@ const atributos = [
 ]
 function App() {
 
+  const didMount = useRef(false);
 
   const [file, setFile] = useState(null) // Estado archivo
   const [headersFile, setHeadersFile] = useState([]) // Estado headers para archivo
@@ -31,7 +30,7 @@ function App() {
 
   const [backPostResp, setBackPostResp] = useState(); // Respuesta backend
 
-  const [infoGeneral, setInfoGeneral] = useState(null);
+  const [infoGeneral, setInfoGeneral] = useState();
 
   const [listaDatos, setListaDatos] = useState([]); // Lista que guarda datos de graficas YA cargadas
 
@@ -40,6 +39,9 @@ function App() {
 
   const [listaAtributos, setListaAtributos] = useState();
   const [runId, setRunId] = useState();
+  const [runStatus, setRunStatus] = useState();
+  const [dashboardEnabled, setDashboardEnabled] = useState(false);
+  const intervalRef = useRef();
 
   // Funcion para creacion de gráfico -- Dashboard
   const createGraph = async (x)  => {
@@ -51,27 +53,88 @@ function App() {
   const updateList = (chart, url) =>{
     
   }
+
   useEffect(() => {
-    backGet()
+    if(!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+    console.log('useEffect runId');
+    setGraphList([]);
+    setListaDatos([]);
+    setRunStatus(null);
+    setInfoGeneral(null);
+    setDashboardEnabled(false);
+    intervalRef.current = null
+
+    if(runId === null || runId === undefined){
+      return;
+    }
+    
+    intervalRef.current = setInterval(() => {
+      backGetStatus().then((res) => {
+        setRunStatus(res)
+        //console.log(res)
+      }).catch((e) => {
+        console.log(e.message)
+      })
+    }, 500);
+
+    return () => {
+      clearInterval(intervalRef.current);
+    }
+  }, [runId])
+
+
+  useEffect(() => {
+    console.log(runStatus)
+    if (runStatus === null || runStatus === undefined){
+      return;
+    }
+
+    if(runStatus['message'] === 'Not found'){
+      return
+    }
+
+    if (runStatus['message'] === 'Error' || runStatus['result']['code'] !== 0){
+      clearInterval(intervalRef.current);
+      return;
+    }
+
+    backGetInfoGeneral()
       .then((res) => {
-        console.log(res)
+        // console.log(res)
+        console.log('infoGeneral updated')
         setInfoGeneral(res)
+        setDashboardEnabled(true);
       })
       .catch((e) => {
         console.log(e.message)
       })
-  }, [])
+    clearInterval(intervalRef.current);
+    }, [runStatus])
 
-
-  const backGet = async () =>{
+  const backGetInfoGeneral = async () =>{
     const response = await fetch(`http://127.0.0.1:8000/api/getStatistics/${runId}/0/`) 
     if(!response.ok){
       throw new Error('Data could not be fetched')
     } else {
+      // console.log(response)
+      // console.log(response.json())
       return response.json()
     }
   }
 
+  const backGetStatus = async () =>{
+    const response = await fetch(`http://127.0.0.1:8000/api/getStatus/${runId}/`)
+    if(!response.ok){
+      throw new Error('Data could not be fetched')
+    } else {
+      // console.log(response)
+      // console.log(response.json())
+      return response.json()
+    }
+  }
   // Funcion para lectura del archivo cuando se dropea -- UploadFile
   const onFileDrop = (e) => {
     const newFile = e.target.files[0]
@@ -125,9 +188,9 @@ function App() {
       <Routes>
         <Route path='/' element={<HomeScreenview/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setBackPostResp={setBackPostResp} setListaAtributos={setListaAtributos}/>}/>
-        <Route path='/Queue' element={<Queue backPostResp={backPostResp} setRunId={setRunId}/>}/>
-        <Route path='/Dashboard' element={<Dashboard infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos}/>}/>
-        <Route path='/Historial' element={<Historial listaAtributos={listaAtributos} runId={runId}/>}/>
+        <Route path='/FileUploadResp' element={<UploadFileRespView backPostResp={backPostResp} setRunId={setRunId}/>}/>
+        <Route path='/Dashboard' element={<DashboardView infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos} dashboardEnabled = {dashboardEnabled} runStatus = {runStatus}/>}/>
+        <Route path='/Historial' element={<HistorialView listaAtributos={listaAtributos} runId={runId}/>}/>
       </Routes>
     </Router>
   );

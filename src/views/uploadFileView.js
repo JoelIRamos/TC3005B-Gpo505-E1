@@ -2,12 +2,16 @@ import Navbar from '../components/Navbar/Navbar.js';
 import '../App.css';
 import DropFile from '../components/DropFile/DropFile.js';
 import SeleccionAtributos from '../components/SelectorAtributos/SelectorAtributos.js';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 
 function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, setBackPostResp, setListaAtributos}) {
   
+  useEffect(() => {
+    setBackPostResp(null)
+  }, []);
+
   // HTTP request a backend (aun en prueba)
   const backPost = (listaAtt) => {
     setListaAtributos(listaAtt);
@@ -66,7 +70,7 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, setB
         :
         <>
           <div className="att-options-container">
-            <Link to='/Queue'>
+            <Link to='/FileUploadResp'>
                 <button className='button-gen' onClick={() => backPost(listAttRef.current)}>Siguiente</button>
             </Link>
           </div>

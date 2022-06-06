@@ -1,6 +1,7 @@
 import InvNavbar from '../components/Navbar/Invisible-Navbar.js';
 import '../App.css';
 import HomeSelectionBtn from '../components/HomeSelectionButton/HomeSelectionButton.js';
+import Queue from '../components/Queue/Queue.js';
 
 function homeScreen() {
   return (
