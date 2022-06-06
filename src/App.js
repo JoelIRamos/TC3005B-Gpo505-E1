@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomeScreenview from './views/homeScreen';
 import UpLoadFileview from './views/uploadFileView';
-import DashboardView from './views/dashboardView';
+import DashboardView from './views/DashboardView';
 import HistorialView from './views/historyView';
 import UploadFileRespView from './views/uploadFileRespView'
 import ContainerDB from './components/ContainerDB/ContainerDB';
 import SeleccionAtributos from './components/SelectorAtributos/SelectorAtributos'
-import dashboardView from './views/dashboardView';
+import dashboardView from './views/DashboardView';
+
 
 // Atributos dummy
 const atributos = [
@@ -42,6 +43,7 @@ function App() {
   const [runStatus, setRunStatus] = useState();
   const [dashboardEnabled, setDashboardEnabled] = useState(false);
   const intervalRef = useRef();
+  
 
   // Funcion para creacion de gráfico -- Dashboard
   const createGraph = async (x)  => {
@@ -60,6 +62,7 @@ function App() {
       return;
     }
     console.log('useEffect runId');
+    console.log(runId)
     setGraphList([]);
     setListaDatos([]);
     setRunStatus(null);
@@ -182,6 +185,8 @@ function App() {
     setGraphList(newArray.filter((graph) => graph.id !== index))
     // Splice function here
   }
+
+  
 
   return (
     <Router>
