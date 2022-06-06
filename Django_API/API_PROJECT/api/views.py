@@ -196,29 +196,6 @@ class searchStatusView(View):
     def delete(self, request, historyID='0'):
         return JsonResponse(self.data)
 
-
-# View del endpoint de updateGraph
-class updateGraphsView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
-    
-    data = {'message': 'endpoint not implemented'}
-    
-    def get(self, request, historyID='0'): 
-        return JsonResponse(self.data)
-    
-    def post(self, request, historyID='0'):
-        return JsonResponse(self.data)
-    
-    # * Metodo HTTP (PUT) del endpoint
-    def put(self, request, historyID):
-        return updateGraphs(request, historyID)
-    
-    def delete(self, request='0', historyID='0'):
-        return JsonResponse(self.data)
-
-
 class FileUploadView(View):
     """File upload view that manages file uploads and proccesing
     """

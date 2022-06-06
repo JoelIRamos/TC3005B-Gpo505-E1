@@ -440,50 +440,24 @@ def searchStatus(request, historyID):
     except: # Si ocurre cualquier error insesperado regresar mensaje de error
         return JsonResponse({'message': 'Error'})
 
-
-def updateGraphs(request, historyID):
-    try: 
-        # Usar la coleccion "RunHistory"
-        collectionRH = db["RunHistory"]
-        # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
-        resultsRH = list(collectionRH.find({"_id": historyID}))
-        # Si existe el historial
-        if len(resultsRH) > 0:
-            # Extraer Graficas del body
-            newgraphs = json.loads(request.body)
-            
-            if(resultsRH[0]['status']['code'] != 0):
-                data = {'message': 'Not found'}
-            else:
-                # Actualizar el registro con la nueva lista
-                collectionRH.update_one({"_id": historyID}, {"$set": {"graphs": newgraphs}})
-            
-                data = {'message': 'Success'}
-        else: 
-            data = {'message': 'Not found'}
-        return JsonResponse(data)
-    except: # Si ocurre cualquier error insesperado regresar mensaje de error
-        return JsonResponse({'message': 'Error'})
-
-
 # * Pendientes: Documentacion y burbuja
 '''
-
+Push Branch
 Terminar:
     Para Antes de la presentación:
         Documento de Funcionalidades (Frontend y Backend)
-        Bitacora de Pruebas (Frontend y Backend)
+        Bitacora y Plan de Pruebas (Frontend y Backend)
         Manual de Usuario (Frontend)
         Manual de Despliegue (Frontend y Backend)
 
     Despues de la Presentación:
         Especificación de Requerimientos (Casi Terminado)
-        Historias de Usuario (Casi Terminado)
         Plan de Calidad
-        Actualizar Modelo de BD
 
 
 Terminados:
+    Actualizar Modelo de BD
+    Historias de Usuario
     Modelo de Calidad
     Documento Vision
     Plan de Comunicación

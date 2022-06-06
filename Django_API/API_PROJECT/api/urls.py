@@ -7,7 +7,7 @@ urlpatterns = [
     path('getHistoryList/', views.searchHistoryListView.as_view(), name='get_history_list'),
     
     # ! Consultar los detalles de un historial (endpoint para testeo)
-    path('getHistoryDetail/<str:historyID>/', views.searchHistoryDetailView.as_view(), name='get_history_detail'),
+    # path('getHistoryDetail/<str:historyID>/', views.searchHistoryDetailView.as_view(), name='get_history_detail'),
     
     # * Consultar los detalles de la corrida de un archivo
     path('getHistory/<str:historyID>/', views.searchHistoryView.as_view(), name='get_history'),
@@ -26,9 +26,6 @@ urlpatterns = [
     
     # * Mandar a pedir el estatus de una corrida por si existe errores
     path('getStatus/<str:historyID>/', views.searchStatusView.as_view(), name='get_status'),
-    
-    # * Actualizar las graficas del historial
-    path('putGraphs/<str:historyID>/', views.updateGraphsView.as_view(), name='put_graphs'),
     
     # * Mandar a pedir el queue de archivos por procesar
     path('getQueue/', views.getQueue.as_view(), name='get_queue'),
