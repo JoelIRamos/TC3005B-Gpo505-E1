@@ -144,6 +144,8 @@ def upload_to_db_error(run_id_info: RunIdInfo, attributes: Attributes, error_cod
             "message": error_message
         }
     })
+    
+    remove_from_queue(run_id_info.run_id)
 
 def upload_to_db_success(df: pd.DataFrame, run_id_info: RunIdInfo, attributes: Attributes):
     """Uploads the data to the database if the run was successful

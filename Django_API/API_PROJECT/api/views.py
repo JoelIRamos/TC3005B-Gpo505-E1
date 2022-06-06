@@ -142,7 +142,7 @@ class searchBubbleGraphView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, historyID, attribute1, attribute2, filter):
-        return searchBubbleGraph2(request, historyID, attribute1, attribute2, filter)
+        return searchBubbleGraph(request, historyID, attribute1, attribute2, filter)
     
     def post(self, request, historyID='0', attribute='0', attribute2='0', filter='0'):
         return JsonResponse(self.data)
@@ -269,9 +269,9 @@ class FileUploadView(View):
             # Get the file from the request
             file = request.FILES['file']
             
-            # internal_attributes = ['ID_TRANSPORTISTA','weightDifference','D_UBICACION','USUARIO_EGRESO','N_PESO_TARA','mediana']
-            # external_attributes = ['C_ID_ORDEN_CABECERA','C_POSICION_ORDEN','Q_CANTIDAD','N_PESO_BRUTO','TIPO_TRANSPORTE']
-            # informational_attributes = ['C_SOCIEDAD','D_PATENTE']
+            internal_attributes = [ "C_GRANEL", "C_ID_ENTREGA", "C_ID_ORDEN_CABECERA", "TIPO_DOC", "EMPRESA_TRANSPORTISTA", "ID_TRANSPORTISTA", "D_UBICACION", "C_SOCIEDAD" ]
+            external_attributes = [ "D_PRODUCTO", "C_POSICION_ORDEN", "MOVIL2", "NOM_APE_COND", "NRO_DOC", "REMITO", "C_ID_PERMISO_CIRCULACION" ]
+            informational_attributes = [ "weightDifference", "C_POSICION_ENTREGA", "D_PATENTE", "TRACTOR" ]
             # Gets internal and external attributes from request
             # internal_attributes = json.loads(request.POST['internal_attributes'])
             # external_attributes = json.loads(request.POST['external_attributes'])
@@ -281,9 +281,9 @@ class FileUploadView(View):
             # print('external_attributes: ', external_attributes, 'type: ', type(external_attributes))
             # print('informational_attributes: ', informational_attributes, 'type: ', type(informational_attributes))
             
-            attributes = Attributes(json.loads(request.POST['internal_attributes']), json.loads(request.POST['external_attributes']), json.loads(request.POST['informational_attributes']))
+            # attributes = Attributes(json.loads(request.POST['internal_attributes']), json.loads(request.POST['external_attributes']), json.loads(request.POST['informational_attributes']))
             
-            # attributes = Attributes(internal_attributes, external_attributes, informational_attributes)
+            attributes = Attributes(internal_attributes, external_attributes, informational_attributes)
             
             # Saves the file to the storage and gets the file name, file id, base name and date
             run_id_info = self.save_file_to_storage(file)
@@ -299,9 +299,8 @@ class FileUploadView(View):
             remove_from_queue(run_id_info.run_id)
             return JsonResponse({"message": "Upload failed"})
         
-    
-    
     def get(self, request):
+        return render(request, 'upload_file.html', {'form': UploadFileForm()})
         return JsonResponse(self.data)
 
     def put(self, request):

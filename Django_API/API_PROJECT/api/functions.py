@@ -209,62 +209,7 @@ def searchBarGraph(request, historyID, variable, filter):
 def searchLineGraph(request, historyID, variable, filter):
     return searchBarLineGraphHelper(request, historyID, variable, filter, "Line")
 
-
-def searchBubbleGraph1(request, historyID, attribute1, attribute2, filter):
-    try:
-        filter = float(filter)
-        print("start")
-        # Usar coleccion "FileData"
-        colectionFD = db["FileData"]
-        print("coleccion")
-        # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
-        resultsFD = list(colectionFD.find({"_id": historyID}, {"data." + attribute1 : 1, "data." + attribute2 : 1, "data.   anomaly_scores": 1}))
-        
-        print("resultFD")
-        # Si existe el historial
-        if len(resultsFD) > 0:
-            # Crear data frame
-            df =  pd.DataFrame({'attribute1' :resultsFD[0]['data'][attribute1],'attribute2' :resultsFD[0]['data'][attribute2], 
-            'anomaly': resultsFD[0]['data']['anomaly_scores']})
-            # Filtrar las anomalias
-            # ! Igual o menor que??
-            rslt_df = df[df['anomaly'] <= filter]
-            
-            anomalyRelation = df.groupby(['attribute1', 'attribute2']).size().to_frame('size')
-            anomalyRelation.reset_index( inplace=True)
-            
-
-            anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
-            bubbleData = []
-
-            attribute1_list = anomalyRelation['attribute1'].values.tolist()
-            attribute2_list =  anomalyRelation['attribute2'].values.tolist()
-
-            for i in range(len(anomalyRelation)):
-                bubbleData.append(
-                    {
-                        #'x': str(anomalyRelation.iloc[i]['attribute1']), 
-                        #'y': str(anomalyRelation.iloc[i]['attribute2']), 
-                        'x': int(i), 
-                        'y': int(i), 
-                        'r': int(anomalyRelation.iloc[i]['size'])
-                    }
-                )
-
-            data = {
-                'type':'Bubble',
-                #'labels': anomalyTable['attribute'].tolist(),
-                'data' : bubbleData, #.tolist(),
-                'attribute1': attribute1_list,
-                'attribute2': attribute2_list
-            }            
-        else:
-            data = { 'message': 'Not found' }
-        return JsonResponse(data)
-    except: # Si ocurre cualquier error insesperado regresar mensaje de error
-        return JsonResponse({'message': 'Error'})
-
-def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
+def searchBubbleGraph(request, historyID, attribute1, attribute2, filter):
     try:
         filter = float(filter)
         
@@ -298,7 +243,7 @@ def searchBubbleGraph2(request, historyID, attribute1, attribute2, filter):
                 # //anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
                 # //print(anomalyRelation)
 
-                anomalyRelationTop25 = anomalyRelation.nlargest(25, 'size')
+                anomalyRelationTop25 = anomalyRelation.nlargest(500, 'size')
 
                 # lista de valores unicos de attribute1
                 attribute1List = anomalyRelationTop25['attribute1'].unique().tolist()
