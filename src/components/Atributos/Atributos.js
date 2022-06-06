@@ -5,7 +5,7 @@ import './Atributos.css'
 const Atributos = ({atributos, idForm}) => {
   return (
       <div className='atributos'>
-        <input type='radio' id={`radio-${atributos + idForm}`} name='atributo' value={atributos} />
+        <input type='radio' id={`radio-${atributos + idForm}`} name='atributo' value={atributos}/>
         <label htmlFor={`radio-${atributos + idForm}`}>{atributos}</label>
       </div>
 
