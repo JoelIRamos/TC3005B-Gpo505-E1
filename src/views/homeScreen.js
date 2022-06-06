@@ -3,15 +3,23 @@ import '../App.css';
 import HomeSelectionBtn from '../components/HomeSelectionButton/HomeSelectionButton.js';
 import Queue from '../components/Queue/Queue.js';
 
-function homeScreen() {
+function homeScreen({runId}) {
   return (
     <div className="App">
       <InvNavbar/>
       <div className="home-background">
         <div className="home-btn-container">
-          <HomeSelectionBtn path='/FileUpLoad' titulo='Subir Archivo' label='Crear un nuevo analisis' color='red' icon='cloud'/>
-          <HomeSelectionBtn path='/Dashboard' titulo='Dashboard' label='Revisar el dashboard del analisis actual' color='yellow' icon='chart'/>
-          <HomeSelectionBtn path='/Historial' titulo='Historial' label='Revisar el historial' color='gray' icon='history'/>
+          <div className="upload-history-container">
+            <HomeSelectionBtn path='/FileUpLoad' titulo='Subir Archivo' label='Crear un nuevo analisis' color='red' icon='cloud'/>
+            <div className="separator"></div>
+            <HomeSelectionBtn path='/Historial' titulo='Historial' label='Revisar el historial' color='gray' icon='history'/>
+          </div>
+          <div className="dashboard-container">
+            <HomeSelectionBtn path='/Dashboard' titulo='Dashboard' label='Revisar el dashboard del analisis actual' color='yellow' icon='chart' runId={runId}/>
+          </div>
+          <div className="queue-container">
+            <Queue/>
+          </div>
         </div>
       </div>
     </div>

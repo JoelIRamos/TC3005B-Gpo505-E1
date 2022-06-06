@@ -1,32 +1,115 @@
-.contenedor-datos-home{
+.contenedor-datos-home-vertical{
     justify-content: center;
     align-items: center;
     flex-direction: column;
     border-radius: 10px;
     color: rgb(255, 255, 255);
-    height: 59%;
-    width: 50%;
+    height: 85%;
+    width: 100%;
     text-align: center;
-    margin-right: 3%;
-    margin-left: 3%;
-    margin-top: 8%;
+    margin-right: 2.5%;
+    margin-left: 2.5%;
+    margin-top: 0%;
     filter: drop-shadow(8px 8px 8px rgb(0, 0, 0));
 }
 
-.contenedor-info{
-    text-align: center;
-    padding-top: 20%;
-    font-size: 1.2vw;
-}
-
-.icono{
-    height: 1vw;
-}
-
-.contenedor-icono{
+.contenedor-info-vertical{
     display: flex;
-    height: 80%;
+    text-align: center;
+    align-items: flex-start;
+    /* justify-content: center; */
+    flex-direction: column;
+    font-size: 1.2vw;
+    height: 100%;
+    width: 100%;
+}
+
+.contenedor-titulo-vertical{
+    display: flex;
+    text-align: center;
+    align-items: center;
     justify-content: center;
+    flex-direction: column;
+    font-size: 1.2vw;
+    height: 87%;
+    width: 100%;
+}
+
+.contenedor-icono-vertical{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.separator-vertical{
+    height: 3%;
+}
+
+.title-vertical{
+    margin: 0;
+    width: 100%;
+}
+
+.label-vertical{
+    margin: 0;
+    width: 100%;
+}
+
+.contenedor-datos-home-horizontal{
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    color: rgb(255, 255, 255);
+    height: 40%;
+    width: 100%;
+    text-align: center;
+    margin-right: 3%;
+    margin-left: 3%;
+    
+    filter: drop-shadow(8px 8px 8px rgb(0, 0, 0));
+}
+
+.contenedor-info-horizontal{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 1.2vw;
+    height: 100%;
+}
+
+.contenedor-icono-horizontal{
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5%;
+}
+
+.separator-horizontal{
+    width: 5%;
+}
+
+.title-horizontal{
+    width: 100%;
+    margin: 0;
+}
+
+.label-horizontal{
+    width: 100%;
+    margin: 0;
+}
+
+.contenedor-texto{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2.5%;
+    margin-right: 5%;
+    height: 100%;
+    width: 100%;
 }
 
 .home-button{
@@ -36,10 +119,13 @@
     cursor: pointer;
 }
 
+.icono{
+    height: 1vw;
+}
 
 .red{
     background-color: #f25c29;
-
+    
 }
 
 .yellow{

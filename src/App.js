@@ -186,7 +186,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<HomeScreenview/>}/>
+        <Route path='/' element={<HomeScreenview runId={runId}/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setBackPostResp={setBackPostResp} setListaAtributos={setListaAtributos}/>}/>
         <Route path='/FileUploadResp' element={<UploadFileRespView backPostResp={backPostResp} setRunId={setRunId}/>}/>
         <Route path='/Dashboard' element={<DashboardView infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos} dashboardEnabled = {dashboardEnabled} runStatus = {runStatus}/>}/>
