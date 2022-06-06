@@ -2,7 +2,9 @@ import Navbar from '../components/Navbar/Navbar.js';
 import '../App.css';
 import DropFile from '../components/DropFile/DropFile.js';
 import SeleccionAtributos from '../components/SelectorAtributos/SelectorAtributos.js';
-import { useState, useRef, useEffect } from 'react';
+import BarraBusqueda from '../components/BarraBusqueda/BarraBusqueda.js';
+import CircleButton from '../components/ButtonCircle/ButtonCircle.js';
+import React, { useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 
 
@@ -55,9 +57,19 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, setB
   const [upLoadView, setUpLoadView] = useState(true);
 
   const listAttRef = useRef(listasAtt);
-
+  
   const viewUpdate = () => {
     setUpLoadView(!upLoadView);
+  }
+
+  const scrollToTop = () => {
+    document.documentElement.scrollTop = 0;
+  }
+
+  const scrollToSelected = (selected) => {
+    document.getElementById(selected).scrollIntoView({
+      block: "center",
+      behavior: "smooth"});
   }
 
   return (
@@ -74,6 +86,8 @@ function UploadFileView({file, onFileDrop, fileRemove, setCsvFile, headers, setB
                 <button className='button-gen' onClick={() => backPost(listAttRef.current)}>Siguiente</button>
             </Link>
           </div>
+          <CircleButton event={scrollToTop}/>
+          <BarraBusqueda placeholder={"Buscar Atributos"} data={headers} scrollToSelected={scrollToSelected}/>
           <SeleccionAtributos headers={headers} listasAtt={listAttRef.current}/>
         </>
       }

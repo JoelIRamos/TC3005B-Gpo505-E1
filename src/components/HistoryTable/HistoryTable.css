@@ -1,0 +1,19 @@
+.hist-select-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5vw;
+  margin-top: 1%;
+}
+
+.hist-select-box{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background-color: white;
+  width: 80%;
+  border-radius: 5px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  padding: 1vw;
+}

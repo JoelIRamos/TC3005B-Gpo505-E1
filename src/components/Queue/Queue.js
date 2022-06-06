@@ -22,7 +22,7 @@ function Queue() {
     intervalRef.current = setInterval(() => {
       backGetQueue().then((res) => {
         setQueue(res.queue)
-        console.log(res.queue)
+        // console.log(res.queue)
       }).catch((e) => {
         setQueue([])
         console.log(e.message)
@@ -36,19 +36,30 @@ function Queue() {
 
   if (queue === undefined || queue === null || queue.length === 0){
     return(
-      <div className='queue'>
+      <div className="contenedor-queue grey">
+      <div className="contenedor-queue-header">
+        <h1>Archivos siendo procesados</h1>
       </div>
+      <div className="contenedor-queue-body-empty">
+        <h1>Actualmente no se esta procesando ningun archivo</h1>
+      </div>
+    </div>
     )
   }
   return (
-    <div className="queue">
-      {queue.map((q) => {
-        return (
-          <div>
-            {q}
-          </div>
-        )
-      })}
+    <div className="contenedor-queue grey">
+      <div className="contenedor-queue-header">
+        <h1>Archivos siendo procesados</h1>
+      </div>
+      <div className="contenedor-queue-body">
+        {queue.map((q, index) => {
+          return (
+            <div key={index} className="contenedor-queue-body-cell">
+              {q}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }

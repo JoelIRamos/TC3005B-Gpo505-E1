@@ -7,7 +7,7 @@ function SeleccionAtributos({headers, listasAtt}) {
         <div className="att-select-container">
             <div className="att-select-box">
             {headers.map((header, index) =>  
-                <div key={index} className="tarjeta-att">
+                <div id={header} key={index} className="tarjeta-att">
                     <div className="att-name">
                         {header}
                     </div>
