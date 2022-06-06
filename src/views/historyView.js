@@ -1,22 +1,34 @@
+import React, {useState} from 'react'
 import Navbar from '../components/Navbar/Navbar.js';
-import Tabla from '../components/Tabla/Tabla';
+import BarraBusqueda from '../components/BarraBusqueda/BarraBusqueda'
+import HistorialTable from '../components/HistoryTable/HistoryTable.js'
+import CircleButton from '../components/ButtonCircle/ButtonCircle.js'
 import '../App.css';
 
-function historyView({listaAtributos, runId}) {
+//call history get
 
-  console.log(listaAtributos);
-  console.log(runId);
+function HistoryView({setRunId}) {
+
+  const [historyObj, setHistoryObj] = useState([])
+
+  const scrollToTop = () => {
+    document.documentElement.scrollTop = 0;
+  }
+
+  const scrollToSelected = (selected) => {
+    document.getElementById(selected).scrollIntoView({
+      block: "center",
+      behavior: "smooth"});
+  }
 
   return (
     <div className="App">
       <Navbar selected='history' />
-      <div className="container-app">
-          <div className="area-historial">
-            <Tabla/>
-          </div>
-      </div>
+      <BarraBusqueda placeholder={"Buscar"}  scrollToSelected={scrollToSelected}/>
+      <HistorialTable historyObj={historyObj} setHistoryObj={setHistoryObj} setRunId={setRunId}/>
+      <CircleButton event={scrollToTop}/>
     </div>
   );
 }
 
-export default historyView;
+export default HistoryView;

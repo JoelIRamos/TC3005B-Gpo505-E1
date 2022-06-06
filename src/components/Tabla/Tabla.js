@@ -5,12 +5,12 @@ import { FaSearch } from "react-icons/fa"
 
 function historyView() {
     return (
-        <div className="historial">
-            <BarraBusqueda/>
-            <TarjetaHitorial/>
-            <TarjetaHitorial/>
-            <TarjetaHitorial/>
-        </div>
+        <>
+        <BarraBusqueda/>
+            
+        </>
+            
+        
     );
   }
   

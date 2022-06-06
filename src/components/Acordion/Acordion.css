@@ -1,0 +1,134 @@
+.acordion {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.tarjeta-acordion {
+    height: 10%;
+    width: 97%;
+    padding: 1vw;
+    padding-top: 1.25vw;
+    padding-bottom: 1.25vw;
+    margin-top: .4vw;
+    margin-bottom: .4vw;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.3vw;
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.tarjeta-acordion.selected {
+    background-color: rgb(255, 224, 203);
+    border-color: rgb(255, 102, 0);
+    border-radius: 10px 10px 0px 0px;
+}
+
+.tarjeta-acordion:hover {
+    background-color: rgb(255, 224, 203);
+    border-color: rgb(255, 102, 0);
+}
+
+.content-wrapper {
+    display: none;
+    max-height: 0;
+    width: 95%;
+    padding-right: 2vw;
+    margin-top: -.4vw;
+    transition: all 0.5s cubic-bezier(0,1,0,1);
+}
+
+.content-wrapper.show {
+    display: block;
+    max-height: 100%;
+    width: 97%;
+    border-radius:  0px 0px 10px 10px;
+    padding-right: 2vw;
+    margin-top: -.4vw;
+    transition: all 0.5s cubic-bezier(0,1,0,1);
+    border: solid 1px rgb(0, 0, 0);
+    border-top: transparent;
+}
+
+.tarjeta-content {
+    width: 100%;
+    padding: 1vw;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.3vw;
+}
+
+.tarjeta-content-name {
+    display: flex;
+    position: relative;
+    width: 50%;
+    left: 0%;
+    align-items: center;
+}
+
+.tarjeta-content-status {
+    display: flex;
+    position: relative;
+    width: 10%;
+    align-items: center;
+}
+
+.tarjeta-content-view-button {
+    display: flex;
+    position: relative;
+    width: 40%;
+    justify-content: center;
+    align-items: center;
+}
+
+.view-button {
+    padding-top: 1vw;
+    padding-bottom: 1vw;
+    padding-left: 20%;
+    padding-right: 20%;
+    background-color: rgb(255, 165, 29);
+    border: solid 1px rgb(255, 165, 29);
+    color: rgb(255, 255, 255);
+    border-radius: 30px;
+}
+
+.view-button:hover {
+    background-color: rgb(228, 142, 15);
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    border: solid 1px rgb(228, 142, 15);
+}
+
+.thick-status-icon {
+    color: rgb(0, 197, 0);
+    display: flex;
+    position: relative;
+    align-items: center;
+    margin-left: 5%;
+}
+
+.cross-status-icon {
+    color: rgb(228, 0, 0);
+    display: flex;
+    position: relative;
+    align-items: center;
+    margin-left: 5%;
+}
+
+/*.tarjeta-content:hover{
+    background-color: rgb(241, 241, 241);
+    cursor: pointer;
+}*/
+
+.tarjeta-name {
+    padding-right: 8vw;
+    width: 40%;
+    text-align: left;
+    margin-top: auto;
+    margin-bottom: auto;
+}

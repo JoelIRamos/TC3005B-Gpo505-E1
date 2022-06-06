@@ -172,29 +172,6 @@ input, select, button{
   display: none;
 }
 
-.busqueda {
-  margin-top: 3%;
-  margin-left: 6%;
-  height: 10%;
-  width: 90%;
-  border: 1px solid rgb(83,83,83);
-  border-radius: 35px;
-}
-
-.icono-busqueda {
-  margin-top: .9%;
-  margin-left: 1.2%;
-  font-size: 200%;
-  position: absolute;
-}
-
-.icono-flecha {
-  margin-top: .8%;
-  margin-left: 54%;
-  font-size: 200%;
-  position: absolute;
-}
-
 .area-historial {
   justify-content: left;
    height: 80vh;
@@ -243,7 +220,9 @@ a{
 
 .att-options-container{
   margin-top: 1%;
+  width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
