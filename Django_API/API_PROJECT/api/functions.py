@@ -52,7 +52,7 @@ def searchHistoryList(request):
                         version = {
                             "_id": run["_id"],
                             "date": run["date"],
-                            "staus": run["status"]
+                            "status": run["status"]
                         }
                         # Agregar la version
                         file["versions"].append(version)
