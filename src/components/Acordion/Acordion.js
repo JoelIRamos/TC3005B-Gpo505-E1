@@ -2,10 +2,15 @@ import React, {useState} from 'react'
 import { Link } from "react-router-dom";
 import { FaRegTimesCircle, FaRegCheckCircle } from 'react-icons/fa'
 import './Acordion.css'
+import { isCompositeComponent } from 'react-dom/test-utils';
 // Agregar espacio para boton de VER corridaa
 
 function Acordion({file, index, setRunId}) {
     const [selected, setSelected] = useState(null);
+
+    const handleClick = (run_id) => {
+        setRunId(run_id);
+    }
 
     const toggle = (i) => {
         if(selected === i)
@@ -45,8 +50,8 @@ function Acordion({file, index, setRunId}) {
                         </div>
                         }
                         <div className="tarjeta-content-view-button">
-                            <Link className="view-button"  to={'/Dashboard'}>
-                                <div onClick={() => {setRunId(fileVersion._id)}}>
+                            <Link className="view-button"  to={'/Dashboard'} onClick={() => {handleClick(fileVersion._id); console.log(fileVersion._id)}}>
+                                <div>
                                     Ver en Dashboard
                                 </div>
                             </Link>

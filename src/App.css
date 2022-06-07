@@ -112,7 +112,7 @@ input, select, button{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  width: 100vw;
 }
 
 .button-down{

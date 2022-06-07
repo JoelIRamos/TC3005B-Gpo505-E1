@@ -1,9 +1,9 @@
 import React from 'react'
 import './Atributos.css'
 
-const Atributos = ({data, onClick}) => {
+const Atributos = ({data, onClick, color}) => {
   return (
-    <button onClick={((e) => onClick(data))} className='atributo'>{data}</button>
+    <button onClick={((e) => onClick(data))} className={`atributo ${color}`}>{data}</button>
   )
 }
 

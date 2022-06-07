@@ -3,53 +3,57 @@
     border-radius: 10px;
     padding: 20px 20px;
     padding-bottom: 40px;
-    width: 70%;
+    min-width: 70vw;
     position: relative;
   }
 
-  .container-graph{
-      position: relative;
-      width: 100%;
-  }
+.container-graph{
+    position: relative;
+    width: 100%;
+}
 
 .container-titulo-btn{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 0.2vw;
 }
 
-.container-btn-graph{
-    display: flex;
-    flex-direction: row;
-}
-
-.container-btn-graph{
+.container-titulo-btn h3{
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0;
+    font-size: 1.2vw;
+    min-height: 100%;
+}
+
+.container-btn-graph{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    width: 10vw;
+    margin-right: 1.5vw;
 }
 
 .btn-graph{
-    margin-right: 5%;
-    padding: 1%;
-    display: block;
-    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #f0f0f000;
-    font-size: 1.5rem;
-    border-radius: 5px;
+    font-size: 1.4vw;
     cursor: pointer;
-    width: 2%;
     color: #636363;
     border: solid 1px transparent;
     transition: all 200ms;
-    margin-left: 40px;
+    margin-left: 1vw;
 }
 
 .btn-graph:hover{
     color: #f25c29;
 }
 
-
-h3{
-    margin: 0;
+.red-btn{
+    color : #f22929;
 }
+

@@ -9,16 +9,16 @@ const ContainerAtributosExt = ({atributos, onClick, atributo2}) => {
         setAtributes(!showAtributes)
     }
   return (
-    <>
+    <div className='contenedor-atributos'>
         <h3>Eje Y</h3>
         <div className='cont-atributos'>
-        <button className='titulo-atributo' onClick={showAtributesClick}>{atributo2}</button> 
-        <div className={showAtributes ? '' : 'no-display'}>
+        <button className='titulo-atributo yellow' onClick={showAtributesClick}>{atributo2}</button> 
+        <div className={`lista-atributos yellow ${showAtributes ? '' : 'no-display'}`}>
             <p>Atributo Externo</p>
-            {atributos["Atributo Externo"]["items"].map((atributo, i) => <Atributos key={i} onClick={onClick} data={atributo}/>)}
+            {atributos["Atributo Externo"]["items"].map((atributo, i) => <Atributos key={i} onClick={onClick} data={atributo} color="yellow"/>)}
         </div>
       </div>
-      </>
+      </div>
   )
 }
 

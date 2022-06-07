@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomeScreenview from './views/homeScreen';
 import UpLoadFileview from './views/uploadFileView';
-import DashboardView from './views/DashboardView';
+import DashboardView from './views/dashboardView';
 import HistorialView from './views/historyView';
 import UploadFileRespView from './views/uploadFileRespView'
 import ContainerDB from './components/ContainerDB/ContainerDB';
 import SeleccionAtributos from './components/SelectorAtributos/SelectorAtributos'
-import dashboardView from './views/DashboardView';
+
 
 
 // Atributos dummy
@@ -40,7 +40,7 @@ function App() {
 
   const [listaAtributos, setListaAtributos] = useState();
   const [runId, setRunId] = useState();
-  const [runStatus, setRunStatus] = useState();
+  const [runInfo, setRunInfo] = useState();
   const [dashboardEnabled, setDashboardEnabled] = useState(false);
   const intervalRef = useRef();
   
@@ -65,7 +65,7 @@ function App() {
     console.log(runId)
     setGraphList([]);
     setListaDatos([]);
-    setRunStatus(null);
+    setRunInfo(null);
     setInfoGeneral(null);
     setDashboardEnabled(false);
     intervalRef.current = null
@@ -75,9 +75,9 @@ function App() {
     }
     
     intervalRef.current = setInterval(() => {
-      backGetStatus().then((res) => {
-        setRunStatus(res)
-        //console.log(res)
+      backGetHistory().then((res) => {
+        setRunInfo(res)
+        console.log(res)
       }).catch((e) => {
         console.log(e.message)
       })
@@ -90,33 +90,56 @@ function App() {
 
 
   useEffect(() => {
-    console.log(runStatus)
-    if (runStatus === null || runStatus === undefined){
+    // console.log(runStatus)
+    if (runInfo === null || runInfo === undefined){
       return;
     }
 
-    if(runStatus['message'] === 'Not found'){
+    if(runInfo['message'] === 'Not found'){
       return
     }
 
-    if (runStatus['message'] === 'Error' || runStatus['result']['code'] !== 0){
+    if (runInfo['message'] === 'Error' || runInfo['result']['status']['code'] !== 0){
       clearInterval(intervalRef.current);
       return;
     }
+
+    clearInterval(intervalRef.current);
 
     backGetInfoGeneral()
       .then((res) => {
         // console.log(res)
         console.log('infoGeneral updated')
+        console.log(res)
         setInfoGeneral(res)
+        setListaAtributos(
+          { 
+            "Atributo Interno":
+            {
+              name: "Atributos Internos",
+              items: runInfo['result']['internal_attributes']
+            },
+            "Atributo Externo":{
+              name: "Atributos Externos",
+              items: runInfo['result']['external_attributes']
+            },
+            "Atributo Informativo":{
+              name: "Atributos Informativos",
+              items: runInfo['result']['informational_attributes']
+            }
+          }
+        )
         //TODO: Get historyDetail
         setDashboardEnabled(true);
       })
       .catch((e) => {
         console.log(e.message)
       })
-    clearInterval(intervalRef.current);
-    }, [runStatus])
+    }, [runInfo])
+
+  useEffect(() => {
+    console.log(listaAtributos)
+  }, [listaAtributos])
 
   const backGetInfoGeneral = async () =>{
     const response = await fetch(`http://127.0.0.1:8000/api/getStatistics/${runId}/0/`) 
@@ -129,8 +152,8 @@ function App() {
     }
   }
 
-  const backGetStatus = async () =>{
-    const response = await fetch(`http://127.0.0.1:8000/api/getStatus/${runId}/`)
+  const backGetHistory = async () =>{
+    const response = await fetch(`http://127.0.0.1:8000/api/getHistory/${runId}/`)
     if(!response.ok){
       throw new Error('Data could not be fetched')
     } else {
@@ -193,7 +216,7 @@ function App() {
         <Route path='/' element={<HomeScreenview runId={runId}/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setBackPostResp={setBackPostResp} setListaAtributos={setListaAtributos}/>}/>
         <Route path='/FileUploadResp' element={<UploadFileRespView backPostResp={backPostResp} setRunId={setRunId}/>}/>
-        <Route path='/Dashboard' element={<DashboardView infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos} dashboardEnabled = {dashboardEnabled} runStatus = {runStatus}/>}/>
+        <Route path='/Dashboard' element={<DashboardView infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos} dashboardEnabled = {dashboardEnabled} runStatus = {runInfo}/>}/>
         <Route path='/Historial' element={<HistorialView setRunId={setRunId}/>}/>
       </Routes>
     </Router>
