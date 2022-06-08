@@ -2,11 +2,14 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
-    align-items: center;
     height: 100%;
     width: 100%;
     margin-left: 0;
     margin-right: 0;
+}
+
+.bubblegraph-dictionary-container-title{
+    margin-bottom: 10px;
 }
 
 .bubblegraph-dictionary-attribute-selector {
@@ -74,13 +77,44 @@
     color: rgb(255, 255, 255);
 }
 
+.bubblegraph-dictionary-container-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    max-height: 100%;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0.3vw;
+    border-radius: 10px;
+}
+
+.bubblegraph-dictionary-attribute-list-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    height: 2vw;
+    max-width: 100%;
+    min-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 0.8vw;
+    box-shadow: 0 0 0 1px white;
+}
+
 .bubblegraph-dictionary-attribute-list {
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    max-height: 100%;
-    max-width: 100%;
+    max-height: 29vw;
+    max-width: 20vw;
     margin-left: 0;
     margin-right: 0;
+    margin-top: 10px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    padding-bottom: 0.5vw;
 }

@@ -5,6 +5,7 @@ import { useState, useLayoutEffect, useEffect, useRef  } from 'react';
 import ContainerAtributos from '../ContainerAtributos/ContainerAtributos';
 import ContainerAtributosExt from '../ContainerAtributos/ContainerAtributosExt'
 import BubbleGraphDictionary from '../BubbleGraphDictionary/BubbleGraphDictionary';
+import SliderAnomaly from '../SliderAnomaly/SliderAnomaly';
 
 const ContainerDB = ({updateList, atributos, deleteGraph, indexGraph, runId, currentChart, url, currentAtributo1, currentAtributo2, currentShowForm, currentParamAnomaly}) => {
 
@@ -62,8 +63,11 @@ const ContainerDB = ({updateList, atributos, deleteGraph, indexGraph, runId, cur
       .catch((e) => {
         console.log(e.message)
       })
-      updateList(chart, urlRef.current, indexGraph, atributo1, atributo2, showForm, paramAnomaly)
   }, [apiURL])
+
+  useEffect(() => {
+    updateList(chart, urlRef.current, indexGraph, atributo1, atributo2, showForm, paramAnomaly)
+  }, [chart, atributo1, atributo2, showForm, paramAnomaly])
 
   // Modificador booleano de click
   const clicked = () => {
@@ -105,7 +109,7 @@ const ContainerDB = ({updateList, atributos, deleteGraph, indexGraph, runId, cur
 
 
   const attributes_dictionary_condition = () => {
-    if(dictionaryEnabled){
+    if(dictionaryEnabled && chart === 'Grafico de Burbuja'){
       return (
         <div className='container-form-a'>
           <BubbleGraphDictionary dictionaryAtt1={datos.attribute1Dict} dictionaryAtt2={datos.attribute2Dict} attribute1={atributo1} attribute2={atributo2}/>
@@ -118,6 +122,7 @@ const ContainerDB = ({updateList, atributos, deleteGraph, indexGraph, runId, cur
         <div className='container-form-a'>
           <ContainerAtributos atributo1={atributo1} atributos={atributos} onClick={saveAtributo1}/>
           <div className='contenedor-atributos'></div>
+          <SliderAnomaly setParamAnomaly={setParamAnomaly} paramAnomally={paramAnomaly}/>
         </div>
       )
     }
@@ -126,6 +131,7 @@ const ContainerDB = ({updateList, atributos, deleteGraph, indexGraph, runId, cur
       <div className='container-form-a'>
         <ContainerAtributos atributo1={atributo1} atributos={atributos} onClick={saveAtributo1}/>
         <ContainerAtributosExt atributo2={atributo2} atributos={atributos} onClick={saveAtributo2}/>
+        <SliderAnomaly setParamAnomaly={setParamAnomaly} paramAnomally={paramAnomaly}/>
       </div>
     )
   }

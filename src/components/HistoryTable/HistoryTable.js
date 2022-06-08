@@ -22,9 +22,15 @@ function HistoryTable({historyObj, setHistoryObj, setRunId}) {
     return (
         <div className="hist-select-container">
             <div className="hist-select-box">
-                {historyObj.map((fileName, index) =>
-                    <Acordion key={index} file={fileName} index={index} setRunId={setRunId}/>
-                )}
+                {historyObj !== undefined ?
+                    historyObj.map((fileName, index) =>
+                        <Acordion key={index} file={fileName} index={index} setRunId={setRunId}/>
+                    )
+                    :
+                    <div className="history-nofile">
+                        No se encontraron analisis
+                    </div>
+                }
             </div>
         </div>
     );

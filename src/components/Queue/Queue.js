@@ -32,7 +32,7 @@ function Queue() {
     return () => {
       clearInterval(intervalRef.current);
     }
-  }, [queue]);
+  }, []);
 
   if (queue === undefined || queue === null || queue.length === 0){
     return(

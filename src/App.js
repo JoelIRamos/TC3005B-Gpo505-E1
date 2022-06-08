@@ -46,6 +46,7 @@ function App() {
       } 
       else return graph
     }))
+    console.log(graphList)
   }
      
 

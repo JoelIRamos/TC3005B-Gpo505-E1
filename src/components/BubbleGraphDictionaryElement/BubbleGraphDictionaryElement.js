@@ -1,5 +1,5 @@
 import React from "react";
-
+import "./BubbleGraphDictionaryElement.css";
 
 const BubbleGraphDictionaryElement = ({id, name}) => {
     return (

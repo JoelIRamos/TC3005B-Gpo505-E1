@@ -1,0 +1,38 @@
+.bubblegraph-dictionary-element {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-height: 2.5vw;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 0.8vw;
+}
+
+.bubblegraph-dictionary-element-id{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+    min-height: 2.5vw;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 10px 0 0 10px;
+    border-bottom: 1px solid white;
+
+}
+
+.bubblegraph-dictionary-element-name {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 2.5vw;
+    width: 80%;
+    margin-left: 0;
+    margin-right: 0;
+    border-bottom: 1px solid white;
+
+}

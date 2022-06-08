@@ -1,0 +1,6 @@
+.contenedor-slider{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    min-width: 20vw;
+}

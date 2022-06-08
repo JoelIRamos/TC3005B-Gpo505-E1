@@ -24,10 +24,8 @@ const DashboardView = ({updateList, createGraph, graphList, atributos, deleteGra
 
     if (runInfo !== undefined && runInfo !== null) {
       if (runInfo['message'] === "Not found"){
-        message = "Cargando..."
-      }
-
-      if (runInfo['message'] === "Error" || runInfo['result']['status']['code'] !== 0){
+        message = "Cargando información...";
+      } else if (runInfo['message'] === "Error" || runInfo['result']['status']['code'] !== 0){
         titulo = "Error"
         var error = ""
 

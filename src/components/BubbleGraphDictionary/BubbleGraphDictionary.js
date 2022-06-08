@@ -25,6 +25,9 @@ const BubbleGraphDictionary = ({dictionaryAtt1, dictionaryAtt2, attribute1, attr
 
   return (
     <div className={'bubblegraph-dictionary-container'}>
+      <h3 className={'bubblegraph-dictionary-container-title'}>
+        Diccionario
+      </h3>
       <div className={'bubblegraph-dictionary-attribute-selector'}>
           <div className={`bubblegraph-dictionary-attribute-selector-title corners-left red ${selected !== attribute1 ? 'unselected-attribute-title-red':''}`} onClick={() => {setSelected(attribute1); selectedAtt.current = dictionaryAtt1;}}>
             <div>
@@ -35,12 +38,18 @@ const BubbleGraphDictionary = ({dictionaryAtt1, dictionaryAtt2, attribute1, attr
             {attribute2}
           </div>
       </div>
-      <div className={'bubblegraph-dictionary-attribute-list'}>
-        {selectedAtt.current !== undefined && Object.entries(selectedAtt.current).map((dict, i) => {
-            return (
-              <BubbleGraphDictionaryElement key={i} id={dict[0]} name={dict[1]}/>
-            )
-          })}
+      <div className={`bubblegraph-dictionary-container-body ${selected === attribute2 ? "yellow" : "red"}`}>
+        <div className={'bubblegraph-dictionary-attribute-list-title'}>
+          <div style={{width: 20 + '%'}}>Indice</div>
+          <div style={{width: 80 + '%'}}>Traduccion</div>
+        </div>
+        <div className={'bubblegraph-dictionary-attribute-list'}>
+          {selectedAtt.current !== undefined && Object.entries(selectedAtt.current).map((dict, i) => {
+              return (
+                <BubbleGraphDictionaryElement key={i} id={dict[0]} name={dict[1]}/>
+              )
+            })}
+        </div>
       </div>
     </div>
   )
