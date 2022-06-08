@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactSlider from 'react-slider';
 import styled from 'styled-components';
 
@@ -31,14 +31,20 @@ const Track = (props, state) => <StyledTrack {...props} index={state.index} />;
 
 
 const SliderAnomaly = ({setParamAnomaly, paramAnomally}) => {
-    const changeHandler = (value) => {
+    const [valueSlider, setValueSlider] = useState(paramAnomally);
+
+    const onAfterchangeHandler = (value) => {
         setParamAnomaly(value);
     }
 
+    const onChangeHandler = (value) => {
+        setValueSlider(value);
+    }
+    
     return (
         <div className='contenedor-slider'>
-            <h3 className='title-slider'>{`Sensibilidad de anomalia: ${paramAnomally}`}</h3>
-            <StyledSlider defaultValue={paramAnomally} min={-1} max={0} step={0.01} renderTrack={Track} renderThumb={Thumb} onAfterChange={(value, index) => {changeHandler(value)}}/>
+            <h3 className='title-slider'>{`Sensibilidad de anomalia: ${valueSlider}`}</h3>
+            <StyledSlider defaultValue={paramAnomally} min={-1} max={0} step={0.01} renderTrack={Track} renderThumb={Thumb} onChange={(value, index) =>{onChangeHandler(value)}} onAfterChange={(value, index) => {onAfterchangeHandler(value)}}/>
         </div>
     )
 }
