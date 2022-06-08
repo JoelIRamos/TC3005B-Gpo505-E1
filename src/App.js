@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomeScreenview from './views/homeScreen';
 import UpLoadFileview from './views/uploadFileView';
 import DashboardView from './views/DashboardView';
-import HistorialView from './views/historyView';
+import Historial from './views/Historial';
 import UploadFileRespView from './views/uploadFileRespView'
 import ContainerDB from './components/ContainerDB/ContainerDB';
 import SeleccionAtributos from './components/SelectorAtributos/SelectorAtributos'

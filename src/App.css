@@ -168,7 +168,7 @@ input, select, button{
   display: flex;
   width: calc(100vw - 4%);
   justify-content: center;
-  margin-bottom: 40px;
+  
 }
 
 .button-add{
@@ -180,6 +180,7 @@ input, select, button{
   width: 60px;
   height: 60px;
   margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 .historial {
