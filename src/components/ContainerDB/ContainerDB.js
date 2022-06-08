@@ -6,13 +6,14 @@ import { useLayoutEffect, useEffect } from 'react';
 import {useRef} from 'react';
 import ContainerAtributos from '../ContainerAtributos/ContainerAtributos';
 import ContainerAtributosExt from '../ContainerAtributos/ContainerAtributosExt'
+import BubbleGraphDictionary from '../BubbleGraphDictionary/BubbleGraphDictionary';
 
 const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
 
   // Obejto de datos para graficas
   const [datos, setDatos] = useState({anomalyList: [1, 2, 3,4, 5], labels: ['Dato1', 'Dato2', 'Dato3', 'Dato4', 'Dato5']});
 
-  
+  const [dictionaryEnabled, setDictionaryEnabled] = useState(false);
 
   // Estado de click booleano para despliegue de elementos
   const [click, setClick] = useState(false);
@@ -104,15 +105,42 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
     setAtributo2(atributo)
   }
 
+
+  const attributes_dictionary_condition = () => {
+    if(dictionaryEnabled){
+      return (
+        <div className='container-form-a'>
+          <BubbleGraphDictionary dictionaryAtt1={datos.attribute1Dict} dictionaryAtt2={datos.attribute2Dict}/>
+        </div>
+      )
+    }
+
+    if(chart !== 'Grafico de Burbuja'){
+      return(
+        <div className='container-form-a'>
+          <ContainerAtributos atributo1={atributo1} atributos={atributos} onClick={saveAtributo1}/>
+          <div className='contenedor-atributos'></div>
+        </div>
+      )
+    }
+
+    return (
+      <div className='container-form-a'>
+        <ContainerAtributos atributo1={atributo1} atributos={atributos} onClick={saveAtributo1}/>
+        <ContainerAtributosExt atributo2={atributo2} atributos={atributos} onClick={saveAtributo2}/>
+      </div>
+    )
+  }
+
   return (
       <div className='container-db-general'>
         <div className='container-db'>
         <React.StrictMode>
-            <GraphContainer indexGraph={indexGraph} deleteGraph={deleteGraph} showForm={showForm} atributo2={atributo2} click={click} chart={chart} data = {datos} atributo1={atributo1} clicked={clicked} clickedLi={clickedLi} />
-            <div className='container-form-a'>
-              < ContainerAtributos atributo1={atributo1} atributos={atributos} onClick={saveAtributo1} />
-              {chart === 'Grafico de Burbuja' && < ContainerAtributosExt atributo2={atributo2} atributos={atributos} onClick={saveAtributo2}/>}
-            </div>
+            <GraphContainer indexGraph={indexGraph} deleteGraph={deleteGraph} showForm={showForm} atributo2={atributo2} click={click} chart={chart} data = {datos} atributo1={atributo1} clicked={clicked} clickedLi={clickedLi} setDictionaryEnabled={setDictionaryEnabled} dictionaryEnabled={dictionaryEnabled}/>
+            {attributes_dictionary_condition()}
+              {/* < ContainerAtributos atributo1={atributo1} atributos={atributos} onClick={saveAtributo1} />
+              {chart === 'Grafico de Burbuja' && < ContainerAtributosExt atributo2={atributo2} atributos={atributos} onClick={saveAtributo2}/>} */}
+
         </React.StrictMode>
         </div>
       </div>

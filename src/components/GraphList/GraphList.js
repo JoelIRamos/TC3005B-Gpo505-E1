@@ -4,7 +4,7 @@ import './GraphList.css'
 
 const GraphList = ({graphs, state, onClick}) => {
   return (
-    <div className={`dropdown ${state && 'active'}`}>
+    <div className={`dropdown-graph-list ${state && 'active'}`}>
         <ul>
             {graphs.map((element, i) => (
                 <GraphListContet key={i} element={element} onClick={onClick} />

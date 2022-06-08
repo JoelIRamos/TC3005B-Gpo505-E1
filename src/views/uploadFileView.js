@@ -4,7 +4,11 @@ import DropFile from '../components/DropFile/DropFile.js';
 import SeleccionAtributos from '../components/SelectorAtributos/SelectorAtributos.js';
 import BarraBusqueda from '../components/BarraBusqueda/BarraBusqueda.js';
 import CircleButton from '../components/ButtonCircle/ButtonCircle.js';
+<<<<<<< HEAD
 import React, { useState, useRef, useEffect } from 'react';
+=======
+import React, { useState, useRef,  useEffect } from 'react';
+>>>>>>> 0a0d67e973817470ae95beb5fb492ef7361560de
 import { Link } from "react-router-dom";
 
 

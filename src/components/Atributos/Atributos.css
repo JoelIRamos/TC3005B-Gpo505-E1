@@ -1,12 +1,13 @@
 .atributo{
     cursor: pointer;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    display: block;
-    width: 100%;
-    border: none;
-    background-color: white;
+    margin-left: 1.5vw;
+    margin-right: 1.5vw;
+    border: 1px solid #f0f0f0;
     text-align: left;
+    border-radius: 10px;
+    font-size: 0.7vw;
+    padding: 0.6vw;
+    margin-bottom: 0.3vw;
 }
 
 .atributo:hover{

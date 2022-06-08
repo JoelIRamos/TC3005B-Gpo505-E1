@@ -68,7 +68,7 @@ const DashboardView = ({createGraph, graphList, atributos, deleteGraph, indexGra
       (imgProperties.height * pdfWidth) / imgProperties.width;
 
     pdf.addImage(data, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('print.pdf');
+    pdf.save(`${runId}.pdf`);
   }
   // Props: 
   //   datos = datos dummy
