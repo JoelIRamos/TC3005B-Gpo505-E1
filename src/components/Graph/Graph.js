@@ -59,7 +59,10 @@ const Graph = ({datosGraph, chart}) => {
             {
               label: 'Número de Anomalías',
               data: datosGraph.anomalyList,
-              backgroundColor: 'rgb(255,168,47)',
+              borderWidth: 2,
+              borderRadius: 10,
+              borderColor: 'rgb(242, 92, 41)',
+              backgroundColor: 'rgba(242, 92, 41, 0.2)',
             },
           ],
         }} />
@@ -83,8 +86,8 @@ const Graph = ({datosGraph, chart}) => {
                   {
                     label: 'Número de Anomalías',
                     data: datosGraph.anomalyList,
-                    borderColor: 'rgb(255,168,47)',
-                    backgroundColor: 'rgba(255,168,47,0.2)',
+                    borderColor: 'rgb(242, 92, 41)',
+                    backgroundColor: 'rgba(242, 92, 41, 0.2)',
                     fill: true
                   },
                 ],
@@ -169,7 +172,42 @@ const Graph = ({datosGraph, chart}) => {
         {
           label: 'Relaciones',
           data: datosGraph.data,
-          backgroundColor: 'rgba(53, 162, 235, 0.5)',
+          borderColor: function(context) {
+            // return 'rgb(255, 118, 34)';
+
+            // if (context.dataIndex%2 == 0){
+            //   return 'rgba(242, 92, 41, 0.5)';
+            // }
+            // else {
+            //   return 'rgba(255, 168, 47, 0.5)';
+            // }
+
+            if (context.raw === undefined) {
+              return 'rgba(255, 255, 255)';
+            }
+            if (context !== undefined && context.raw.x%2 == 0){
+              return 'rgba(242, 92, 41)';
+            }
+            return 'rgba(255, 168, 47)';
+          },
+          backgroundColor: function(context) { 
+            // return 'rgba(255, 118, 34, 0.5)';
+
+            // if (context.dataIndex%2 == 0){
+            //   return 'rgba(242, 92, 41, 0.5)';
+            // }
+            // else {
+            //   return 'rgba(255, 168, 47, 0.5)';
+            // }
+            
+            if (context.raw === undefined) {
+              return 'rgba(255, 255, 255, 0.5)';
+            }
+            if (context !== undefined && context.raw.x%2 == 0){
+              return 'rgba(242, 92, 41, 0.5)';
+            }
+            return 'rgba(255, 168, 47, 0.5)';
+          },
         }
       ]
     }} />

@@ -112,7 +112,7 @@ input, select, button{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100vw;
+  width: 99.15vw;
 }
 
 .button-down{
@@ -166,7 +166,7 @@ input, select, button{
 
 .container-button-add{
   display: flex;
-  width: calc(100vw - 4%);
+  width: 99.15vw;
   justify-content: center;
   
 }

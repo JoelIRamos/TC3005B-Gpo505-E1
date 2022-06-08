@@ -1,9 +1,7 @@
 import React from 'react'
 import GraphContainer from '../GraphContainer/GraphContainer'
 import './ContainerDB.css'
-import { useState } from 'react';
-import { useLayoutEffect, useEffect } from 'react';
-import {useRef} from 'react';
+import { useState, useLayoutEffect, useEffect, useRef  } from 'react';
 import ContainerAtributos from '../ContainerAtributos/ContainerAtributos';
 import ContainerAtributosExt from '../ContainerAtributos/ContainerAtributosExt'
 import BubbleGraphDictionary from '../BubbleGraphDictionary/BubbleGraphDictionary';
@@ -110,7 +108,7 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
     if(dictionaryEnabled){
       return (
         <div className='container-form-a'>
-          <BubbleGraphDictionary dictionaryAtt1={datos.attribute1Dict} dictionaryAtt2={datos.attribute2Dict}/>
+          <BubbleGraphDictionary dictionaryAtt1={datos.attribute1Dict} dictionaryAtt2={datos.attribute2Dict} attribute1={atributo1} attribute2={atributo2}/>
         </div>
       )
     }

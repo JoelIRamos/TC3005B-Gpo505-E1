@@ -11,29 +11,42 @@ import { jsPDF } from 'jspdf';
 import React, {useRef} from 'react'
 
 
-const DashboardView = ({createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId, infoGeneral, dashboardEnabled, runStatus}) => {
+const DashboardView = ({createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId, infoGeneral, dashboardEnabled, runInfo}) => {
   
   const printRef = React.useRef();
   if (!dashboardEnabled) {
-    var message = "Seleccione un reporte del historial o cargue un archivo para poder utilizar el Dashboard"
+    var message = "Cargando información..."
     var titulo = ""
 
-    if (runStatus !== undefined && runStatus !== null) {
-      if (runStatus['message'] === "Not found"){
-        message = "El archivo se esta procesando..."
+    if (runId === undefined || runId === null || runId === '' ) {
+      message = "Seleccione un analisis del historial o cargue un archivo para utilizar el dashboard"
+    }
+
+    if (runInfo !== undefined && runInfo !== null) {
+      if (runInfo['message'] === "Not found"){
+        message = "Cargando..."
       }
 
-      if (runStatus['message'] === "Error"){
-        message = "Hubo un error al procesar el archivo, por favor intente de nuevo"
+      if (runInfo['message'] === "Error" || runInfo['result']['status']['code'] !== 0){
+        titulo = "Error"
+        var error = ""
+
+        if (runInfo['message'] === 'Found') {
+          error = runInfo['result']['status']['code']} 
+        else {
+          error = 'Error de conexion'
+        }
+
+        message = [`Hubo un error al cargar la información`, <br/> , `Codigo de error: ${error}`]
       }
     }
 
-    if (runId !== undefined && runId !== null){
-      titulo = runId
-    }
+    // if (runId !== undefined && runId !== null){
+    //   titulo = runId
+    // }
     return <div className="App">
       <Navbar selected="dashboard"/>
-      <Titulo runId={titulo}/>
+      <Titulo runId={runId}/>
       <Message title = {titulo} message={message} showButton={true}/>
 
       {/* <div className='message-view-container'>

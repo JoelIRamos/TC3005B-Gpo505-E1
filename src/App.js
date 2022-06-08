@@ -2,13 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomeScreenview from './views/homeScreen';
 import UpLoadFileview from './views/uploadFileView';
-<<<<<<< HEAD
-import DashboardView from './views/DashboardView';
-import Historial from './views/Historial';
-=======
 import DashboardView from './views/dashboardView';
-import HistorialView from './views/historyView';
->>>>>>> 0a0d67e973817470ae95beb5fb492ef7361560de
+import HistorialView from './views/Historial';
 import UploadFileRespView from './views/uploadFileRespView'
 import ContainerDB from './components/ContainerDB/ContainerDB';
 import SeleccionAtributos from './components/SelectorAtributos/SelectorAtributos'
@@ -221,7 +216,7 @@ function App() {
         <Route path='/' element={<HomeScreenview runId={runId}/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setBackPostResp={setBackPostResp} setListaAtributos={setListaAtributos}/>}/>
         <Route path='/FileUploadResp' element={<UploadFileRespView backPostResp={backPostResp} setRunId={setRunId}/>}/>
-        <Route path='/Dashboard' element={<DashboardView infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos} dashboardEnabled = {dashboardEnabled} runStatus = {runInfo}/>}/>
+        <Route path='/Dashboard' element={<DashboardView infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos} dashboardEnabled = {dashboardEnabled} runInfo = {runInfo}/>}/>
         <Route path='/Historial' element={<HistorialView setRunId={setRunId}/>}/>
       </Routes>
     </Router>
