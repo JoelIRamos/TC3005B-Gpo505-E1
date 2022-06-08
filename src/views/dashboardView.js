@@ -11,7 +11,7 @@ import { jsPDF } from 'jspdf';
 import React, {useRef} from 'react'
 
 
-const DashboardView = ({createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId, infoGeneral, dashboardEnabled, runInfo}) => {
+const DashboardView = ({updateList, createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId, infoGeneral, dashboardEnabled, runInfo}) => {
   
   const printRef = React.useRef();
   if (!dashboardEnabled) {
@@ -67,7 +67,7 @@ const DashboardView = ({createGraph, graphList, atributos, deleteGraph, indexGra
     //<Navigate to='/' />
   }
 
-  let GraphCont = {id: indexGraph, atributos: atributos, deleteGraph: deleteGraph}
+  let GraphCont = {id: indexGraph, atributos: atributos, deleteGraph: deleteGraph, chart: undefined, url: undefined, atributo1: undefined, atributo2: undefined, showForm: undefined, paramAnomaly:undefined}
   
   const handleDownloadPdf = async () => {
     const element = printRef.current;
@@ -110,7 +110,20 @@ const DashboardView = ({createGraph, graphList, atributos, deleteGraph, indexGra
               <ContenedorDatos datos={infoGeneral["result"]["TotalAnomalys"]} label='Total de Anomalías' color='yellow'/>
         </div>
         {graphList.map((element, i) => (
-          < ContainerDB runId={runId} key={element.id} indexGraph={element.id} atributos={element.atributos} deleteGraph={element.deleteGraph} setURL = {setURL} />
+          < ContainerDB 
+            updateList={updateList} 
+            runId={runId} key={element.id} 
+            indexGraph={element.id} 
+            atributos={element.atributos} 
+            deleteGraph={element.deleteGraph} 
+            setURL = {setURL} 
+            currentChart={element.chart} 
+            url={element.url} 
+            currentAtributo1 = {element.atributo1} 
+            currentAtributo2 = {element.atributo2} 
+            currentShowForm={element.showForm} 
+            currentParamAnomaly ={element.paramAnomaly}
+          />
         ))}
       </div>
       <div className='container-button-add'><button onClick={(() => createGraph(GraphCont))} className='button-add'>+</button></div>

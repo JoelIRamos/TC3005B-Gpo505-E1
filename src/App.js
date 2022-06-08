@@ -5,20 +5,7 @@ import UpLoadFileview from './views/uploadFileView';
 import DashboardView from './views/dashboardView';
 import HistorialView from './views/Historial';
 import UploadFileRespView from './views/uploadFileRespView'
-import ContainerDB from './components/ContainerDB/ContainerDB';
-import SeleccionAtributos from './components/SelectorAtributos/SelectorAtributos'
 
-
-
-// Atributos dummy
-const atributos = [
-  'ID_TRANSPORTISTA',
-  'weightDifference',
-  'D_UBICACION',
-  'USUARIO_EGRESO',
-  'N_PESO_TARA',
-  'mediana'
-]
 function App() {
 
   const didMount = useRef(false);
@@ -32,8 +19,6 @@ function App() {
   const [backPostResp, setBackPostResp] = useState(); // Respuesta backend
 
   const [infoGeneral, setInfoGeneral] = useState();
-
-  const [listaDatos, setListaDatos] = useState([]); // Lista que guarda datos de graficas YA cargadas
 
   // Referencia para la lista de grafico
   const graphListRef = useRef(); 
@@ -52,9 +37,17 @@ function App() {
   }
 
   // Funcion para actualizar datos de listaDatos
-  const updateList = (chart, url) =>{
-    
+  const updateList = (chart, url, id, atributo1, atributo2, showForm, paramAnomaly) =>{
+    console.log(id)
+    setGraphList([...graphList].map(graph =>{
+      if(graph.id === id){
+        return{
+          ...graph, chart: chart, url: url, atributo1: atributo1, atributo2: atributo2, showForm: showForm, paramAnomaly: paramAnomaly}
+      } 
+      else return graph
+    }))
   }
+     
 
   useEffect(() => {
     if(!didMount.current) {
@@ -64,7 +57,6 @@ function App() {
     console.log('useEffect runId');
     console.log(runId)
     setGraphList([]);
-    setListaDatos([]);
     setRunInfo(null);
     setInfoGeneral(null);
     setDashboardEnabled(false);
@@ -200,10 +192,7 @@ function App() {
   graphListRef.current = graphList
   // Eliminar en gráfico -- Dashboard
   const deleteGraph = (index) => {
-    console.log(index)
     const newArray = graphListRef.current
-    console.log(newArray)
-    console.log(newArray[index])
     setGraphList(newArray.filter((graph) => graph.id !== index))
     // Splice function here
   }
@@ -216,7 +205,7 @@ function App() {
         <Route path='/' element={<HomeScreenview runId={runId}/>}/>
         <Route path='/FileUpLoad' element={<UpLoadFileview setCsvFile={setCsvFile} file={file} onFileDrop={onFileDrop} fileRemove={fileRemove} headers={headersFile} setBackPostResp={setBackPostResp} setListaAtributos={setListaAtributos}/>}/>
         <Route path='/FileUploadResp' element={<UploadFileRespView backPostResp={backPostResp} setRunId={setRunId}/>}/>
-        <Route path='/Dashboard' element={<DashboardView infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos} dashboardEnabled = {dashboardEnabled} runInfo = {runInfo}/>}/>
+        <Route path='/Dashboard' element={<DashboardView updateList={updateList} infoGeneral={infoGeneral} indexGraph={indexGraph} runId={runId} deleteGraph={deleteGraph} createGraph={createGraph} graphList={graphList} atributos = {listaAtributos} dashboardEnabled = {dashboardEnabled} runInfo = {runInfo}/>}/>
         <Route path='/Historial' element={<HistorialView setRunId={setRunId}/>}/>
       </Routes>
     </Router>

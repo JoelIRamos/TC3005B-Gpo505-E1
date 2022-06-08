@@ -6,11 +6,11 @@ import ContainerAtributos from '../ContainerAtributos/ContainerAtributos';
 import ContainerAtributosExt from '../ContainerAtributos/ContainerAtributosExt'
 import BubbleGraphDictionary from '../BubbleGraphDictionary/BubbleGraphDictionary';
 
-const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
+const ContainerDB = ({updateList, atributos, deleteGraph, indexGraph, runId, currentChart, url, currentAtributo1, currentAtributo2, currentShowForm, currentParamAnomaly}) => {
 
   // Obejto de datos para graficas
   const [datos, setDatos] = useState({anomalyList: [1, 2, 3,4, 5], labels: ['Dato1', 'Dato2', 'Dato3', 'Dato4', 'Dato5']});
-  const [paramAnomaly, setParamAnomaly] = useState(0);
+  const [paramAnomaly, setParamAnomaly] = useState(currentParamAnomaly === undefined ? 0 : currentParamAnomaly);
 
   const [dictionaryEnabled, setDictionaryEnabled] = useState(false);
 
@@ -18,17 +18,17 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
   const [click, setClick] = useState(false);
 
   // Gráfico a desplegar
-  const [chart, setChart] = useState('Grafico de Barras');
+  const [chart, setChart] = useState(currentChart === undefined ? 'Grafico de Barras': currentChart);
 
   // Booleano para mostrar el form de grafico burbuja
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(currentShowForm === undefined ? false : currentShowForm);
 
   // Atributos para graficas
-  const [atributo1, setAtributo1] = useState(atributos["Atributo Interno"]["items"][0])
-  const [atributo2, setAtributo2] = useState(atributos["Atributo Externo"]["items"][0])
+  const [atributo1, setAtributo1] = useState(currentAtributo1 === undefined ? atributos["Atributo Interno"]["items"][0] : currentAtributo1)
+  const [atributo2, setAtributo2] = useState(currentAtributo2 === undefined ? atributos["Atributo Externo"]["items"][0] : currentAtributo2)
 
   // URL para GET Req
-  const [apiURL, setApiURL] = useState(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/${paramAnomaly}/`)
+  const [apiURL, setApiURL] = useState(url === undefined ?`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/${paramAnomaly}/` : url)
 
   // Lista de datos para acceder cuando se cambian las pestañas
   const [listaDatos, setListaDatos] = useState([])
@@ -50,6 +50,7 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
       setApiURL(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/${paramAnomaly}/`)
     }
     
+    
   }, [chart, atributo1, atributo2, paramAnomaly])
 
   // Effect para GET
@@ -57,13 +58,11 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
     backGet()
       .then((res) => {
         setDatos(res)
-        console.log(apiURL)
-        console.log(chart)
-        console.log(indexGraph)
       })
       .catch((e) => {
         console.log(e.message)
       })
+      updateList(chart, urlRef.current, indexGraph, atributo1, atributo2, showForm, paramAnomaly)
   }, [apiURL])
 
   // Modificador booleano de click
