@@ -46,26 +46,26 @@ class searchHistoryListView(View):
     def delete(self, request):
         return JsonResponse(self.data)
 
-# ! View del endpoint de searchHistoryDetail (endpoint para testeo)
-class searchHistoryDetailView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs): 
-        return super().dispatch(request, *args, **kwargs)
+# # ! View del endpoint de searchHistoryDetail (endpoint para testeo)
+# class searchHistoryDetailView(View):
+#     @method_decorator(csrf_exempt)
+#     def dispatch(self, request, *args, **kwargs): 
+#         return super().dispatch(request, *args, **kwargs)
     
-    data = {'message': 'endpoint not implemented'}
+#     data = {'message': 'endpoint not implemented'}
     
-    # * Metodo HTTP (GET) del endpoint
-    def get(self, request, historyID):
-        return searchHistoryDetail(request, historyID)
+#     # * Metodo HTTP (GET) del endpoint
+#     def get(self, request, historyID):
+#         return searchHistoryDetail(request, historyID)
     
-    def post(self, request, historyID='0'):
-        return JsonResponse(self.data)
+#     def post(self, request, historyID='0'):
+#         return JsonResponse(self.data)
     
-    def put(self, request, historyID='0'):
-        return JsonResponse(self.data)
+#     def put(self, request, historyID='0'):
+#         return JsonResponse(self.data)
     
-    def delete(self, request, historyID='0'):
-        return JsonResponse(self.data)
+#     def delete(self, request, historyID='0'):
+#         return JsonResponse(self.data)
 
 
 # View del endpoint de searchLastSession
@@ -142,7 +142,7 @@ class searchBubbleGraphView(View):
     
     # * Metodo HTTP (GET) del endpoint
     def get(self, request, historyID, attribute1, attribute2, filter):
-        return searchBubbleGraph2(request, historyID, attribute1, attribute2, filter)
+        return searchBubbleGraph(request, historyID, attribute1, attribute2, filter)
     
     def post(self, request, historyID='0', attribute='0', attribute2='0', filter='0'):
         return JsonResponse(self.data)
