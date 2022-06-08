@@ -235,20 +235,23 @@ def searchBubbleGraph(request, historyID, attribute1, attribute2, filter):
                     # nlargest retorna un dataframe... iloc retorna el valor
                 topAnomalyValue = anomalyRelation.nlargest(1, 'size').iloc[0]['size']
 
-                ratio = 25 / topAnomalyValue
+                ratio = 20 / topAnomalyValue
 
-                anomalyRelation['size'] = anomalyRelation['size'].map(lambda x : x * ratio)
+                anomalyRelation['size_scaled'] = anomalyRelation['size'].map(lambda x : (x * ratio)+5)
 
                 # ! borrar No es necesario puesto a que final se obtiene los top 25
                 # //anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
                 # //print(anomalyRelation)
 
-                anomalyRelationTop25 = anomalyRelation.nlargest(500, 'size')
+                anomalyRelationTop = anomalyRelation.nlargest(200, 'size')
+                
+                anomalyRelationTop.sample(frac=1).reset_index(drop=True)
 
                 # lista de valores unicos de attribute1
-                attribute1List = anomalyRelationTop25['attribute1'].unique().tolist()
+                attribute1List = anomalyRelationTop['attribute1'].unique().tolist()
                 # lista de valores unicos de attribute2
-                attribute2List = anomalyRelationTop25['attribute2'].unique().tolist()
+                attribute2List = anomalyRelationTop['attribute2'].unique().tolist()
+                
 
                 # Rangos para values en attribute1Dict
                 attribute1Range = list(range(0, len(attribute1List), 1))
@@ -262,14 +265,18 @@ def searchBubbleGraph(request, historyID, attribute1, attribute2, filter):
 
                 # Lista para los datos que graficar
                 bubbleDataList = []
+                bubbleAnomalyCountList = []
                 # agrega los datos en bubbledata
-                for i in range(len(anomalyRelationTop25)):
+                for i in range(len(anomalyRelationTop)):
                     bubbleDataList.append(
                         {
-                            'x': int(attribute1Dict[anomalyRelationTop25.iloc[i]['attribute1']]),  # Valor que tiene atributo1 en attribute1Dict
-                            'y': int(attribute2Dict[anomalyRelationTop25.iloc[i]['attribute2']]),  # Valor que tiene atributo2 en attribute2Dict
-                            'r': int(anomalyRelationTop25.iloc[i]['size'])
+                            'x': int(attribute1Dict[anomalyRelationTop.iloc[i]['attribute1']]),  # Valor que tiene atributo1 en attribute1Dict
+                            'y': int(attribute2Dict[anomalyRelationTop.iloc[i]['attribute2']]),  # Valor que tiene atributo2 en attribute2Dict
+                            'r': int(anomalyRelationTop.iloc[i]['size_scaled'])
                         }
+                    )
+                    bubbleAnomalyCountList.append(
+                        int(anomalyRelationTop.iloc[i]['size'])
                     )
 
                 # Juntar attribute1Range, attribute1List  para formar diccionario
@@ -280,6 +287,7 @@ def searchBubbleGraph(request, historyID, attribute1, attribute2, filter):
                 data = {
                     'type':'Bubble',
                     'data' : bubbleDataList, #.tolist(),
+                    'anomalyCount' : bubbleAnomalyCountList, #.tolist(),
                     'attribute1Dict' : attribute1DictBubble,
                     'attribute2Dict' : attribute2DictBubble
                 }            
