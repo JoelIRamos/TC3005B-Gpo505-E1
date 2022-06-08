@@ -10,6 +10,7 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
 
   // Obejto de datos para graficas
   const [datos, setDatos] = useState({anomalyList: [1, 2, 3,4, 5], labels: ['Dato1', 'Dato2', 'Dato3', 'Dato4', 'Dato5']});
+  const [paramAnomaly, setParamAnomaly] = useState(0);
 
   const [dictionaryEnabled, setDictionaryEnabled] = useState(false);
 
@@ -27,7 +28,7 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
   const [atributo2, setAtributo2] = useState(atributos["Atributo Externo"]["items"][0])
 
   // URL para GET Req
-  const [apiURL, setApiURL] = useState(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/0/`)
+  const [apiURL, setApiURL] = useState(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/${paramAnomaly}/`)
 
   // Lista de datos para acceder cuando se cambian las pestañas
   const [listaDatos, setListaDatos] = useState([])
@@ -44,12 +45,12 @@ const ContainerDB = ({atributos, deleteGraph, indexGraph, runId}) => {
   // Effect para cambio de URL
   useLayoutEffect(() => {
     if(chartRef.current === 'Grafico de Burbuja'){
-      setApiURL(`http://127.0.0.1:8000/api/getBubbleGraph/${runId}/${atributo1}/${atributo2}/0/`)
+      setApiURL(`http://127.0.0.1:8000/api/getBubbleGraph/${runId}/${atributo1}/${atributo2}/${paramAnomaly}/`)
     } else{
-      setApiURL(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/0/`)
+      setApiURL(`http://127.0.0.1:8000/api/getBarGraph/${runId}/${atributo1}/${paramAnomaly}/`)
     }
     
-  }, [chart, atributo1, atributo2])
+  }, [chart, atributo1, atributo2, paramAnomaly])
 
   // Effect para GET
   useLayoutEffect(() => {
