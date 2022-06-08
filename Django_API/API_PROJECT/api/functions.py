@@ -398,14 +398,15 @@ def searchStatus(request, historyID):
 Push Branch
 Terminar:
     Para Antes de la presentación:
-        Documento de Funcionalidades (Frontend y Backend)
-        Bitacora y Plan de Pruebas (Frontend y Backend)
+        Presentación Final
         Manual de Usuario (Frontend)
         Manual de Despliegue (Frontend y Backend)
 
     Despues de la Presentación:
         Especificación de Requerimientos (Casi Terminado)
-        Plan de Calidad
+        Plan de Calidad (Actualizar pruebas)
+        Documento de Funcionalidades (Backend casi Termiando)
+        Bitacora y Plan de Pruebas (Backend casi Termiando)
 
 
 Terminados:
