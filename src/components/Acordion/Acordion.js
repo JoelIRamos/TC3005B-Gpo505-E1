@@ -2,8 +2,6 @@ import React, {useState} from 'react'
 import { Link } from "react-router-dom";
 import { FaRegTimesCircle, FaRegCheckCircle } from 'react-icons/fa'
 import './Acordion.css'
-import { isCompositeComponent } from 'react-dom/test-utils';
-// Agregar espacio para boton de VER corridaa
 
 function Acordion({file, index, setRunId}) {
     const [selected, setSelected] = useState(null);

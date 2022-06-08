@@ -24,7 +24,7 @@ function HistoryView({setRunId}) {
   return (
     <div className="App">
       <Navbar selected='history' />
-      <BarraBusqueda placeholder={"Buscar"}  scrollToSelected={scrollToSelected}/>
+      <BarraBusqueda placeholder={"Buscar"} data={historyObj.map(name => name.base_file_name)} scrollToSelected={scrollToSelected}/>
       <HistorialTable historyObj={historyObj} setHistoryObj={setHistoryObj} setRunId={setRunId}/>
       <CircleButton event={scrollToTop}/>
     </div>

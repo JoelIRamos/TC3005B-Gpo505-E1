@@ -2,8 +2,6 @@ import React, {useState} from 'react'
 import './BarraBusqueda.css';
 import { FaSearch, FaTimes } from "react-icons/fa"
 
-//TO DO: add return value to splice list
-
 //placeHolder: Texto descriptivo para la input box
 //data: Datos para la lista de busqueda
 function BarraBusqueda({placeHolder, data, scrollToSelected}) {
@@ -26,13 +24,11 @@ function BarraBusqueda({placeHolder, data, scrollToSelected}) {
         }
     }
 
+    console.log(data)
+
     const clearSearch = () => {
         setFilterData([]);
         setWordEntered("");
-    }
-
-    const getIndex = (i) => {
-        console.log(i)
     }
 
     return (

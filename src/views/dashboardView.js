@@ -3,12 +3,10 @@ import Titulo from '../components/Titulo/Titulo';
 import '../App.css';
 import ContenedorDatos from '../components/ContenedorDatos/ContenedorDatos.js';
 import ContainerDB from '../components/ContainerDB/ContainerDB.js';
-import {Navigate, Link} from 'react-router-dom';
-import Button from '../components/Button/GenericButton';  
 import Message from '../components/Message/Message.js';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import React, {useRef} from 'react'
+import React from 'react'
 
 
 const DashboardView = ({updateList, createGraph, graphList, atributos, deleteGraph, indexGraph, setURL, runId, infoGeneral, dashboardEnabled, runInfo}) => {
@@ -39,30 +37,13 @@ const DashboardView = ({updateList, createGraph, graphList, atributos, deleteGra
       }
     }
 
-    // if (runId !== undefined && runId !== null){
-    //   titulo = runId
-    // }
+
     return <div className="App">
       <Navbar selected="dashboard"/>
       <Titulo runId={runId}/>
       <Message title = {titulo} message={message} showButton={true}/>
 
-      {/* <div className='message-view-container'>
-          <div className='message-container'>
-            <div className='message-box'>
-              <h2 className='title'>{message}</h2>
-            </div>
-          </div>
-          <Link to='/'>
-            <div className="button">
-                <Button text={"Pagino de inicio"}/>
-            </div>
-          </Link> 
-      </div> */}
-      
-        
       </div>
-    //<Navigate to='/' />
   }
 
   let GraphCont = {id: indexGraph, atributos: atributos, deleteGraph: deleteGraph, chart: undefined, url: undefined, atributo1: undefined, atributo2: undefined, showForm: undefined, paramAnomaly:undefined}
