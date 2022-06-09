@@ -38,7 +38,6 @@ function App() {
 
   // Funcion para actualizar datos de listaDatos
   const updateList = (chart, url, id, atributo1, atributo2, showForm, paramAnomaly) =>{
-    console.log(id)
     setGraphList([...graphList].map(graph =>{
       if(graph.id === id){
         return{
@@ -46,7 +45,6 @@ function App() {
       } 
       else return graph
     }))
-    console.log(graphList)
   }
      
 

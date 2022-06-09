@@ -35,7 +35,9 @@ const BubbleGraphDictionary = ({dictionaryAtt1, dictionaryAtt2, attribute1, attr
             </div>
           </div>
           <div className={`bubblegraph-dictionary-attribute-selector-title corners-right yellow ${selected !== attribute2 ? 'unselected-attribute-title-yellow':''}`} onClick={() => {setSelected(attribute2); selectedAtt.current = dictionaryAtt2;}}> 
-            {attribute2}
+            <div>
+              {attribute2}
+            </div>
           </div>
       </div>
       <div className={`bubblegraph-dictionary-container-body ${selected === attribute2 ? "yellow" : "red"}`}>
