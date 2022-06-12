@@ -16,6 +16,10 @@ import pandas as pd
 import numpy as np
 
 
+def scaleBetween(unscaledNum, minAllowed, maxAllowed, min, max):
+    return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
+    
+
 def searchHistoryList(request): 
     try:
         # Buscar todos los registros de la coleccion "History" quitando las columnas "internos", "externos" y "graphs"
@@ -125,7 +129,7 @@ def searchHistory(request, historyID):
                 graphs = []
             # Formato de los Datos
             data = {
-                'message':'found',
+                'message':'Found',
                 'result': {
                     'historyID': historyID,
                     'base_file_name': ExtIntResult["base_file_name"],
@@ -205,7 +209,6 @@ def searchBarLineGraphHelper(request, historyID, variable, filter, type):
 def searchBarGraph(request, historyID, variable, filter):
     return searchBarLineGraphHelper(request, historyID, variable, filter, "Bar")
 
-
 def searchLineGraph(request, historyID, variable, filter):
     return searchBarLineGraphHelper(request, historyID, variable, filter, "Line")
 
@@ -234,10 +237,11 @@ def searchBubbleGraph(request, historyID, attribute1, attribute2, filter):
                 # Obtener el valor mas alto de anomaly
                     # nlargest retorna un dataframe... iloc retorna el valor
                 topAnomalyValue = anomalyRelation.nlargest(1, 'size').iloc[0]['size']
+                bottomAnomalyValue = anomalyRelation.nsmallest(1, 'size').iloc[0]['size']
 
                 ratio = 20 / topAnomalyValue
 
-                anomalyRelation['size_scaled'] = anomalyRelation['size'].map(lambda x : (x * ratio)+5)
+                anomalyRelation['size_scaled'] = anomalyRelation['size'].map(lambda x : scaleBetween(x, 3, 40, bottomAnomalyValue, topAnomalyValue))
 
                 # ! borrar No es necesario puesto a que final se obtiene los top 25
                 # //anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
@@ -245,7 +249,7 @@ def searchBubbleGraph(request, historyID, attribute1, attribute2, filter):
 
                 anomalyRelationTop = anomalyRelation.nlargest(200, 'size')
                 
-                anomalyRelationTop.sample(frac=1).reset_index(drop=True)
+                # anomalyRelationTop = anomalyRelationTop.sample(frac=1).reset_index(drop=True)
 
                 # lista de valores unicos de attribute1
                 attribute1List = anomalyRelationTop['attribute1'].unique().tolist()
