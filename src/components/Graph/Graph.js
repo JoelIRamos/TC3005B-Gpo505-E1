@@ -106,7 +106,7 @@ const Graph = ({datosGraph, chart}) => {
                 // console.log(value);
                 // console.log(index);
                 // console.log(ticks);
-                if (parseInt(value) == value) {
+                if (parseInt(value) === value) {
                   if (datosGraph.attribute2Dict === undefined || datosGraph.attribute2Dict === null){
                     return value;
                   }
@@ -125,7 +125,7 @@ const Graph = ({datosGraph, chart}) => {
                 // console.log(value);
                 // console.log(index);
                 // console.log(ticks);
-                if (parseInt(value) == value) {
+                if (parseInt(value) === value) {
                   if (datosGraph.attribute1Dict === undefined || datosGraph.attribute1Dict === null){
                     return value;
                   }
@@ -161,7 +161,7 @@ const Graph = ({datosGraph, chart}) => {
                 // console.log(tooltipItem)
                 // console.log(datosGraph)
                 const z = datosGraph.anomalyCount[tooltipItem[0].dataIndex]
-                return "Cantidad de relaciones anomalas: " + z;
+                return "Cantidad de interacciones anomalas: " + z;
               }
             }
           }
@@ -185,7 +185,7 @@ const Graph = ({datosGraph, chart}) => {
             if (context.raw === undefined) {
               return 'rgba(255, 255, 255)';
             }
-            if (context !== undefined && context.raw.x%2 == 0){
+            if (context !== undefined && ((context.raw.x%2 === 0 && context.raw.y%2 === 0) || (context.raw.x%2 !== 0 && context.raw.y%2 !== 0))){
               return 'rgba(242, 92, 41)';
             }
             return 'rgba(255, 168, 47)';
@@ -203,7 +203,7 @@ const Graph = ({datosGraph, chart}) => {
             if (context.raw === undefined) {
               return 'rgba(255, 255, 255, 0.5)';
             }
-            if (context !== undefined && context.raw.x%2 == 0){
+            if (context !== undefined && ((context.raw.x%2 === 0 && context.raw.y%2 === 0) || (context.raw.x%2 !== 0 && context.raw.y%2 !== 0))){
               return 'rgba(242, 92, 41, 0.5)';
             }
             return 'rgba(255, 168, 47, 0.5)';
