@@ -1,9 +1,9 @@
 # Interfaz Analítico de Anomalías de Comportamiento
 ### General
-Bienvenido al repositorio de **Interfaz Analítico de Anomalías de Comportamiento** del Equipo #1. Este proyecto fue desarollado a lo largo de 15 semanas como proyecto de la materia de **Desarrollo de Software** en el Tecnológico de Monterrey. 
+Bienvenido al repositorio de **Interfaz Analítico de Anomalías de Comportamiento** del Equipo #1. Este proyecto fue desarrollado a lo largo de 15 semanas como proyecto de la materia de **Desarrollo de Software** en el Tecnológico de Monterrey. 
 
 ### Integrantes del Equipo
-Los desarolladores de este proyecto fueron alumnos del sexto semestre del Tecnológico de Monterrey de la carera de **ITC** (Ingeniería en Tecnologías Computacionales).
+Los desarrolladores de este proyecto fueron alumnos del sexto semestre del Tecnológico de Monterrey de la carrera de **ITC** (Ingeniería en Tecnologías Computacionales).
 
 En la siguiente tabla se muestran sus contactos en caso de que se requieran: 
 
