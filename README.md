@@ -20,6 +20,6 @@ En la siguiente tabla se muestran sus contactos en caso de que se requieran:
 ## Obtención del Software
 **El software de este proyecto está dividido en dos partes, front-end y back-end, cada parte se encuentran en su respectiva rama dentro de este repositorio.**
 
- Para ir al software del back-end, ir a la rama de [**back-end-stable**](https://github.com/JoelIRamos/TC3005B-Gpo505-E1/tree/back-end-stable).
-
 Para ir al software del front-end, ir a la rama de [**front-end-stable**](https://github.com/JoelIRamos/TC3005B-Gpo505-E1/tree/front-end-stable).
+
+Para ir al software del back-end, ir a la rama de [**back-end-stable**](https://github.com/JoelIRamos/TC3005B-Gpo505-E1/tree/back-end-stable).
