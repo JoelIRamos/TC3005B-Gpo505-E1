@@ -88,7 +88,7 @@ N/A
                 "PlantaPorteria_num",
                 "EmpresaTransportista_num"
             ],
-            "external__attributes": [
+            "external_attributes": [
                 "UsuarioPesadaEntrada_num",
                 "UsuarioDescarga_num"
             ],
@@ -387,90 +387,34 @@ N/A
 ```
 
 ----
-## **PUT_GRAPHS**
-> Funcion: Actualizar las gráficas que estaba haciendo el usuario
+## **UPLOAD_FILE**
+> Funcion: Subir un archivo
 
 ### URL: 
-    /api/putGraphs/<str:historyID>/
+    /api/upload_file/<str:historyID>/
 
-### Parametros: 
-**historyID:** El id de una corrida del archivo
+### Bodys (Form Files):
+**file**: Archivo CSV con toda la información
 
-### Bodys
-``` json
-    [
-        {
-            "type": "Line",
-            "labels": [
-                "Largos Puebla",
-                "Gue. Privada Famosa",
-                "L. Apo. Av. Acero",
-                "Gue. Av. República Mexicana",
-                "L. Apo. Av. Camino Mezquital"
-            ],
-            "anomalyList": [
-                4485,
-                1244,
-                258,
-                1,
-                1
-            ],
-            "noAnomalyList": [
-                4958,
-                20637,
-                14603,
-                15,
-                30
-            ]
-        },
-        {
-            "type": "Bar",
-            "labels": [
-                "Largos Puebla",
-                "Gue. Privada Famosa",
-                "L. Apo. Av. Acero",
-                "L. Apo. Av. Camino Mezquital",
-                "Gue. Av. República Mexicana"
-            ],
-            "anomalyList": [
-                8606,
-                4853,
-                2779,
-                9,
-                4
-            ],
-            "noAnomalyList": [
-                837,
-                17028,
-                12082,
-                22,
-                12
-            ]
-        }
-    ]
-```
+### Bodys (Form Fields): 
 
-### Objeto Retorno Correcto
+**internal_attributes:** atributos internos
+
+**external_attributes:** atributos externos
+
+**informational_attributes:** atributos informacionales
+
+### Objeto Retorno
 ``` json
     {
-        "message": "Success"
+        "message": "Upload successful",
+        "run_id": "...",
+        "queue": [
+            "..."
+        ]
     }
 ```
 
-### Objeto Retorno Incorrecto
-**Versión 1**
-``` json
-    {
-        "message": "Not found"
-    }
-```
-
-**Version 2**
-``` json
-    {
-        "message": "Error"
-    }
-```
 
 <!-- ----
 ## **a**
@@ -579,19 +523,4 @@ N/A
         "message": "Not found"
     }
 ``` -->
-
-----
-----
-
-# Revisión de Endpoints
-
-**Hay algún problema?** No
-
-**Descripción del problema:** N/A 
-
-**Hay algún pendiente?** No
-
-**Descripción del pendiente:** N/A
-
-**Revision hecha por:** Joel Ramos
 
