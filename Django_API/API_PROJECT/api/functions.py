@@ -74,42 +74,42 @@ def searchHistoryList(request):
 
 
 # ! Funcion de testeo
-def searchHistoryDetail(request, historyID):
-    try: 
-        # Buscar los registros de la coleccion "File" con el id_history e ignorar las columnas _id y id_history 
-        fileResults = list(db["FileData"].find({"_id": historyID}, {'_id': 0, 'id_history': 0}))
-        # Si hay registros regresarlos
-        if len(fileResults) > 0:
-            # file = fileResults[0]["data"]
-            # Buscar el registro de la coleccion "History" que tiene el historyID correspondiente
-            ExtIntResults = db["RunHistory"].find_one({"_id": historyID})
+# def searchHistoryDetail(request, historyID):
+#     try: 
+#         # Buscar los registros de la coleccion "File" con el id_history e ignorar las columnas _id y id_history 
+#         fileResults = list(db["FileData"].find({"_id": historyID}, {'_id': 0, 'id_history': 0}))
+#         # Si hay registros regresarlos
+#         if len(fileResults) > 0:
+#             # file = fileResults[0]["data"]
+#             # Buscar el registro de la coleccion "History" que tiene el historyID correspondiente
+#             ExtIntResults = db["RunHistory"].find_one({"_id": historyID})
 
-            # Extraer las graficas      
-            try:
-                graphs = ExtIntResults["graphs"]
-            except:
-                graphs = []
+#             # Extraer las graficas      
+#             try:
+#                 graphs = ExtIntResults["graphs"]
+#             except:
+#                 graphs = []
                 
-            # Formato de los Datos
-            data = {
-                'message':'found',
-                'result': {
-                    'historyID': historyID,
-                    'base_file_name': ExtIntResults["base_file_name"],
-                    'date': ExtIntResults["date"],
-                    'internal_attributes': ExtIntResults["internal_attributes"],
-                    'external_attributes': ExtIntResults["external_attributes"],
-                    'informational_attributes': ExtIntResults["informational_attributes"],
-                    'graphs': graphs,
-                    # 'data': file
-                }
-            }
+#             # Formato de los Datos
+#             data = {
+#                 'message':'found',
+#                 'result': {
+#                     'historyID': historyID,
+#                     'base_file_name': ExtIntResults["base_file_name"],
+#                     'date': ExtIntResults["date"],
+#                     'internal_attributes': ExtIntResults["internal_attributes"],
+#                     'external_attributes': ExtIntResults["external_attributes"],
+#                     'informational_attributes': ExtIntResults["informational_attributes"],
+#                     'graphs': graphs,
+#                     # 'data': file
+#                 }
+#             }
 
-        else: # Si no hay registros regresar mensaje de error
-            data = {'message': 'Not found'}
-        return JsonResponse(data)
-    except: # Si ocurre cualquier error insesperado regresar mensaje de error
-        return JsonResponse({'message': 'Error'})
+#         else: # Si no hay registros regresar mensaje de error
+#             data = {'message': 'Not found'}
+#         return JsonResponse(data)
+#     except: # Si ocurre cualquier error insesperado regresar mensaje de error
+#         return JsonResponse({'message': 'Error'})
 
 
 def searchHistory(request, historyID):
@@ -243,10 +243,6 @@ def searchBubbleGraph(request, historyID, attribute1, attribute2, filter):
 
                 anomalyRelation['size_scaled'] = anomalyRelation['size'].map(lambda x : scaleBetween(x, 3, 40, bottomAnomalyValue, topAnomalyValue))
 
-                # ! borrar No es necesario puesto a que final se obtiene los top 25
-                # //anomalyRelation.sort_values(by=['size'], inplace=True, ascending=False, kind='mergesort')
-                # //print(anomalyRelation)
-
                 anomalyRelationTop = anomalyRelation.nlargest(200, 'size')
                 
                 # anomalyRelationTop = anomalyRelationTop.sample(frac=1).reset_index(drop=True)
@@ -290,8 +286,8 @@ def searchBubbleGraph(request, historyID, attribute1, attribute2, filter):
 
                 data = {
                     'type':'Bubble',
-                    'data' : bubbleDataList, #.tolist(),
-                    'anomalyCount' : bubbleAnomalyCountList, #.tolist(),
+                    'data' : bubbleDataList, 
+                    'anomalyCount' : bubbleAnomalyCountList,
                     'attribute1Dict' : attribute1DictBubble,
                     'attribute2Dict' : attribute2DictBubble
                 }            
@@ -312,16 +308,10 @@ def searchStatistics(request, historyID, filter):
         colectionFD = db["FileData"]
 
         # Encontrar los registros que tienen el historyID correspondiente (Maximo debe haber 1)
-        resultsFD = list(colectionFD.find({"_id": historyID})) # {"data." + attribute1 : 1, "data." + attribute2 : 1, "data.    anomaly_scores": 1}
+        resultsFD = list(colectionFD.find({"_id": historyID})) 
 
         # Si existe el historial
         if len(resultsFD) > 0:
-
-            # ! BRUH
-            #// Creacion del data frame
-            #// df = pd.DataFrame({labelsList[0] : resultsFD[0]['data'][str(labelsList[0])]})
-            #// for i in range(1, len(labelsList)):
-            #//     df.insert(i, labelsList[i], resultsFD[0]['data'][str(labelsList[i])])  # assign(TutorsAssigned=resultsFD[0]['data'][labelsList[i]])
 
             # ? yes
             # Creacion del data frame
@@ -396,30 +386,3 @@ def searchStatus(request, historyID):
         return JsonResponse(data)
     except: # Si ocurre cualquier error insesperado regresar mensaje de error
         return JsonResponse({'message': 'Error'})
-
-# * Pendientes: Documentacion y burbuja
-'''
-Push Branch
-Terminar:
-    Para Antes de la presentación:
-        Presentación Final
-        Manual de Usuario (Frontend)
-        Manual de Despliegue (Frontend y Backend)
-
-    Despues de la Presentación:
-        Especificación de Requerimientos (Casi Terminado)
-        Plan de Calidad (Actualizar pruebas)
-        Documento de Funcionalidades (Backend casi Termiando)
-        Bitacora y Plan de Pruebas (Backend casi Termiando)
-
-
-Terminados:
-    Actualizar Modelo de BD
-    Historias de Usuario
-    Modelo de Calidad
-    Documento Vision
-    Plan de Comunicación
-    Plan de Recursos
-    Plan y Analisis de Riesgos
-
-'''
