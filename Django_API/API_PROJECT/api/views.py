@@ -296,7 +296,10 @@ class FileUploadView(View):
             
             return JsonResponse({"message": "Upload successful", "run_id": run_id_info.run_id, "queue": queue.tolist()})
         except:
-            remove_from_queue(run_id_info.run_id)
+            try:
+                remove_from_queue(run_id_info.run_id)
+            except:
+                pass
             return JsonResponse({"message": "Upload failed"})
         
     
