@@ -34,7 +34,7 @@ function UploadFileRespView({backPostResp, setRunId}) {
         return(
             <div className="App">
                 <Navbar selected='upload' />
-                <Message title= 'Error al subir el archivo' message='Intente otra vez' showButton={false}/>
+                <Message title= 'Error al subir el archivo' message='Intente otra vez' showButton={true}/>
             </div>
         )
     }
